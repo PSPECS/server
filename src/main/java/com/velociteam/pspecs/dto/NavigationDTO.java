@@ -4,24 +4,39 @@ import java.util.Date;
 import java.util.List;
 
 public class NavigationDTO {
+
+//	{ 
+//	    "dtInicio": "datetime",
+//		"dtFin": "datetime",
+//		"usosOk": 99999,
+//		"usosNoOk": 99999,
+//		"usuario": "username",
+//		"pictogramas":
+//			{
+//				"nombre": "nombrePictograma",
+//	    		"categoria": "nombreCategoria",
+//				"usos": 99999
+//			}
+//		
+//	}
 	
-	private Date dtInicio;
-	private Date dtFin;
+	private String dtInicio;
+	private String dtFin;
 	private Integer usosOk;
 	private Integer usosNoOk;
 	private String usuario;
 	private List<PictogramaDTO> pictogramas;
 	
-	public Date getDtInicio() {
+	public String getDtInicio() {
 		return dtInicio;
 	}
-	public void setDtInicio(Date dtInicio) {
+	public void setDtInicio(String dtInicio) {
 		this.dtInicio = dtInicio;
 	}
-	public Date getDtFin() {
+	public String getDtFin() {
 		return dtFin;
 	}
-	public void setDtFin(Date dtFin) {
+	public void setDtFin(String dtFin) {
 		this.dtFin = dtFin;
 	}
 	public Integer getUsosOk() {

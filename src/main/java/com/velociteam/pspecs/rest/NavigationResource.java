@@ -23,7 +23,7 @@ public class NavigationResource {
 	private NavigationDAO navigationDAO;
 	
 	@RequestMapping(method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createExchange(@Valid @RequestBody NavigationDTO navigationDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> createNavigation(@Valid @RequestBody NavigationDTO navigationDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);

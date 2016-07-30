@@ -2,7 +2,7 @@ package com.velociteam.pspecs.dto;
 
 import java.util.List;
 
-public class NavigationDTO {
+public class LogDTO {
 
 //	{ 
 //	    "dtInicio": "datetime",

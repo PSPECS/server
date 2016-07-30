@@ -1,6 +1,6 @@
 package com.velociteam.pspecs.dto;
 
-public class UsuariosConectadosDTO {
+public class UsuariosContactadosDTO {
 	
 	public Long usuario;
 	public Integer mensajesEnviados;

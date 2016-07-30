@@ -24,11 +24,11 @@ public class LogDAO {
 				.append("usosNoOk",logDTO.getUsosNoOk())
 				.append("usuario", logDTO.getUsuario())
 				.append("pictogramas", buildDBPictogramas(logDTO))
-				.append("usuariosConectados", buildDBUsuariosConectados(logDTO)));
+				.append("usuariosContactados", buildDBUsuariosContactados(logDTO)));
 	}
 
-	private List<BasicDBObject> buildDBUsuariosConectados(LogDTO logDTO) {
-		return logDTO.getUsuariosConectados().stream().map(p-> new BasicDBObject("usuario",p.getUsuario())
+	private List<BasicDBObject> buildDBUsuariosContactados(LogDTO logDTO) {
+		return logDTO.getUsuariosContactados().stream().map(p-> new BasicDBObject("usuario",p.getUsuario())
 				.append("mensajesEnviados", p.getMensajesEnviados())).collect(Collectors.toList());
 	}
 

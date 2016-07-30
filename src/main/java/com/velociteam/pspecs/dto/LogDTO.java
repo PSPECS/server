@@ -32,7 +32,7 @@ public class LogDTO {
 	private Integer usosNoOk;
 	private Long usuario;
 	private List<PictogramaDTO> pictogramas;
-	private List<UsuariosConectadosDTO> usuariosConectados;
+	private List<UsuariosContactadosDTO> usuariosContactados;
 	
 	public String getDtInicio() {
 		return dtInicio;
@@ -70,11 +70,11 @@ public class LogDTO {
 	public void setPictogramas(List<PictogramaDTO> pictogramas) {
 		this.pictogramas = pictogramas;
 	}
-	public List<UsuariosConectadosDTO> getUsuariosConectados() {
-		return usuariosConectados;
+	public List<UsuariosContactadosDTO> getUsuariosContactados() {
+		return usuariosContactados;
 	}
-	public void setUsuariosConectados(List<UsuariosConectadosDTO> usuariosConectados) {
-		this.usuariosConectados = usuariosConectados;
+	public void setUsuariosContactados(List<UsuariosContactadosDTO> usuariosContactados) {
+		this.usuariosContactados = usuariosContactados;
 	}
 
 }

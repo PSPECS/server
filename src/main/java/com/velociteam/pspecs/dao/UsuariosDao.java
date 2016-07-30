@@ -18,7 +18,7 @@ public class UsuariosDao {
 
 	public UsuarioDTO getContacts(String userId) throws UnknownHostException {
 		final DB db = new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
-		DBCursor DBContactos = db.getCollection("usuario").find(new BasicDBObject("_id",new ObjectId(userId))).getCollection().getCollection("contactos").find();
+		DBCursor DBContactos = db.getCollection("usuario").find(new BasicDBObject("_id",new ObjectId(userId)),new BasicDBObject("contacts",1));
 		
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
 		for (DBObject contact : DBContactos) {

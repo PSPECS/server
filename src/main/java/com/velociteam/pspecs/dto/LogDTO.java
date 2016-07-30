@@ -26,7 +26,7 @@ public class LogDTO {
 //		
 //	}
 	
-	private Long userId;
+	private String userId;
 	private String dtInicio;
 	private String dtFin;
 	private Integer usosOk;
@@ -70,10 +70,10 @@ public class LogDTO {
 	public void setUsuariosContactados(List<UsuariosContactadosDTO> usuariosContactados) {
 		this.usuariosContactados = usuariosContactados;
 	}
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

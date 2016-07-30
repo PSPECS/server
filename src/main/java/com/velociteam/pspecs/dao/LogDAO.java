@@ -31,12 +31,12 @@ public class LogDAO {
 				.append("usuariosContactados", buildDBUsuariosContactados(logDTO,db)));
 	}
 
-	private ObjectId validUserId(Long userId,DB db) {
-		final DBCursor cursor = db.getCollection("usuario").find(new BasicDBObject("_id",String.valueOf(userId)));
+	private ObjectId validUserId(String userId,DB db) {
+		final DBCursor cursor = db.getCollection("usuario").find(new BasicDBObject("_id",userId));
 		if (cursor.size()<=0){
 			throw new RuntimeException("El usuario ingresado no existe.");
 		}
-		return new ObjectId(String.valueOf(userId));
+		return new ObjectId(userId);
 	}
 
 	private List<BasicDBObject> buildDBUsuariosContactados(LogDTO logDTO,DB db) {

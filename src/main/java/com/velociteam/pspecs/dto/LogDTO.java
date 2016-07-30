@@ -9,6 +9,7 @@ public class LogDTO {
 //		"dtFin": "datetime",
 //		"usosOk": 99999,
 //		"usosNoOk": 99999,
+//		"userId": 1,
 //		"usuario": "username",
 //		"pictogramas": [
 //			{
@@ -19,18 +20,19 @@ public class LogDTO {
 //		]
 //		usuariosConectados:[
 //			{
-//				usuario:"username",
+//				userId: 1,
 //				mensajesEnviados:99
 //			}
 //		]
 //		
 //	}
 	
+	private Long userId;
 	private String dtInicio;
 	private String dtFin;
 	private Integer usosOk;
 	private Integer usosNoOk;
-	private Long usuario;
+	private String usuario;
 	private List<PictogramaDTO> pictogramas;
 	private List<UsuariosContactadosDTO> usuariosContactados;
 	
@@ -58,10 +60,10 @@ public class LogDTO {
 	public void setUsosNoOk(Integer usosNoOk) {
 		this.usosNoOk = usosNoOk;
 	}
-	public Long getUsuario() {
+	public String getUsuario() {
 		return usuario;
 	}
-	public void setUsuario(Long usuario) {
+	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
 	public List<PictogramaDTO> getPictogramas() {
@@ -75,6 +77,12 @@ public class LogDTO {
 	}
 	public void setUsuariosContactados(List<UsuariosContactadosDTO> usuariosContactados) {
 		this.usuariosContactados = usuariosContactados;
+	}
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

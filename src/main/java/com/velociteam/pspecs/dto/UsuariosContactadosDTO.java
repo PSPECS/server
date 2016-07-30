@@ -2,14 +2,14 @@ package com.velociteam.pspecs.dto;
 
 public class UsuariosContactadosDTO {
 	
-	public Long usuario;
+	public Long userId;
 	public Integer mensajesEnviados;
 	
-	public Long getUsuario() {
-		return usuario;
+	public Long getUserId() {
+		return userId;
 	}
-	public void setUsuario(Long idUsuario) {
-		this.usuario = idUsuario;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	public Integer getMensajesEnviados() {
 		return mensajesEnviados;

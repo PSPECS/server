@@ -2,9 +2,11 @@ package com.velociteam.pspecs.dao;
 
 import java.net.UnknownHostException;
 
+import org.bson.types.BasicBSONList;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
@@ -18,14 +20,17 @@ public class UsuariosDao {
 
 	public UsuarioDTO getContacts(String userId) throws UnknownHostException {
 		final DB db = new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
-		DBCursor DBContactos = db.getCollection("usuario").find(new BasicDBObject("_id",new ObjectId(userId)),new BasicDBObject("contactos",1)).getCollection().getCollection("contactos").find();
+		DBCursor DBContactos = db.getCollection("usuario").find(new BasicDBObject("_id",new ObjectId(userId)),new BasicDBObject("contactos",1));
 		
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
-		for (DBObject contact : DBContactos) {
-			usuarioDTO.setUsuario((String) contact.get("username"));
-			usuarioDTO.setNombre((String) contact.get("nombre"));
-			usuarioDTO.setApellido((String) contact.get("apellido"));
-			usuarioDTO.setImagenDePerfil((String) contact.get("imagenPerfil"));
+		for (DBObject document : DBContactos) {
+			BasicDBList contacts = (BasicDBList) document.get("contacts");
+			for (BasicDBObject contact : contacts.toArray(new BasicDBObject[0])) {
+				usuarioDTO.setUsuario((String) contact.get("username"));
+				usuarioDTO.setNombre((String) contact.get("nombre"));
+				usuarioDTO.setApellido((String) contact.get("apellido"));
+				usuarioDTO.setImagenDePerfil((String) contact.get("imagenPerfil"));
+			}
 		}
 		return usuarioDTO;
 		

@@ -32,7 +32,7 @@ public class LogDAO {
 	}
 
 	private ObjectId validUserId(String userId,DB db) {
-		final DBCursor cursor = db.getCollection("usuario").find(new BasicDBObject("_id",userId));
+		final DBCursor cursor = db.getCollection("usuario").find(new BasicDBObject("_id",new ObjectId(userId)));
 		if (cursor.size()<=0){
 			throw new RuntimeException("El usuario ingresado no existe.");
 		}

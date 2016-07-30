@@ -18,7 +18,7 @@ public class NavigationDAO {
 	public void save(NavigationDTO navigationDTO) throws UnknownHostException{
 		DB db = new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
 		
-		db.getCollection("navegacion").insert(new BasicDBObject("dtInicio", "")
+		db.getCollection("navegacion").insert(new BasicDBObject("dtInicio", navigationDTO.getDtInicio())
 				.append("dtFin", navigationDTO.getDtFin())
 				.append("usosOk", navigationDTO.getUsosOk())
 				.append("usosNoOk",navigationDTO.getUsosNoOk())

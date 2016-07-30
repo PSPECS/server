@@ -3,6 +3,7 @@ package com.velociteam.pspecs.dao;
 import java.net.UnknownHostException;
 
 import org.bson.types.ObjectId;
+import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -12,6 +13,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 
+@Repository
 public class UsuariosDao {
 
 	public UsuarioDTO getContacts(String userId) throws UnknownHostException {

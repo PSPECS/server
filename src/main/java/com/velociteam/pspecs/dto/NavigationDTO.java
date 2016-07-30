@@ -10,12 +10,19 @@ public class NavigationDTO {
 //		"usosOk": 99999,
 //		"usosNoOk": 99999,
 //		"usuario": "username",
-//		"pictogramas":
+//		"pictogramas": [
 //			{
 //				"nombre": "nombrePictograma",
 //	    		"categoria": "nombreCategoria",
 //				"usos": 99999
 //			}
+//		]
+//		usuariosConectados:[
+//			{
+//				usuario:"username",
+//				mensajesEnviados:99
+//			}
+//		]
 //		
 //	}
 	
@@ -23,8 +30,9 @@ public class NavigationDTO {
 	private String dtFin;
 	private Integer usosOk;
 	private Integer usosNoOk;
-	private String usuario;
+	private Long usuario;
 	private List<PictogramaDTO> pictogramas;
+	private List<UsuariosConectadosDTO> usuariosConectados;
 	
 	public String getDtInicio() {
 		return dtInicio;
@@ -50,10 +58,10 @@ public class NavigationDTO {
 	public void setUsosNoOk(Integer usosNoOk) {
 		this.usosNoOk = usosNoOk;
 	}
-	public String getUsuario() {
+	public Long getUsuario() {
 		return usuario;
 	}
-	public void setUsuario(String usuario) {
+	public void setUsuario(Long usuario) {
 		this.usuario = usuario;
 	}
 	public List<PictogramaDTO> getPictogramas() {
@@ -61,6 +69,12 @@ public class NavigationDTO {
 	}
 	public void setPictogramas(List<PictogramaDTO> pictogramas) {
 		this.pictogramas = pictogramas;
+	}
+	public List<UsuariosConectadosDTO> getUsuariosConectados() {
+		return usuariosConectados;
+	}
+	public void setUsuariosConectados(List<UsuariosConectadosDTO> usuariosConectados) {
+		this.usuariosConectados = usuariosConectados;
 	}
 
 }

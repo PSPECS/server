@@ -23,7 +23,13 @@ public class NavigationDAO {
 				.append("usosOk", navigationDTO.getUsosOk())
 				.append("usosNoOk",navigationDTO.getUsosNoOk())
 				.append("usuario", navigationDTO.getUsuario())
-				.append("pictogramas", buildDBPictogramas(navigationDTO)));
+				.append("pictogramas", buildDBPictogramas(navigationDTO))
+				.append("usuariosConectados", buildDBUsuariosConectados(navigationDTO)));
+	}
+
+	private List<BasicDBObject> buildDBUsuariosConectados(NavigationDTO navigationDTO) {
+		return navigationDTO.getUsuariosConectados().stream().map(p-> new BasicDBObject("usuario",p.getUsuario())
+				.append("mensajesEnviados", p.getMensajesEnviados())).collect(Collectors.toList());
 	}
 
 	private List<BasicDBObject> buildDBPictogramas(NavigationDTO navigationDTO) {

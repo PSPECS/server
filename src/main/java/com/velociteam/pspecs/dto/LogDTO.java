@@ -10,7 +10,6 @@ public class LogDTO {
 //		"usosOk": 99999,
 //		"usosNoOk": 99999,
 //		"userId": 1,
-//		"usuario": "username",
 //		"pictogramas": [
 //			{
 //				"nombre": "nombrePictograma",
@@ -32,7 +31,6 @@ public class LogDTO {
 	private String dtFin;
 	private Integer usosOk;
 	private Integer usosNoOk;
-	private String usuario;
 	private List<PictogramaDTO> pictogramas;
 	private List<UsuariosContactadosDTO> usuariosContactados;
 	
@@ -59,12 +57,6 @@ public class LogDTO {
 	}
 	public void setUsosNoOk(Integer usosNoOk) {
 		this.usosNoOk = usosNoOk;
-	}
-	public String getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
 	}
 	public List<PictogramaDTO> getPictogramas() {
 		return pictogramas;

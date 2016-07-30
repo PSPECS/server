@@ -27,7 +27,6 @@ public class LogDAO {
 				.append("usosOk", logDTO.getUsosOk())
 				.append("usosNoOk",logDTO.getUsosNoOk())
 				.append("userId", validUserId(logDTO.getUserId(),db))
-				.append("usuario", logDTO.getUsuario())
 				.append("pictogramas", buildDBPictogramas(logDTO))
 				.append("usuariosContactados", buildDBUsuariosContactados(logDTO,db)));
 	}

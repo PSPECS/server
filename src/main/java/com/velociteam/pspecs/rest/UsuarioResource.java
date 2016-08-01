@@ -1,5 +1,7 @@
 package com.velociteam.pspecs.rest;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,15 +23,15 @@ public class UsuarioResource {
 
 	@RequestMapping(value="/{userId}/contactos",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createLog(@PathVariable String userId) {
-		UsuarioDTO usuarioDTO = null;
+		List<UsuarioDTO> contactos = null;
 		
         try {
-        	usuarioDTO=usuariosDao.getContacts(userId);
+        	contactos=usuariosDao.getContacts(userId);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(usuarioDTO,HttpStatus.OK);
+        return new ResponseEntity<>(contactos,HttpStatus.OK);
     }
 	
 }

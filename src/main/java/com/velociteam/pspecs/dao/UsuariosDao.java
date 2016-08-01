@@ -4,7 +4,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.types.BasicBSONList;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +27,7 @@ public class UsuariosDao {
 				.find(new BasicDBObject("_id",new ObjectId(userId)),new BasicDBObject("contactos",1));
 		
 		for (DBObject usuario : dbUsuario) {
-			BasicDBList contacts = (BasicDBList) usuario.get("contacts");
+			BasicDBList contacts = (BasicDBList) usuario.get("contactos");
 			
 			for (Object contact : contacts) {
 				UsuarioDTO usuarioDTO = new UsuarioDTO();

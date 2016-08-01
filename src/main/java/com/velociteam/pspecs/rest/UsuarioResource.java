@@ -28,7 +28,7 @@ public class UsuarioResource {
         try {
         	contactos=usuariosDao.getContacts(userId);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getClass(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(contactos,HttpStatus.OK);

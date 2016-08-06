@@ -16,7 +16,7 @@ public class FirebaseChatService {
 	
 	private void initialiaze() throws FileNotFoundException{
 		FirebaseOptions options = new FirebaseOptions.Builder()
-			    .setDatabaseUrl("https://pspecs-2d21b.firebaseio.com/")
+			    .setDatabaseUrl("https://pspecs-2d21b.firebaseio.com")
 			    .setServiceAccount(new FileInputStream("pspecs-97e1d9e5648f.json"))
 			    .build();
 			FirebaseApp.initializeApp(options);

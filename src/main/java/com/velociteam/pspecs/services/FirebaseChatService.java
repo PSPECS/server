@@ -24,8 +24,8 @@ public class FirebaseChatService {
 	
 	private DatabaseReference getDB(){
 		return FirebaseDatabase
-			    .getInstance(FirebaseApp.getInstance("mensajes"))
-			    .getReference();
+			    .getInstance()
+			    .getReference("mensajes");
 	}
 	
 	public void saveMsg(String userId, MensajeDTO msg){

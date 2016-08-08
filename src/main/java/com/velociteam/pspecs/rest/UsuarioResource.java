@@ -42,11 +42,11 @@ public class UsuarioResource {
         return new ResponseEntity<>(contactos,HttpStatus.OK);
     }
 	
-	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createMsg(@PathVariable String userId,@Valid @RequestBody MensajeDTO mensaje) {
+	@RequestMapping(value="/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createMsg(@Valid @RequestBody MensajeDTO mensaje) {
 		
         try {
-        	chatService.saveMsg(userId,mensaje);
+        	chatService.saveMsg(mensaje);
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }

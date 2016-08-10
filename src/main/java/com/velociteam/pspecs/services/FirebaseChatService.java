@@ -23,6 +23,8 @@ public class FirebaseChatService {
 	
 	public void saveMsg(String userId, MensajeDTO msg){
 		Map<String,Object> data = new HashMap<>();
+		data.put("data",userId);
+		//TODO formatear notificacion con formato pedido por juan.
 		data.put("notification",msg);
 		data.put("to",usuariosDao.getTokenByUser(userId));
 		httpService.sendPost(FCM_URL, new Gson().toJson(data));

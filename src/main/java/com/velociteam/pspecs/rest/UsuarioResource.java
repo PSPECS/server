@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.velociteam.pspecs.dao.UsuariosDao;
 import com.velociteam.pspecs.dto.MensajeDTO;
+import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.services.FirebaseChatService;
 
@@ -29,6 +30,19 @@ public class UsuarioResource {
 	@Autowired 
 	private FirebaseChatService chatService;
 
+	@RequestMapping(value="/{userId}/newRefreshToken",method = RequestMethod.PUT,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateToken(@PathVariable String userId, @RequestBody TokenDTO tokenDTO) {
+		
+        try {
+        	usuariosDao.updateToken(userId,tokenDTO);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+	
 	@RequestMapping(value="/{userId}/contactos",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createLog(@PathVariable String userId) {
 		List<UsuarioDTO> contactos = null;

@@ -14,6 +14,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 
 @Repository
@@ -22,8 +23,7 @@ public class UsuariosDao {
 	public List<UsuarioDTO> getContacts(String userId) throws UnknownHostException {
 		List<UsuarioDTO> contactos = new ArrayList<>();
 		
-		final DB db = new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
-		DBCursor dbUsuario = db.getCollection("usuario")
+		DBCursor dbUsuario = getDB().getCollection("usuario")
 				.find(new BasicDBObject("_id",new ObjectId(userId)),new BasicDBObject("contactos",1));
 		
 		for (DBObject usuario : dbUsuario) {
@@ -39,6 +39,16 @@ public class UsuariosDao {
 			}
 		}
 		return contactos;
+	}
+
+	public void updateToken(String userId, TokenDTO tokenDTO) throws UnknownHostException {
+		getDB().getCollection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+				new BasicDBObject("$set",new BasicDBObject("token",tokenDTO.getRefreshToken())));
+		
+	}
+
+	private DB getDB() throws UnknownHostException {
+		return new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
 	}
 
 }

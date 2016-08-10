@@ -1,6 +1,8 @@
 package com.velociteam.pspecs.services;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -32,9 +34,16 @@ public class HTTPService {
 			os.flush();
 			os.close();
 			
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					httpConnection.getInputStream()));
+			String inputLine;
+	        while ((inputLine = in.readLine()) != null) 
+	            System.out.println(inputLine);
+	        in.close();
+			
 			//Validar Respuesta
 //			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)){
-				throw new RuntimeException(httpConnection.getInputStream().toString());
+				throw new RuntimeException(inputLine);
 //			} 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -37,13 +37,14 @@ public class HTTPService {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					httpConnection.getInputStream()));
 			String inputLine;
+			StringBuffer response = new StringBuffer();
 	        while ((inputLine = in.readLine()) != null) 
-	            System.out.println(inputLine);
+	        	response.append(inputLine);
 	        in.close();
 			
 			//Validar Respuesta
 //			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)){
-				throw new RuntimeException(inputLine);
+				throw new RuntimeException(response.toString());
 //			} 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +36,9 @@ public class HTTPService {
 			os.flush();
 			os.close();
 			
+			if (httpConnection.getResponseCode()==HttpURLConnection.HTTP_UNAUTHORIZED) throw new RuntimeException("Token Invalido");
+//			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)) throw new RuntimeException("Fallo el post");
+			
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					httpConnection.getInputStream()));
 			String inputLine;
@@ -43,9 +48,8 @@ public class HTTPService {
 	        in.close();
 			
 			//Validar Respuesta
-//			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)){
-				throw new RuntimeException(response.toString());
-//			} 
+			throw new RuntimeException(response.toString());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

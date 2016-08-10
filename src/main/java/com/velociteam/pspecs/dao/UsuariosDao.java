@@ -20,7 +20,7 @@ import com.velociteam.pspecs.dto.UsuarioDTO;
 @Repository
 public class UsuariosDao {
 
-	public List<UsuarioDTO> getContacts(String userId) throws UnknownHostException {
+	public List<UsuarioDTO> getContacts(String userId) {
 		List<UsuarioDTO> contactos = new ArrayList<>();
 		
 		DBCursor dbUsuario = getDB().getCollection("usuario")
@@ -41,14 +41,26 @@ public class UsuariosDao {
 		return contactos;
 	}
 
-	public void updateToken(String userId, TokenDTO tokenDTO) throws UnknownHostException {
+	public void updateToken(String userId, TokenDTO tokenDTO) {
 		getDB().getCollection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
 				new BasicDBObject("$set",new BasicDBObject("token",tokenDTO.getRefreshToken())));
 		
 	}
 
-	private DB getDB() throws UnknownHostException {
-		return new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
+	private DB getDB() {
+		DB db = null;
+		try {
+			db = new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
+		} catch (UnknownHostException e) {
+			throw new RuntimeException(e.getCause());
+		}
+		return db;
+	}
+
+	public String getTokenByUser(String userId) {
+		DBObject token = getDB().getCollection("usuario")
+				.findOne(new BasicDBObject("_id",new ObjectId(userId)),new BasicDBObject("token",1));
+		return token.get("token").toString();
 	}
 
 }

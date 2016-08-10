@@ -3,7 +3,6 @@ package com.velociteam.pspecs.dto;
 import java.util.List;
 
 public class MensajeDTO {
-	public String usuarioOrigen;
 	public String usuarioDestino;
 	public String timestamp;
 	public List<ImagenDTO> imagenes;
@@ -25,12 +24,6 @@ public class MensajeDTO {
 	}
 	public void setImagenes(List<ImagenDTO> imagenes) {
 		this.imagenes = imagenes;
-	}
-	public String getUsuarioOrigen() {
-		return usuarioOrigen;
-	}
-	public void setUsuarioOrigen(String usuarioOrigen) {
-		this.usuarioOrigen = usuarioOrigen;
 	}
 	
 }

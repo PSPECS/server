@@ -31,7 +31,7 @@ public class UsuarioResource {
 	private FirebaseChatService chatService;
 
 	@RequestMapping(value="/{userId}/newRefreshToken",method = RequestMethod.PUT,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateToken(@PathVariable String userId, @RequestBody TokenDTO tokenDTO) {
+    public ResponseEntity<?> updateToken(@PathVariable String userId, @Valid @RequestBody TokenDTO tokenDTO) {
 		
         try {
         	usuariosDao.updateToken(userId,tokenDTO);
@@ -56,16 +56,16 @@ public class UsuarioResource {
         return new ResponseEntity<>(contactos,HttpStatus.OK);
     }
 	
-	@RequestMapping(value="/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createMsg(@Valid @RequestBody MensajeDTO mensaje) {
+	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createMsg(@PathVariable String userId,@Valid @RequestBody MensajeDTO mensaje) {
 		
         try {
-        	chatService.saveMsg(mensaje);
+        	chatService.saveMsg(userId,mensaje);
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 	
 }

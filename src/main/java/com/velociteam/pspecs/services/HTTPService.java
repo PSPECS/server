@@ -32,10 +32,10 @@ public class HTTPService {
 			os.flush();
 			os.close();
 			
-			//Validar Respuest
-			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)){
-				throw new RuntimeException("Fallo el post");
-			} 
+			//Validar Respuesta
+//			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)){
+				throw new RuntimeException(httpConnection.getInputStream().toString());
+//			} 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

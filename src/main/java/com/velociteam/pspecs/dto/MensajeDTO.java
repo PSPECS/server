@@ -3,26 +3,19 @@ package com.velociteam.pspecs.dto;
 import java.util.List;
 
 public class MensajeDTO {
-	public String usuarioDestino;
-	public String timestamp;
-	public List<ImagenDTO> imagenes;
+	public String to;
+	public List<String> imagenes;
 	
 	public String getUsuarioDestino() {
-		return usuarioDestino;
+		return to;
 	}
 	public void setUsuarioDestino(String usuarioDestino) {
-		this.usuarioDestino = usuarioDestino;
+		this.to = usuarioDestino;
 	}
-	public String getTimestamp() {
-		return timestamp;
-	}
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
-	}
-	public List<ImagenDTO> getImagenes() {
+	public List<String> getImagenes() {
 		return imagenes;
 	}
-	public void setImagenes(List<ImagenDTO> imagenes) {
+	public void setImagenes(List<String> imagenes) {
 		this.imagenes = imagenes;
 	}
 	

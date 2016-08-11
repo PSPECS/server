@@ -34,6 +34,7 @@ public class UsuariosDao {
 				usuarioDTO.setUsuario((String) ((DBObject) contact).get("username"));
 				usuarioDTO.setNombre((String) ((DBObject) contact).get("nombre"));
 				usuarioDTO.setApellido((String) ((DBObject) contact).get("apellido"));
+				usuarioDTO.setEtapaPecs((String) ((DBObject) contact).get("etapaPecs"));
 				usuarioDTO.setImagenDePerfil((String) ((DBObject) contact).get("imagenPerfile"));
 				contactos.add(usuarioDTO);
 			}

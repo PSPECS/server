@@ -5,6 +5,7 @@ public class UsuarioDTO {
 	public String usuario;
 	public String nombre;
 	public String apellido;
+	public String etapaPecs;
 	public String imagenDePerfil;
 	
 	public String getUsuario() {
@@ -24,6 +25,12 @@ public class UsuarioDTO {
 	}
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
+	}
+	public String getEtapaPecs() {
+		return etapaPecs;
+	}
+	public void setEtapaPecs(String etapaPecs) {
+		this.etapaPecs = etapaPecs;
 	}
 	public String getImagenDePerfil() {
 		return imagenDePerfil;

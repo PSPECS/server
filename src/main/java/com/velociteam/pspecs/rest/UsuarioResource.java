@@ -1,6 +1,8 @@
 package com.velociteam.pspecs.rest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.velociteam.pspecs.dao.MensajesDao;
 import com.velociteam.pspecs.dao.UsuariosDao;
 import com.velociteam.pspecs.dto.MensajeDTO;
+import com.velociteam.pspecs.dto.RequestMsgDTO;
 import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.services.FirebaseChatService;
@@ -26,6 +30,9 @@ public class UsuarioResource {
 	
 	@Autowired
 	private UsuariosDao usuariosDao;
+	
+	@Autowired
+	private MensajesDao mensajesDao;
 	
 	@Autowired 
 	private FirebaseChatService chatService;
@@ -66,6 +73,20 @@ public class UsuarioResource {
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+	
+	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.GET,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getMsgs(@PathVariable String userId,@RequestBody RequestMsgDTO requestMsg) {
+		Map<String,Object> mensajes = new HashMap<>();
+		
+        try {
+        	mensajes.put("usuario", usuariosDao.getUserInfoById(userId));
+        	mensajes.put("mensajes", mensajesDao.search(userId,requestMsg));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(mensajes,HttpStatus.OK);
     }
 	
 }

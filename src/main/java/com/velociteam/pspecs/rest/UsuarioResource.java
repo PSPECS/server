@@ -63,7 +63,7 @@ public class UsuarioResource {
     }
 	
 	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createMsg(@PathVariable String userId,@Valid @RequestBody MensajeDTO mensaje) {
+    public ResponseEntity<?> createMsg(@PathVariable String userId,@RequestBody MensajeDTO mensaje) {
 		
         try {
         	chatService.saveMsg(userId,mensaje);

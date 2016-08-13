@@ -11,15 +11,13 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.velociteam.pspecs.dto.LogDTO;
 
 @Repository
-public class LogDAO {
+public class LogDAO extends AbstractDao{
 	
 	public void save(LogDTO logDTO) throws UnknownHostException{
-		DB db = new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
+		DB db = getDB();
 		DBCollection navegacion = db.getCollection("navegacion");
 		
 		navegacion.insert(new BasicDBObject("dtInicio", logDTO.getDtInicio())

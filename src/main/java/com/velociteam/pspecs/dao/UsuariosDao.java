@@ -53,7 +53,7 @@ public class UsuariosDao extends AbstractDao{
 	
 	private UsuarioDTO fromDBtoDTO(Object dbObject) {
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
-		usuarioDTO.setUsuario((String) ((DBObject) dbObject).get("usuario"));
+		usuarioDTO.setUsuario((String) ((DBObject) dbObject).get("_id"));
 		usuarioDTO.setNombre((String) ((DBObject) dbObject).get("nombre"));
 		usuarioDTO.setApellido((String) ((DBObject) dbObject).get("apellido"));
 		usuarioDTO.setEtapaPecs((String) ((DBObject) dbObject).get("etapaPecs"));

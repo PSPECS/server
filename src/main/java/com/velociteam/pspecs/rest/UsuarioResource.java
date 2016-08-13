@@ -37,7 +37,7 @@ public class UsuarioResource {
 	@Autowired 
 	private FirebaseChatService chatService;
 
-	@RequestMapping(value="/{userId}/newRefreshToken",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/{userId}/newRefreshToken",method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateToken(@PathVariable String userId, @Valid @RequestBody TokenDTO tokenDTO) {
 		
         try {

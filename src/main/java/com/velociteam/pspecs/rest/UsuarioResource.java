@@ -38,7 +38,7 @@ public class UsuarioResource {
 	private FirebaseChatService chatService;
 
 	@RequestMapping(value="/{userId}/newRefreshToken",method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateToken(@PathVariable String userId, @Valid @RequestBody TokenDTO tokenDTO) {
+    public ResponseEntity<?> updateToken(@PathVariable String userId, @RequestBody TokenDTO tokenDTO) {
 		
         try {
         	usuariosDao.updateToken(userId,tokenDTO);
@@ -63,7 +63,7 @@ public class UsuarioResource {
     }
 	
 	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createMsg(@PathVariable String userId,@Valid @RequestBody MensajeDTO mensaje) {
+    public ResponseEntity<?> createMsg(@PathVariable String userId,@RequestBody MensajeDTO mensaje) {
 		
         try {
         	chatService.saveMsg(userId,mensaje);

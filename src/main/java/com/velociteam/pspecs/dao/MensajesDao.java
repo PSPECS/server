@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
+import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -15,6 +16,7 @@ import com.velociteam.pspecs.dto.ImagenDTO;
 import com.velociteam.pspecs.dto.RequestMsgDTO;
 import com.velociteam.pspecs.dto.ResponseMsgDTO;
 
+@Repository
 public class MensajesDao extends AbstractDao{
 	
 	public List<ResponseMsgDTO> search(String userId, RequestMsgDTO requestMsg) {

@@ -62,7 +62,7 @@ public class UsuarioResource {
         return new ResponseEntity<>(contactos,HttpStatus.OK);
     }
 	
-	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/{userId}/enviarMensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createMsg(@PathVariable String userId,@RequestBody MensajeDTO mensaje) {
 		
         try {

@@ -26,7 +26,9 @@ public class UsuariosDao extends AbstractDao{
 			BasicDBList contacts = (BasicDBList) usuario.get("contactos");
 			
 			for (Object contact : contacts) {
-				contactos.add(fromDBtoDTO(contact));
+				UsuarioDTO usuarioDTO = fromDBtoDTO(contact);
+				usuarioDTO.setUsuario(userId);
+				contactos.add(usuarioDTO);
 			}
 		}
 		return contactos;
@@ -47,13 +49,13 @@ public class UsuariosDao extends AbstractDao{
 	public UsuarioDTO getUserInfoById(String userId) {
 		DBCursor dbUsuario = getDB().getCollection("usuario")
 				.find(new BasicDBObject("_id",new ObjectId(userId)));
-		
-		return fromDBtoDTO(dbUsuario);
+		UsuarioDTO usuarioDTO = fromDBtoDTO(dbUsuario);
+		usuarioDTO.setUsuario(userId);
+		return usuarioDTO;
 	}
 	
 	private UsuarioDTO fromDBtoDTO(Object dbObject) {
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
-		usuarioDTO.setUsuario((String) ((DBObject) dbObject).get("_id"));
 		usuarioDTO.setNombre((String) ((DBObject) dbObject).get("nombre"));
 		usuarioDTO.setApellido((String) ((DBObject) dbObject).get("apellido"));
 		usuarioDTO.setEtapaPecs((String) ((DBObject) dbObject).get("etapaPecs"));

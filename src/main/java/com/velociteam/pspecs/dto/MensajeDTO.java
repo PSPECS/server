@@ -6,11 +6,11 @@ public class MensajeDTO {
 	public String to;
 	public List<String> imagenes;
 	
-	public String getUsuarioDestino() {
+	public String getTo() {
 		return to;
 	}
-	public void setUsuarioDestino(String usuarioDestino) {
-		this.to = usuarioDestino;
+	public void setTo(String to) {
+		this.to = to;
 	}
 	public List<String> getImagenes() {
 		return imagenes;
@@ -18,5 +18,6 @@ public class MensajeDTO {
 	public void setImagenes(List<String> imagenes) {
 		this.imagenes = imagenes;
 	}
+	
 	
 }

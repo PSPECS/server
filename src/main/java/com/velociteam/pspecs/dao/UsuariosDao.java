@@ -45,8 +45,8 @@ public class UsuariosDao extends AbstractDao{
 	}
 
 	public UsuarioDTO getUserInfoById(String userId) {
-		DBCursor dbUsuario = getDB().getCollection("usuario")
-				.find(new BasicDBObject("_id",new ObjectId(userId)));
+		DBObject dbUsuario = getDB().getCollection("usuario")
+				.find(new BasicDBObject("_id",new ObjectId(userId))).one();
 		
 		return fromDBtoDTO(dbUsuario);
 	}

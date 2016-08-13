@@ -48,7 +48,6 @@ public class UsuarioResource {
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-
 	
 	@RequestMapping(value="/{userId}/contactos",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createLog(@PathVariable String userId) {

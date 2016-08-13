@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;
@@ -27,7 +26,7 @@ public class MensajesDao extends AbstractDao{
 		List<ResponseMsgDTO> mensajes = new ArrayList<>();
 		//TODO Agregar filtro por fecha y devolver ordenados por fecha para que el limit ande.
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
-				.find(new BasicDBObject("usuarioDestino",userId));
+				.find(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		
 		for (DBObject mensaje : dbMensajes) {
 			List<ImagenDTO> imagenes = new ArrayList<>();
@@ -40,7 +39,7 @@ public class MensajesDao extends AbstractDao{
 			
 			ResponseMsgDTO response = new ResponseMsgDTO(
 					(String) ((DBObject) mensaje).get("usuarioOrigen"),
-					(String) ((DBObject) mensaje).get("timestamp"),
+					(String) ((Date)((DBObject) mensaje).get("timestamp")).toString(),
 					imagenes);
 			
 			mensajes.add(response);

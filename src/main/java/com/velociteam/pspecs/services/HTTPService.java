@@ -35,7 +35,7 @@ public class HTTPService {
 			os.close();
 			
 			if (httpConnection.getResponseCode()==HttpURLConnection.HTTP_UNAUTHORIZED) throw new RuntimeException("Token Invalido");
-//			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)) throw new RuntimeException("Fallo el post");
+			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)) throw new RuntimeException("Fallo el post");
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					httpConnection.getInputStream()));
@@ -44,9 +44,6 @@ public class HTTPService {
 	        while ((inputLine = in.readLine()) != null) 
 	        	response.append(inputLine);
 	        in.close();
-			
-			//Validar Respuesta
-			throw new RuntimeException(response.toString());
 			
 		} catch (IOException e) {
 			e.printStackTrace();

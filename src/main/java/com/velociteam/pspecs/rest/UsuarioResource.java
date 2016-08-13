@@ -74,7 +74,7 @@ public class UsuarioResource {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 	
-	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.GET,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getMsgs(@PathVariable String userId,@RequestBody RequestMsgDTO requestMsg) {
 		Map<String,Object> mensajes = new HashMap<>();
 		

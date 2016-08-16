@@ -30,7 +30,7 @@ public class MensajesDao extends AbstractDao{
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
-				.find(new BasicDBObject("or",or));
+				.find(new BasicDBObject("$or",or));
 		
 		for (DBObject mensaje : dbMensajes) {
 			List<ImagenDTO> imagenes = new ArrayList<>();

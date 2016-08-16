@@ -79,7 +79,7 @@ public class UsuarioResource {
 		Map<String,Object> mensajes = new HashMap<>();
 		
         try {
-        	mensajes.put("usuario", usuariosDao.getUserInfoById(userId));
+        	mensajes.put("usuario", usuariosDao.getUserInfoById(requestMsg.getUsuarioAChatear()));
         	mensajes.put("mensajes", mensajesDao.search(userId,requestMsg));
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);

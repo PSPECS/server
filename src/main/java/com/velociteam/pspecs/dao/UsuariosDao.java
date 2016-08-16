@@ -49,21 +49,24 @@ public class UsuariosDao extends AbstractDao{
 				.find(new BasicDBObject("_id",new ObjectId(userId))).one();
 		
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
-		usuarioDTO.setUsuario(userId);
+		usuarioDTO.setId(userId);
 		usuarioDTO.setNombre((String) ((DBObject) dbUsuario).get("nombre"));
 		usuarioDTO.setApellido((String) ((DBObject) dbUsuario).get("apellido"));
 		usuarioDTO.setEtapaPecs((String) ((DBObject) dbUsuario).get("etapaPecs"));
-		usuarioDTO.setImagenDePerfil((String) ((DBObject) dbUsuario).get("imagenDePerfil"));
+		String imagenPerfil =(String) ((DBObject) dbUsuario).get("imagenDePerfil");
+		if (imagenPerfil!=null && !"".equalsIgnoreCase(imagenPerfil)) usuarioDTO.setImagenDePerfil(imagenPerfil);
 		return usuarioDTO;
 	}
 	
 	private UsuarioDTO fromDBtoDTO(Object dbObject) {
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
-		usuarioDTO.setUsuario((String) ((DBObject) dbObject).get("_id"));
+		usuarioDTO.setId((String) ((DBObject) dbObject).get("_id"));
 		usuarioDTO.setNombre((String) ((DBObject) dbObject).get("nombre"));
 		usuarioDTO.setApellido((String) ((DBObject) dbObject).get("apellido"));
 		usuarioDTO.setEtapaPecs((String) ((DBObject) dbObject).get("etapaPecs"));
-		usuarioDTO.setImagenDePerfil((String) ((DBObject) dbObject).get("imagenDePerfil"));
+		String imagenPerfil =(String) ((DBObject) dbObject).get("imagenDePerfil");
+		if (imagenPerfil!=null && !"".equalsIgnoreCase(imagenPerfil)) usuarioDTO.setImagenDePerfil(imagenPerfil);
+		usuarioDTO.setNuevosMensajes(false);
 		return usuarioDTO;
 	}
 

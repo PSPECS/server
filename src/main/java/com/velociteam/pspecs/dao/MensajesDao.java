@@ -1,5 +1,6 @@
 package com.velociteam.pspecs.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -52,14 +53,14 @@ public class MensajesDao extends AbstractDao{
 		DBCollection mensajes = getDB().getCollection("mensajes");
 		
 		mensajes.insert(new BasicDBObject("usuarioOrigen",userFrom)
-				.append("timestamp", new Date())
+				.append("timestamp", new SimpleDateFormat("dd/MM/yyyy-hh:mm").format(new Date()))
 				.append("usuarioDestino", mensajesDTO.getTo())
 				.append("imagenes", buildImagenes(mensajesDTO.getImagenes())));
 	}
 
 	private List<BasicDBObject> buildImagenes(List<String> imagenes) {
 		
-		return imagenes.stream().map(imagen-> new BasicDBObject("resId",imagen)).collect(Collectors.toList());
+		return imagenes.stream().filter(im->im!=null && !"".equalsIgnoreCase(im)).map(imagen-> new BasicDBObject("resId",imagen)).collect(Collectors.toList());
 	}
 
 }

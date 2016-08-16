@@ -2,17 +2,18 @@ package com.velociteam.pspecs.dto;
 
 public class UsuarioDTO {
 	
-	public String usuario;
+	public String id;
 	public String nombre;
 	public String apellido;
 	public String etapaPecs;
 	public String imagenDePerfil;
+	public Boolean nuevosMensajes;
 	
-	public String getUsuario() {
-		return usuario;
+	public String getId() {
+		return id;
 	}
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getNombre() {
 		return nombre;
@@ -37,6 +38,12 @@ public class UsuarioDTO {
 	}
 	public void setImagenDePerfil(String imagenDePerfil) {
 		this.imagenDePerfil = imagenDePerfil;
+	}
+	public Boolean getNuevosMensajes() {
+		return nuevosMensajes;
+	}
+	public void setNuevosMensajes(Boolean nuevosMensajes) {
+		this.nuevosMensajes = nuevosMensajes;
 	}
 	
 

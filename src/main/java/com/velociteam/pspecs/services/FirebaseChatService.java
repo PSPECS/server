@@ -32,7 +32,7 @@ public class FirebaseChatService {
 		Map<String,Object> data = new HashMap<>();
 		data.put("to", usuariosDao.getTokenByUser(msg.getTo()));
 		data.put("message_id", new MessageId(new BigInteger(130, new SecureRandom()).toString(32)));
-		data.put("notification", new FirebaseNotificationDTO("msg_body", "title", "@drawable/logo_hd", "default", "OPEN_CHAT"));
+		data.put("notification", new FirebaseNotificationDTO("", "title", "@drawable/logo_hd", "default", "OPEN_CHAT"));
 		data.put("data", new UserId(userId));
 		httpService.sendPost(FCM_URL, new Gson().toJson(data));
 		mensajesDao.saveMsg(userId, msg);

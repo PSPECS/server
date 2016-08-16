@@ -26,8 +26,11 @@ public class MensajesDao extends AbstractDao{
 		
 		List<ResponseMsgDTO> mensajes = new ArrayList<>();
 		//TODO Agregar filtro por fecha y devolver ordenados por fecha para que el limit ande.
+		BasicDBList or = new BasicDBList();
+		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
+		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
-				.find(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
+				.find(new BasicDBObject("or",or));
 		
 		for (DBObject mensaje : dbMensajes) {
 			List<ImagenDTO> imagenes = new ArrayList<>();

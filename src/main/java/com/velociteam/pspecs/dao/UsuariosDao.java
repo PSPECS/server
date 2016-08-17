@@ -54,7 +54,7 @@ public class UsuariosDao extends AbstractDao{
 		usuarioDTO.setApellido((String) ((DBObject) dbUsuario).get("apellido"));
 		usuarioDTO.setEtapaPecs((String) ((DBObject) dbUsuario).get("etapaPecs"));
 		String imagenPerfil =(String) ((DBObject) dbUsuario).get("imagenDePerfil");
-		if (imagenPerfil!=null && !"".equalsIgnoreCase(imagenPerfil)) usuarioDTO.setImagenDePerfil(imagenPerfil);
+		usuarioDTO.setImagenDePerfil((imagenPerfil!=null && !"".equalsIgnoreCase(imagenPerfil))?imagenPerfil:"");
 		usuarioDTO.setNuevosMensajes("false");
 		return usuarioDTO;
 	}

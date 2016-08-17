@@ -14,7 +14,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.velociteam.pspecs.dto.ImagenDTO;
 import com.velociteam.pspecs.dto.MensajeDTO;
 import com.velociteam.pspecs.dto.RequestMsgDTO;
 import com.velociteam.pspecs.dto.ResponseMsgDTO;
@@ -33,12 +32,12 @@ public class MensajesDao extends AbstractDao{
 				.find(new BasicDBObject("$or",or));
 		
 		for (DBObject mensaje : dbMensajes) {
-			List<ImagenDTO> imagenes = new ArrayList<>();
+			List<String> imagenes = new ArrayList<>();
 			BasicDBList imgs = (BasicDBList) mensaje.get("imagenes");
 			
 			for (Iterator<Object> imIt = imgs.iterator(); imIt.hasNext();) {
 				Object imagen = (Object) imIt.next();
-				imagenes.add(new ImagenDTO((String) ((DBObject) imagen).get("resId")));
+				imagenes.add((String) ((DBObject) imagen).get("resId"));
 			}
 			
 			ResponseMsgDTO response = new ResponseMsgDTO(

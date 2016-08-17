@@ -7,7 +7,7 @@ public class UsuarioDTO {
 	public String apellido;
 	public String etapaPecs;
 	public String imagenDePerfil;
-	public Boolean nuevosMensajes;
+	public String nuevosMensajes;
 	
 	public String getId() {
 		return id;
@@ -39,10 +39,10 @@ public class UsuarioDTO {
 	public void setImagenDePerfil(String imagenDePerfil) {
 		this.imagenDePerfil = imagenDePerfil;
 	}
-	public Boolean getNuevosMensajes() {
+	public String getNuevosMensajes() {
 		return nuevosMensajes;
 	}
-	public void setNuevosMensajes(Boolean nuevosMensajes) {
+	public void setNuevosMensajes(String nuevosMensajes) {
 		this.nuevosMensajes = nuevosMensajes;
 	}
 	

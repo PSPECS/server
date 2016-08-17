@@ -43,7 +43,7 @@ public class MensajesDao extends AbstractDao{
 			
 			ResponseMsgDTO response = new ResponseMsgDTO(
 					(String) ((DBObject) mensaje).get("usuarioOrigen"),
-					(String) ((Date)((DBObject) mensaje).get("timestamp")).toString(),
+					(String) ((DBObject) mensaje).get("timestamp"),
 					imagenes);
 			
 			mensajes.add(response);

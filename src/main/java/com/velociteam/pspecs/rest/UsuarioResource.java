@@ -36,7 +36,7 @@ public class UsuarioResource {
 	
 	@Autowired 
 	private FirebaseChatService chatService;
-
+	
 	@RequestMapping(value="/{userId}/newRefreshToken",method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateToken(@PathVariable String userId, @Valid @RequestBody TokenDTO tokenDTO) {
 		
@@ -56,7 +56,7 @@ public class UsuarioResource {
         try {
         	contactos=usuariosDao.getContacts(userId);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(contactos,HttpStatus.OK);

@@ -24,7 +24,7 @@ public class UsuariosDao extends AbstractDao{
 		
 		for (DBObject usuario : dbUsuario) {
 			BasicDBList contacts = (BasicDBList) usuario.get("contactos");
-			
+			if (contacts==null) continue;
 			for (Object contact : contacts) {
 				contactos.add(fromDBtoDTO(contact));
 			}

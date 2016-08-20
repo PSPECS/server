@@ -8,14 +8,16 @@ import com.mongodb.MongoClientURI;
 
 public abstract class AbstractDao {
 	
-	private DB db = null;
+	private MongoClient mc = null;
 	
 	protected synchronized DB getDB() {
-		if (db!=null){
-			return db;
+		DB db = null;
+		if (mc!=null){
+			return mc.getDB("pspecs");
 		} else{
 			try {
-				db = new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/")).getDB("pspecs");
+				mc = new MongoClient(new MongoClientURI("mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/"));
+				db = mc.getDB("pspecs");
 			} catch (UnknownHostException e) {
 				throw new RuntimeException(e.getCause());
 			}

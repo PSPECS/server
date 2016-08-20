@@ -10,7 +10,7 @@ public abstract class AbstractDao {
 	
 	private DB db = null;
 	
-	protected DB getDB() {
+	protected synchronized DB getDB() {
 		if (db!=null){
 			return db;
 		} else{

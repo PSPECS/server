@@ -3,6 +3,8 @@ package com.velociteam.pspecs.dto;
 public class ImagenMetadataDTO{
 	private String id;
 	private String tipo;
+	public ImagenMetadataDTO() {
+	}
 	public ImagenMetadataDTO(String id, String tipo) {
 		super();
 		this.id = id;

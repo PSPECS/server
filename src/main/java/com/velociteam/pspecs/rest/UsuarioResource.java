@@ -63,7 +63,7 @@ public class UsuarioResource {
     }
 	
 	@RequestMapping(value="/{userId}/enviarMensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createMsg(@PathVariable String userId,@RequestBody MensajeDTO mensaje) {
+    public ResponseEntity<?> createMsg(@PathVariable String userId,@Valid @RequestBody MensajeDTO mensaje) {
 		
         try {
         	chatService.saveMsg(userId,mensaje);
@@ -75,7 +75,7 @@ public class UsuarioResource {
     }
 	
 	@RequestMapping(value="/{userId}/mensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getMsgs(@PathVariable String userId,@RequestBody RequestMsgDTO requestMsg) {
+    public ResponseEntity<?> getMsgs(@PathVariable String userId,@Valid @RequestBody RequestMsgDTO requestMsg) {
 		Map<String,Object> mensajes = new HashMap<>();
 		
         try {

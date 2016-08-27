@@ -15,6 +15,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.velociteam.pspecs.dto.MensajeDTO;
+import com.velociteam.pspecs.dto.MensajeDTO.ImagenMetadataDTO;
 import com.velociteam.pspecs.dto.RequestMsgDTO;
 import com.velociteam.pspecs.dto.ResponseMsgDTO;
 
@@ -32,12 +33,12 @@ public class MensajesDao extends AbstractDao{
 				.find(new BasicDBObject("$or",or));
 		
 		for (DBObject mensaje : dbMensajes) {
-			List<String> imagenes = new ArrayList<>();
+			List<MensajeDTO.ImagenMetadataDTO> imagenes = new ArrayList<>();
 			BasicDBList imgs = (BasicDBList) mensaje.get("imagenes");
 			
 			for (Iterator<Object> imIt = imgs.iterator(); imIt.hasNext();) {
 				Object imagen = (Object) imIt.next();
-				imagenes.add((String) ((DBObject) imagen).get("resId"));
+				imagenes.add(setImagenMetadata(imagen));
 			}
 			
 			ResponseMsgDTO response = new ResponseMsgDTO(
@@ -50,7 +51,7 @@ public class MensajesDao extends AbstractDao{
 		
 		return mensajes.stream().limit(Long.valueOf(requestMsg.getUltimos())).collect(Collectors.toList());
 	}
-	
+
 	public void saveMsg(String userFrom,MensajeDTO mensajesDTO){
 		DBCollection mensajes = getDB().getCollection("mensajes");
 		
@@ -59,10 +60,14 @@ public class MensajesDao extends AbstractDao{
 				.append("usuarioDestino", mensajesDTO.getTo())
 				.append("imagenes", buildImagenes(mensajesDTO.getImagenes())));
 	}
+	
+	private ImagenMetadataDTO setImagenMetadata(Object imagen) {
+		return new MensajeDTO().new ImagenMetadataDTO((String) ((DBObject) imagen).get("resId"), (String) ((DBObject) imagen).get("tipo"));
+	}
+	
 
-	private List<BasicDBObject> buildImagenes(List<String> imagenes) {
-		
-		return imagenes.stream().filter(im->im!=null && !"".equalsIgnoreCase(im)).map(imagen-> new BasicDBObject("resId",imagen)).collect(Collectors.toList());
+	private List<BasicDBObject> buildImagenes(List<ImagenMetadataDTO> list) {
+		return list.stream().filter(imMetadata->imMetadata!=null).map(imMetadata-> new BasicDBObject("resId",imMetadata.getId()).append("tipo", imMetadata.getTipo())).collect(Collectors.toList());
 	}
 
 }

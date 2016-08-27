@@ -6,12 +6,12 @@ public class ResponseMsgDTO {
 	
 	private String enviadoPor;
 	private String timestamp;
-	private List<String> imagenes;
+	private List<MensajeDTO.ImagenMetadataDTO> imagenes;
 	
 	public ResponseMsgDTO() {
 	}
 	
-	public ResponseMsgDTO(String enviadoPor, String timestamp, List<String> imagenes) {
+	public ResponseMsgDTO(String enviadoPor, String timestamp, List<MensajeDTO.ImagenMetadataDTO> imagenes) {
 		super();
 		this.enviadoPor = enviadoPor;
 		this.timestamp = timestamp;
@@ -31,11 +31,11 @@ public class ResponseMsgDTO {
 		this.timestamp = timestamp;
 	}
 
-	public List<String> getImagenes() {
+	public List<MensajeDTO.ImagenMetadataDTO> getImagenes() {
 		return imagenes;
 	}
 
-	public void setImagenes(List<String> imagenes) {
+	public void setImagenes(List<MensajeDTO.ImagenMetadataDTO> imagenes) {
 		this.imagenes = imagenes;
 	}
 	

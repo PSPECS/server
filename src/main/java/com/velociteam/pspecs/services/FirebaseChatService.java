@@ -31,10 +31,11 @@ public class FirebaseChatService {
 	public void saveMsg(String userId, MensajeDTO msg){
 		Map<String,Object> data = new HashMap<>();
 		try {
+			String etapaPecs = usuariosDao.getUserInfoById(userId).getEtapaPecs();
 			data.put("to", usuariosDao.getTokenByUser(msg.getTo()));
 			data.put("message_id", new MessageId(new BigInteger(130, new SecureRandom()).toString(32)));
 			data.put("notification", new FirebaseNotificationDTO("", "Nuevo mensaje", "@drawable/logo_hd", "default", "OPEN_CHAT"));
-			data.put("data", new UserId(userId));
+			data.put("data", new Data(userId,etapaPecs));
 			httpService.sendPost(FCM_URL, new Gson().toJson(data));
 		} catch (Exception e){
 			//TODO q hacer
@@ -42,15 +43,17 @@ public class FirebaseChatService {
 		mensajesDao.saveMsg(userId, msg);
 	}
 	
-	public class UserId {
+	public class Data {
 		private String user_id;
+		private String user_level;
 		
-		public UserId() {
+		public Data() {
 		}
 		
-		public UserId(String user_id) {
+		public Data(String user_id,String user_level) {
 			super();
 			this.user_id = user_id;
+			this.user_level = user_level;
 		}
 
 		public String getUser_id() {
@@ -59,6 +62,14 @@ public class FirebaseChatService {
 
 		public void setUser_id(String user_id) {
 			this.user_id = user_id;
+		}
+
+		public String getUser_level() {
+			return user_level;
+		}
+
+		public void setUser_level(String user_level) {
+			this.user_level = user_level;
 		}
 	}
 	

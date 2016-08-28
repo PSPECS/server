@@ -25,14 +25,14 @@ public class MensajesDao extends AbstractDao{
 	public List<ResponseMsgDTO> search(String userId, RequestMsgDTO requestMsg) {
 		
 		List<ResponseMsgDTO> mensajes = new ArrayList<>();
-		//TODO Agregar filtro por fecha y devolver ordenados por fecha para que el limit ande.
 		BasicDBList or = new BasicDBList();
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
+		or.add(new BasicDBObject("timestamp",new BasicDBObject("$lt",requestMsg.getAnteriorA())));
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
 				.find(new BasicDBObject("$or",or));
 		
-		for (DBObject mensaje : dbMensajes) {
+		for (DBObject mensaje : dbMensajes.sort(new BasicDBObject("lastupdated",-1)).limit(Integer.valueOf(requestMsg.getUltimos()))) {
 			List<ImagenMetadataDTO> imagenes = new ArrayList<>();
 			BasicDBList imgs = (BasicDBList) mensaje.get("imagenes");
 			
@@ -49,7 +49,7 @@ public class MensajesDao extends AbstractDao{
 			mensajes.add(response);
 		}
 		
-		return mensajes.stream().limit(Long.valueOf(requestMsg.getUltimos())).collect(Collectors.toList());
+		return mensajes;
 	}
 
 	public void saveMsg(String userFrom,MensajeDTO mensajesDTO){

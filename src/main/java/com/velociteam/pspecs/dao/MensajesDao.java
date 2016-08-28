@@ -57,7 +57,7 @@ public class MensajesDao extends AbstractDao{
 		DBCollection mensajes = getDB().getCollection("mensajes");
 		
 		mensajes.insert(new BasicDBObject("usuarioOrigen",userFrom)
-				.append("timestamp", new SimpleDateFormat("dd/MM/yyyy-hh:mm").format(new Date()))
+				.append("timestamp", new Date())
 				.append("usuarioDestino", mensajesDTO.getTo())
 				.append("imagenes", buildImagenes(mensajesDTO.getImagenes())));
 	}

@@ -1,5 +1,6 @@
 package com.velociteam.pspecs.dao;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,13 +23,13 @@ import com.velociteam.pspecs.dto.ResponseMsgDTO;
 @Repository
 public class MensajesDao extends AbstractDao{
 	
-	public List<ResponseMsgDTO> search(String userId, RequestMsgDTO requestMsg) {
+	public List<ResponseMsgDTO> search(String userId, RequestMsgDTO requestMsg) throws ParseException {
 		
 		List<ResponseMsgDTO> mensajes = new ArrayList<>();
 		BasicDBList or = new BasicDBList();
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
-		or.add(new BasicDBObject("timestamp",new BasicDBObject("$lt",requestMsg.getAnteriorA())));
+		or.add(new BasicDBObject("timestamp",new BasicDBObject("$lt", new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA()))));
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
 				.find(new BasicDBObject("$or",or));
 		

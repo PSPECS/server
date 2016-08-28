@@ -31,8 +31,7 @@ public class MensajesDao extends AbstractDao{
 		BasicDBList or = new BasicDBList();
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
-		or.add(new BasicDBObject("timestamp",new BasicDBObject("$lt", buildIsoDate(requestMsg.getAnteriorA()))));
-		
+		or.add(new BasicDBObject("timestamp",new BasicDBObject("$lt", new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA()).getTime())));
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
 				.find(new BasicDBObject("$or",or));
 		
@@ -47,7 +46,7 @@ public class MensajesDao extends AbstractDao{
 			
 			ResponseMsgDTO response = new ResponseMsgDTO(
 					(String) ((DBObject) mensaje).get("usuarioOrigen"),
-					new SimpleDateFormat("dd/MM/yyyy-hh:mm").format((Date) mensaje.get("timestamp")),
+					new SimpleDateFormat("dd/MM/yyyy-hh:mm").format(new Date((Long) mensaje.get("timestamp"))),
 					imagenes);
 			
 			mensajes.add(response);
@@ -60,7 +59,7 @@ public class MensajesDao extends AbstractDao{
 		DBCollection mensajes = getDB().getCollection("mensajes");
 		
 		mensajes.insert(new BasicDBObject("usuarioOrigen",userFrom)
-				.append("timestamp", new Date())
+				.append("timestamp", new Date().getTime())
 				.append("usuarioDestino", mensajesDTO.getTo())
 				.append("imagenes", buildImagenes(mensajesDTO.getImagenes())));
 	}
@@ -72,11 +71,6 @@ public class MensajesDao extends AbstractDao{
 
 	private List<BasicDBObject> buildImagenes(List<ImagenMetadataDTO> list) {
 		return list.stream().filter(imMetadata->imMetadata!=null).map(imMetadata-> new BasicDBObject("resId",imMetadata.getId()).append("tipo", imMetadata.getTipo())).collect(Collectors.toList());
-	}
-	
-	private String buildIsoDate(String date){
-		String [] dateParts = date.split("/");
-		return "ISODate('"+dateParts[2].split("-")[0]+"-"+dateParts[1]+"-"+dateParts[0]+"')";
 	}
 
 }

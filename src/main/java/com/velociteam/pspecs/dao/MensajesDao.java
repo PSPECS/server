@@ -76,7 +76,7 @@ public class MensajesDao extends AbstractDao{
 	}
 	
 	private String buildIsoDate(Date date){
-		return "ISODate("+date.getYear()+"-"+date.getDay()+"-"+date.getMonth()+")";
+		return "ISODate('"+date.getYear()+"-"+date.getDay()+"-"+date.getMonth()+"')";
 	}
 
 }

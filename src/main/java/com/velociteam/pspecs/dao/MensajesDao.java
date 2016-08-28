@@ -17,7 +17,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.QueryBuilder;
 import com.velociteam.pspecs.dto.ImagenMetadataDTO;
 import com.velociteam.pspecs.dto.MensajeDTO;
 import com.velociteam.pspecs.dto.RequestMsgDTO;
@@ -32,8 +31,8 @@ public class MensajesDao extends AbstractDao{
 		BasicDBList or = new BasicDBList();
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
-		or.add(new BasicDBObject("timestamp",new BasicDBObject("$lt", 
-				buildIsoDate(new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA())))));
+		or.add(new BasicDBObject("timestamp",new BasicDBObject("$lt", buildIsoDate(requestMsg.getAnteriorA()))));
+		
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
 				.find(new BasicDBObject("$or",or));
 		
@@ -75,8 +74,9 @@ public class MensajesDao extends AbstractDao{
 		return list.stream().filter(imMetadata->imMetadata!=null).map(imMetadata-> new BasicDBObject("resId",imMetadata.getId()).append("tipo", imMetadata.getTipo())).collect(Collectors.toList());
 	}
 	
-	private String buildIsoDate(Date date){
-		return "ISODate('"+date.getYear()+"-"+date.getDay()+"-"+date.getMonth()+"')";
+	private String buildIsoDate(String date){
+		String [] dateParts = date.split("/");
+		return "ISODate('"+dateParts[2].split("-")[0]+"-"+dateParts[1]+"-"+dateParts[0]+"')";
 	}
 
 }

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;
@@ -44,7 +46,10 @@ public class MensajesDao extends AbstractDao{
 			
 			ResponseMsgDTO response = new ResponseMsgDTO(
 					(String) ((DBObject) mensaje).get("usuarioOrigen"),
-					new SimpleDateFormat("dd/MM/yyyy-hh:mm").format(mensaje.get("timestamp")),
+					new SimpleDateFormat("dd/MM/yyyy-hh:mm").format(
+							DatatypeConverter.parseDateTime(
+									(String) mensaje.get("timestamp"))
+							.getTime()),
 					imagenes);
 			
 			mensajes.add(response);

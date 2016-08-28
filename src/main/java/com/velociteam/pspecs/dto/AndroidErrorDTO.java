@@ -1,7 +1,5 @@
 package com.velociteam.pspecs.dto;
 
-import java.util.List;
-
 public class AndroidErrorDTO {
 //	  {
 //	        cause: "stackTrace",
@@ -19,10 +17,10 @@ public class AndroidErrorDTO {
 //	        }
 	
 	private String cause;
-	private List<DeviceDTO> device;
-	private List<FirmwareDTO> firmware;
+	private DeviceDTO device;
+	private FirmwareDTO firmware;
 	public AndroidErrorDTO() {}
-	public AndroidErrorDTO(String cause, List<DeviceDTO> device, List<FirmwareDTO> firmware) {
+	public AndroidErrorDTO(String cause, DeviceDTO device, FirmwareDTO firmware) {
 		super();
 		this.cause = cause;
 		this.device = device;
@@ -34,16 +32,16 @@ public class AndroidErrorDTO {
 	public void setCause(String cause) {
 		this.cause = cause;
 	}
-	public List<DeviceDTO> getDevice() {
+	public DeviceDTO getDevice() {
 		return device;
 	}
-	public void setDevice(List<DeviceDTO> device) {
+	public void setDevice(DeviceDTO device) {
 		this.device = device;
 	}
-	public List<FirmwareDTO> getFirmware() {
+	public FirmwareDTO getFirmware() {
 		return firmware;
 	}
-	public void setFirmware(List<FirmwareDTO> firmware) {
+	public void setFirmware(FirmwareDTO firmware) {
 		this.firmware = firmware;
 	}
 }

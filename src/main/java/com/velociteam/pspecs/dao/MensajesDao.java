@@ -32,30 +32,31 @@ public class MensajesDao extends AbstractDao{
 		BasicDBList and = new BasicDBList();
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
-		and.add(or);
-		and.add(new BasicDBObject("timestamp",new BasicDBObject("$lt", 
-				new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA()).getTime())));
+		
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
 				.find(new BasicDBObject("$and",and));
 		
-		for (DBObject mensaje : dbMensajes.sort(new BasicDBObject("lastupdated",-1)).limit(Integer.valueOf(requestMsg.getUltimos()))) {
-			List<ImagenMetadataDTO> imagenes = new ArrayList<>();
-			BasicDBList imgs = (BasicDBList) mensaje.get("imagenes");
-			
-			for (Iterator<Object> imIt = imgs.iterator(); imIt.hasNext();) {
-				Object imagen = (Object) imIt.next();
-				imagenes.add(setImagenMetadata(imagen));
+		for (DBObject mensaje : dbMensajes.sort(new BasicDBObject("lastupdated",-1))) {
+			Long timestamp = (Long) mensaje.get("timestamp");
+			if (timestamp>new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA()).getTime()){
+				List<ImagenMetadataDTO> imagenes = new ArrayList<>();
+				BasicDBList imgs = (BasicDBList) mensaje.get("imagenes");
+				
+				for (Iterator<Object> imIt = imgs.iterator(); imIt.hasNext();) {
+					Object imagen = (Object) imIt.next();
+					imagenes.add(setImagenMetadata(imagen));
+				}
+				
+				ResponseMsgDTO response = new ResponseMsgDTO(
+						(String) ((DBObject) mensaje).get("usuarioOrigen"),
+						new SimpleDateFormat("dd/MM/yyyy-hh:mm").format(new Date(timestamp)),
+						imagenes);
+				
+				mensajes.add(response);
 			}
-			
-			ResponseMsgDTO response = new ResponseMsgDTO(
-					(String) ((DBObject) mensaje).get("usuarioOrigen"),
-					new SimpleDateFormat("dd/MM/yyyy-hh:mm").format(new Date((Long) mensaje.get("timestamp"))),
-					imagenes);
-			
-			mensajes.add(response);
 		}
 		
-		return mensajes;
+		return mensajes.stream().limit(Long.valueOf(requestMsg.getUltimos())).collect(Collectors.toList());
 	}
 
 	public void saveMsg(String userFrom,MensajeDTO mensajesDTO){

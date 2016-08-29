@@ -37,7 +37,7 @@ public class MensajesDao extends AbstractDao{
 		
 		for (DBObject mensaje : dbMensajes.sort(new BasicDBObject("lastupdated",-1))) {
 			Long timestamp = (Long) mensaje.get("timestamp");
-			if (timestamp>new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA()).getTime()){
+			if (new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA()).getTime()>timestamp){
 				List<ImagenMetadataDTO> imagenes = new ArrayList<>();
 				BasicDBList imgs = (BasicDBList) mensaje.get("imagenes");
 				

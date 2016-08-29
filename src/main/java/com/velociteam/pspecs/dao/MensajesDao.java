@@ -29,13 +29,14 @@ public class MensajesDao extends AbstractDao{
 		
 		List<ResponseMsgDTO> mensajes = new ArrayList<>();
 		BasicDBList or = new BasicDBList();
+		BasicDBList and = new BasicDBList();
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
-
+		and.add(or);
+		and.add(new BasicDBObject("timestamp",new BasicDBObject("$lt", 
+				new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA()).getTime())));
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
-				.find(new BasicDBObject("$and",new BasicDBObject("$or",or)
-						.append("timestamp",new BasicDBObject("$lt", 
-								new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(requestMsg.getAnteriorA()).getTime()))));
+				.find(new BasicDBObject("$and",and));
 		
 		for (DBObject mensaje : dbMensajes.sort(new BasicDBObject("lastupdated",-1)).limit(Integer.valueOf(requestMsg.getUltimos()))) {
 			List<ImagenMetadataDTO> imagenes = new ArrayList<>();

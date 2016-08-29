@@ -29,12 +29,11 @@ public class MensajesDao extends AbstractDao{
 		
 		List<ResponseMsgDTO> mensajes = new ArrayList<>();
 		BasicDBList or = new BasicDBList();
-		BasicDBList and = new BasicDBList();
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
 		
 		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
-				.find(new BasicDBObject("$and",and));
+				.find(new BasicDBObject("$or",or));
 		
 		for (DBObject mensaje : dbMensajes.sort(new BasicDBObject("lastupdated",-1))) {
 			Long timestamp = (Long) mensaje.get("timestamp");

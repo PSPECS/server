@@ -9,6 +9,19 @@ public class UsuarioDTO {
 	public String imagenDePerfil;
 	public String nuevosMensajes;
 	
+	public UsuarioDTO() {}
+	
+	public UsuarioDTO(String id, String nombre, String apellido, String etapaPecs, String imagenDePerfil,
+			String nuevosMensajes) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.etapaPecs = etapaPecs;
+		this.imagenDePerfil = imagenDePerfil;
+		this.nuevosMensajes = nuevosMensajes;
+	}
+	
 	public String getId() {
 		return id;
 	}

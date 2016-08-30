@@ -9,7 +9,7 @@ import com.velociteam.pspecs.dto.AndroidErrorDTO;
 public class AndroidErrorDao extends AbstractDao{
 
 	public void logError(AndroidErrorDTO error) {
-		super.getDB().getCollection("androidLog").insert(
+		collection("androidLog").insert(
 				new BasicDBObject("cause",error.getCause())
 				.append("device",new BasicDBObject("brand",error.getDevice().getBrand())
 						.append("device", error.getDevice().getDevice())

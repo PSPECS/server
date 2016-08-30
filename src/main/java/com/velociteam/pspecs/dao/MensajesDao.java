@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;
@@ -32,7 +30,7 @@ public class MensajesDao extends AbstractDao{
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
 		
-		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
+		DBCursor dbMensajes = collection("mensajes")
 				.find(new BasicDBObject("$or",or));
 		
 		for (DBObject mensaje : dbMensajes.sort(new BasicDBObject("timestamp",1))) {
@@ -59,7 +57,7 @@ public class MensajesDao extends AbstractDao{
 	}
 
 	public void saveMsg(String userFrom,MensajeDTO mensajesDTO){
-		DBCollection mensajes = getDB().getCollection("mensajes");
+		DBCollection mensajes = collection("mensajes");
 		
 		mensajes.insert(new BasicDBObject("usuarioOrigen",userFrom)
 				.append("timestamp", new Date().getTime())

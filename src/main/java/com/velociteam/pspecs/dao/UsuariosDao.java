@@ -19,7 +19,7 @@ public class UsuariosDao extends AbstractDao{
 	public List<UsuarioDTO> getContacts(String userId) {
 		List<UsuarioDTO> contactos = new ArrayList<>();
 		
-		DBCursor dbUsuario = getDB().getCollection("usuario")
+		DBCursor dbUsuario = collection("usuario")
 				.find(new BasicDBObject("_id",new ObjectId(userId)),new BasicDBObject("contactos",1));
 		
 		for (DBObject usuario : dbUsuario) {
@@ -34,18 +34,18 @@ public class UsuariosDao extends AbstractDao{
 
 
 	public void updateToken(String userId, TokenDTO tokenDTO) {
-		getDB().getCollection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
 				new BasicDBObject("$set",new BasicDBObject("token",tokenDTO.getRefreshToken())));
 	}
 
 	public String getTokenByUser(String userId) {
-		DBObject token = getDB().getCollection("usuario")
+		DBObject token = collection("usuario")
 				.findOne(new BasicDBObject("_id",new ObjectId(userId)),new BasicDBObject("token",1));
 		return token.get("token").toString();
 	}
 
 	public UsuarioDTO getUserInfoById(String userId) {
-		DBObject dbUsuario = getDB().getCollection("usuario")
+		DBObject dbUsuario = collection("usuario")
 				.find(new BasicDBObject("_id",new ObjectId(userId))).one();
 		
 		UsuarioDTO usuarioDTO = new UsuarioDTO();

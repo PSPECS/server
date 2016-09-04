@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;

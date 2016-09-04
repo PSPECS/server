@@ -1,15 +1,10 @@
 package com.velociteam.pspecs.dao;
 
-import java.net.UnknownHostException;
-
-import org.springframework.stereotype.Component;
-
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.velociteam.pspecs.exception.MongoException;
 
-@Component
+//@Component
 public class RealDB implements MongodbDBCreator {
 
 	public RealDB() {}
@@ -23,12 +18,8 @@ public class RealDB implements MongodbDBCreator {
 		if (mc!=null){
 			return mc.getDB(PSPECS_DB_NAME);
 		} else{
-			try {
-				mc = new MongoClient(new MongoClientURI(MONGODB_CONN_STRING));
-				db = mc.getDB(PSPECS_DB_NAME);
-			} catch (UnknownHostException e) {
-				throw new MongoException("IP address of a host could not be determined.",e.getCause());
-			}
+			mc = new MongoClient(new MongoClientURI(MONGODB_CONN_STRING));
+			db = mc.getDB(PSPECS_DB_NAME);
 			return db;
 		}
 	}

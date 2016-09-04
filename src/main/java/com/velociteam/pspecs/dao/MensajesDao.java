@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;
@@ -23,6 +24,11 @@ import com.velociteam.pspecs.dto.ResponseMsgDTO;
 @Repository
 public class MensajesDao extends AbstractDao{
 	
+	@Autowired
+	public MensajesDao(MongodbDBCreator aCreator) {
+		super(aCreator);
+	}
+
 	public List<ResponseMsgDTO> search(String userId, RequestMsgDTO requestMsg) throws ParseException {
 		
 		List<ResponseMsgDTO> mensajes = new ArrayList<>();

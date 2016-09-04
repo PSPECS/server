@@ -15,6 +15,11 @@ import com.velociteam.pspecs.dto.LogDTO;
 public class LogDAO extends AbstractDao{
 	
 	@Autowired
+	public LogDAO(MongodbDBCreator aCreator) {
+		super(aCreator);
+	}
+
+	@Autowired
 	private UsuariosDao usDao;
 	
 	public void save(LogDTO logDTO) throws UnknownHostException{

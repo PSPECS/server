@@ -93,7 +93,7 @@ public class UsuariosDao extends AbstractDao{
 	
 	private UsuarioDTO fromDBtoDTO(DBObject dbObject) {
 		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
-		return new UsuarioDTO(((ObjectId) dbObject.get("_id")).toString(),
+		return new UsuarioDTO((String) dbObject.get("_id"),
 				(String) dbObject.get("nombre"),
 				(String) dbObject.get("apellido"),
 				(String) dbObject.get("etapaPecs"),

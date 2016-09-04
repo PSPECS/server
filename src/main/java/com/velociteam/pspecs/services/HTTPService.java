@@ -9,6 +9,8 @@ import java.net.URL;
 
 import org.springframework.stereotype.Service;
 
+import com.velociteam.pspecs.exception.BussinessException;
+
 @Service
 public class HTTPService {
 	
@@ -34,8 +36,8 @@ public class HTTPService {
 			os.flush();
 			os.close();
 			
-			if (httpConnection.getResponseCode()==HttpURLConnection.HTTP_UNAUTHORIZED) throw new RuntimeException("Token Invalido");
-			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)) throw new RuntimeException("Fallo el post");
+			if (httpConnection.getResponseCode()==HttpURLConnection.HTTP_UNAUTHORIZED) throw new BussinessException("Token Invalido");
+			if (!(httpConnection.getResponseCode()==HttpURLConnection.HTTP_OK)) throw new BussinessException("Fallo el post");
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					httpConnection.getInputStream()));

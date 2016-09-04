@@ -4,6 +4,11 @@ public class TokenDTO {
 	
 	private String refreshToken;
 
+	public TokenDTO(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+	public TokenDTO() {}
+
 	public String getRefreshToken() {
 		return refreshToken;
 	}

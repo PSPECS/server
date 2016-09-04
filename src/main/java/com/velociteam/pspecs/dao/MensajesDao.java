@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;
@@ -23,6 +24,11 @@ import com.velociteam.pspecs.dto.ResponseMsgDTO;
 @Repository
 public class MensajesDao extends AbstractDao{
 	
+	@Autowired
+	public MensajesDao(MongodbDBCreator aCreator) {
+		super(aCreator);
+	}
+
 	public List<ResponseMsgDTO> search(String userId, RequestMsgDTO requestMsg) throws ParseException {
 		
 		List<ResponseMsgDTO> mensajes = new ArrayList<>();
@@ -30,7 +36,7 @@ public class MensajesDao extends AbstractDao{
 		or.add(new BasicDBObject("usuarioDestino",userId).append("usuarioOrigen", requestMsg.getUsuarioAChatear()));
 		or.add(new BasicDBObject("usuarioOrigen",userId).append("usuarioDestino", requestMsg.getUsuarioAChatear()));
 		
-		DBCursor dbMensajes = super.getDB().getCollection("mensajes")
+		DBCursor dbMensajes = collection("mensajes")
 				.find(new BasicDBObject("$or",or));
 		
 		for (DBObject mensaje : dbMensajes.sort(new BasicDBObject("timestamp",1))) {
@@ -57,7 +63,7 @@ public class MensajesDao extends AbstractDao{
 	}
 
 	public void saveMsg(String userFrom,MensajeDTO mensajesDTO){
-		DBCollection mensajes = getDB().getCollection("mensajes");
+		DBCollection mensajes = collection("mensajes");
 		
 		mensajes.insert(new BasicDBObject("usuarioOrigen",userFrom)
 				.append("timestamp", new Date().getTime())

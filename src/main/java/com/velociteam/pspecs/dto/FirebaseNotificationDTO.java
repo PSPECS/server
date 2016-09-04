@@ -7,9 +7,7 @@ public class FirebaseNotificationDTO {
 	private String sound;
 	private String click_action;
 	
-	public FirebaseNotificationDTO() {
-	}
-	
+	public FirebaseNotificationDTO() {}
 	
 	public FirebaseNotificationDTO(String body, String title, String icon, String sound, String click_action) {
 		super();

@@ -1,10 +1,12 @@
 package com.velociteam.pspecs.dao;
 
+import org.springframework.stereotype.Component;
+
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
-//@Component
+@Component
 public class RealDB implements MongodbDBCreator {
 
 	public RealDB() {}

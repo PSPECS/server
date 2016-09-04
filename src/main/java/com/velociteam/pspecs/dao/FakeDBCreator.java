@@ -8,7 +8,6 @@ import com.mongodb.DB;
 //Solo usado para unit testing.
 //@Component("fakeDB")
 public class FakeDBCreator implements MongodbDBCreator {
-
 	private Fongo server;
 	
 	public FakeDBCreator() {}

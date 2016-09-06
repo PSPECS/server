@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,13 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.velociteam.pspecs.dto.CredentialsResponseDTO;
 import com.velociteam.pspecs.dto.SignupDTO;
+import com.velociteam.pspecs.dto.SignupResponseDTO;
 import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.BussinessException;
+import com.velociteam.pspecs.security.Token;
 
 @Repository
 public class UsuariosDao extends AbstractDao{
@@ -37,12 +39,11 @@ public class UsuariosDao extends AbstractDao{
 			BasicDBList contacts = (BasicDBList) usuario.get("contactos");
 			if (contacts==null) continue;
 			for (Object contact : contacts) {
-				contactos.add(fromDBtoDTO((DBObject)contact));
+				contactos.add(new UsuarioDTO((DBObject)contact));
 			}
 		}
 		return contactos;
 	}
-
 
 	public void updateToken(String userId, TokenDTO tokenDTO) {
 		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
@@ -59,29 +60,38 @@ public class UsuariosDao extends AbstractDao{
 		DBObject dbUsuario = collection("usuario")
 				.find(new BasicDBObject("_id",new ObjectId(userId))).one();
 		
-		return fromDBtoDTO(dbUsuario);
+		return new UsuarioDTO(dbUsuario);
 	}
 	
-	public UsuarioDTO getUserInfoByNyA(String nombre,String apellido) {
+	public SignupResponseDTO getUserInfoByNyA(String nombre,String apellido) {
 		DBObject dbUsuario = collection("usuario")
-				.find(new BasicDBObject("nombre",nombre)
-						.append("apellido", apellido)).one();
+				.find(new BasicDBObject("nombre",nombre).append("apellido", apellido)).one();
 		
-		return fromDBtoDTO(dbUsuario);
+		return new SignupResponseDTO(dbUsuario);
+	}
+	
+	public CredentialsResponseDTO getUserInfoByMailYPass(String mail, String password) {
+		DBObject dbUsuario = collection("usuario")
+				.find(new BasicDBObject("mail",mail).append("passoword", password)).one();
+		
+		if (dbUsuario==null) throw new BussinessException("El usuario y/o password ingresado no existe");
+		return new CredentialsResponseDTO(dbUsuario);
 	}
 	
 	public void createUser(SignupDTO signupDTO) throws ParseException{
 		collection("usuario").insert(new BasicDBObject("nombre",signupDTO.getNombre())
 				.append("apellido", signupDTO.getApellido())
 				.append("mail", signupDTO.getMail())
+				.append("password", signupDTO.getPassword())
 				.append("fnac", new SimpleDateFormat("dd/MM/yyyy").parse(signupDTO.getFnac()).getTime())
 				.append("etapaPecs", signupDTO.getEtapaPecs())
 				.append("rol", signupDTO.getRol())
 				.append("imagenDePerfil",signupDTO.getFoto())
+				.append("accesToken", new Token(signupDTO.getNombre()).base64())
 //				TODO agregar la generacion de los tokens
-				.append("accesToken", "")
 				.append("refreshToken", ""));
 	}
+	
 	
 	public ObjectId isValid(String userId) {
 		final DBCursor cursor = collection("usuario").find(new BasicDBObject("_id",new ObjectId(userId)));
@@ -89,16 +99,6 @@ public class UsuariosDao extends AbstractDao{
 			throw new BussinessException("El usuario ingresado no existe.");
 		}
 		return new ObjectId(userId);
-	}
-	
-	private UsuarioDTO fromDBtoDTO(DBObject dbObject) {
-		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
-		return new UsuarioDTO((String) dbObject.get("_id"),
-				(String) dbObject.get("nombre"),
-				(String) dbObject.get("apellido"),
-				(String) dbObject.get("etapaPecs"),
-				imagenPerfil.orElse(""),
-				"false");
 	}
 
 }

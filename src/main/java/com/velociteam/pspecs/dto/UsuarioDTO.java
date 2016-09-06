@@ -1,5 +1,9 @@
 package com.velociteam.pspecs.dto;
 
+import java.util.Optional;
+
+import com.mongodb.DBObject;
+
 public class UsuarioDTO {
 	
 	public String id;
@@ -11,15 +15,14 @@ public class UsuarioDTO {
 	
 	public UsuarioDTO() {}
 	
-	public UsuarioDTO(String id, String nombre, String apellido, String etapaPecs, String imagenDePerfil,
-			String nuevosMensajes) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.etapaPecs = etapaPecs;
-		this.imagenDePerfil = imagenDePerfil;
-		this.nuevosMensajes = nuevosMensajes;
+	public UsuarioDTO(DBObject dbObject) {
+		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
+		this.id = (String) dbObject.get("_id");
+		this.nombre = (String) dbObject.get("nombre");
+		this.apellido = (String) dbObject.get("apellido");
+		this.etapaPecs = (String) dbObject.get("etapaPecs");
+		this.imagenDePerfil = imagenPerfil.orElse("");
+		this.nuevosMensajes = "false";
 	}
 	
 	public String getId() {

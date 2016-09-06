@@ -72,7 +72,7 @@ public class UsuariosDao extends AbstractDao{
 	
 	public CredentialsResponseDTO getUserInfoByMailYPass(String mail, String password) {
 		DBObject dbUsuario = collection("usuario")
-				.find(new BasicDBObject("mail",mail).append("passoword", password)).one();
+				.find(new BasicDBObject("mail",mail).append("password", password)).one();
 		
 		if (dbUsuario==null) throw new BussinessException("El usuario y/o password ingresado no existe");
 		return new CredentialsResponseDTO(dbUsuario);

@@ -2,6 +2,8 @@ package com.velociteam.pspecs.dto;
 
 import java.util.Optional;
 
+import org.bson.types.ObjectId;
+
 import com.mongodb.DBObject;
 
 public class CredentialsResponseDTO {
@@ -21,7 +23,7 @@ public class CredentialsResponseDTO {
 		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
 		this.token = (String) dbObject.get("accesToken");
 		this.refreshToken = (String) dbObject.get("refreshToken");
-		this.id = (String) dbObject.get("_id");
+		this.id = ((ObjectId) dbObject.get("_id")).toString();
 		this.nombre = (String) dbObject.get("nombre");
 		this.apellido = (String) dbObject.get("apellido");
 		this.mail = (String) dbObject.get("mail");

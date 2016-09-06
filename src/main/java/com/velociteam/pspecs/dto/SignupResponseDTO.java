@@ -1,5 +1,7 @@
 package com.velociteam.pspecs.dto;
 
+import org.bson.types.ObjectId;
+
 import com.mongodb.DBObject;
 
 public class SignupResponseDTO {
@@ -11,7 +13,7 @@ public class SignupResponseDTO {
 	public SignupResponseDTO() {}
 	
 	public SignupResponseDTO(DBObject dbObject) {
-		this.id = (String) dbObject.get("_id");
+		this.id = ((ObjectId) dbObject.get("_id")).toString();
 		this.accessToken = (String) dbObject.get("accesToken");
 		this.refreshToken = (String) dbObject.get("refreshToken");
 	}

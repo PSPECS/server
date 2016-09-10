@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.velociteam.pspecs.dao.AuthenticationDAO;
+import com.velociteam.pspecs.dao.AuthenticationService;
 import com.velociteam.pspecs.dao.UsuariosDao;
 import com.velociteam.pspecs.dto.CredentialsDTO;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
@@ -25,7 +25,7 @@ public class AuthenticationResource {
 	private UsuariosDao usuarioDao;
 	
 	@Autowired
-	private AuthenticationDAO authDao;
+	private AuthenticationService authDao;
 	
 	@RequestMapping(value="/signup",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signup(@RequestBody SignupDTO signupDTO) {

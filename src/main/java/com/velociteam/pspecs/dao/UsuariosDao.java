@@ -18,11 +18,16 @@ import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
 import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
+import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
 import com.velociteam.pspecs.security.Token;
 
 @Repository
 public class UsuariosDao extends AbstractDao{
+
+	private static final int ONE_WEEK = 604800;
+	private static final int THIRTY_MINS = 1800;
+
 
 	@Autowired
 	public UsuariosDao(MongodbDBCreator aCreator) {
@@ -88,10 +93,18 @@ public class UsuariosDao extends AbstractDao{
 				.append("rol", signupDTO.getRol())
 				.append("imagenDePerfil",signupDTO.getFoto())
 				.append("accesToken", new Token(signupDTO.getNombre()).base64())
-//				TODO agregar la generacion de los tokens
-				.append("refreshToken", ""));
+				.append("refreshToken", new Token(signupDTO.getNombre()).base64()));
+		
+		collection("usuario").createIndex(new BasicDBObject("accesToken",1),new BasicDBObject("expireAfterSeconds",THIRTY_MINS));
+		collection("usuario").createIndex(new BasicDBObject("refreshToken",1),new BasicDBObject("expireAfterSeconds",ONE_WEEK));
 	}
 	
+	public void validateAccessToken(String token){
+		DBObject dbUsuario = collection("usuario")
+				.find(new BasicDBObject("accesToken",token)).one();
+		
+		if (dbUsuario==null) throw new AuthenticationException("El access token expiro o no es valido.");
+	}
 	
 	public ObjectId isValid(String userId) {
 		final DBCursor cursor = collection("usuario").find(new BasicDBObject("_id",new ObjectId(userId)));

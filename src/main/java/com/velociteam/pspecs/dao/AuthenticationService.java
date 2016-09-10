@@ -1,23 +1,22 @@
 package com.velociteam.pspecs.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
 
-@Repository
-public class AuthenticationDAO extends AbstractDao{
+@Service
+public class AuthenticationService{
 
 	@Autowired
 	private UsuariosDao usuarioDao;
 	
-	@Autowired
-	public AuthenticationDAO(MongodbDBCreator aCreator) {
-		super(aCreator);
-	}
-
 	public CredentialsResponseDTO authenticate(String mail, String password) {
 		return usuarioDao.getUserInfoByMailYPass(mail, password);
+	}
+	
+	public void isValidToken(String token){
+			usuarioDao.validateAccessToken(token);
 	}
 
 }

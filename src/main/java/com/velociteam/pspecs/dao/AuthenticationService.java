@@ -16,7 +16,15 @@ public class AuthenticationService{
 	}
 	
 	public void isValidToken(String token){
-			usuarioDao.validateAccessToken(token);
+		usuarioDao.validateAccessToken(token);
+	}
+
+	public String refreshToken(String refreshToken) {
+		return usuarioDao.getNewAccessToken(refreshToken);
+	}
+
+	public void logout(String userId) {
+		usuarioDao.clearTokens(userId);
 	}
 
 }

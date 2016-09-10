@@ -92,16 +92,16 @@ public class UsuariosDao extends AbstractDao{
 				.append("etapaPecs", signupDTO.getEtapaPecs())
 				.append("rol", signupDTO.getRol())
 				.append("imagenDePerfil",signupDTO.getFoto())
-				.append("accesToken", new Token(signupDTO.getNombre()).base64())
-				.append("refreshToken", new Token(signupDTO.getNombre()).base64()));
+				.append("accessToken", base64Token(signupDTO.getNombre()))
+				.append("refreshToken", base64Token(signupDTO.getNombre())));
 		
-		collection("usuario").createIndex(new BasicDBObject("accesToken",1),new BasicDBObject("expireAfterSeconds",THIRTY_MINS));
+		collection("usuario").createIndex(new BasicDBObject("accessToken",1),new BasicDBObject("expireAfterSeconds",THIRTY_MINS));
 		collection("usuario").createIndex(new BasicDBObject("refreshToken",1),new BasicDBObject("expireAfterSeconds",ONE_WEEK));
 	}
 	
 	public void validateAccessToken(String token){
 		DBObject dbUsuario = collection("usuario")
-				.find(new BasicDBObject("accesToken",token)).one();
+				.find(new BasicDBObject("accessToken",token)).one();
 		
 		if (dbUsuario==null) throw new AuthenticationException("El access token expiro o no es valido.");
 	}
@@ -113,5 +113,37 @@ public class UsuariosDao extends AbstractDao{
 		}
 		return new ObjectId(userId);
 	}
+
+	public String getNewAccessToken(String refreshToken) {
+		DBObject dbUsuario = collection("usuario").find(new BasicDBObject("refreshToken",refreshToken)).one();
+		
+		if (dbUsuario==null) throw new AuthenticationException("El refresh token expiro o no es valido.");
+		
+		CredentialsResponseDTO cred = new CredentialsResponseDTO(dbUsuario);
+		
+		String newToken = base64Token(cred.getNombre());
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(cred.getId())), 
+				new BasicDBObject("$set",new BasicDBObject("accessToken",newToken)));
+		
+		collection("usuario").createIndex(new BasicDBObject("accessToken",1),new BasicDBObject("expireAfterSeconds",THIRTY_MINS));
+		
+		return newToken;
+	}
+
+	private String base64Token(String name) {
+		return new Token(name).base64();
+	}
+
+	public void clearTokens(String userId) {
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+				new BasicDBObject("$unset",new BasicDBObject("accessToken",1)));
+		
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+				new BasicDBObject("$unset",new BasicDBObject("refreshToken",1)));
+		
+		collection("usuario").dropIndex(new BasicDBObject("accessToken",-1));
+		collection("usuario").dropIndex(new BasicDBObject("refreshToken",-1));
+	}
+
 
 }

@@ -70,6 +70,22 @@ public class UsuarioResource extends AbstractResource {
         return new ResponseEntity<>(contactos,HttpStatus.OK);
     }
 	
+	@RequestMapping(value="/{userId}",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String autHeader,@PathVariable String userId) {
+		UsuarioDTO usuario = null;
+		
+        try {
+        	auth(autHeader);
+        	usuario=usuariosDao.getUserInfoById(userId);
+        } catch (AuthenticationException e){
+        	return new ResponseEntity<>(e,HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(usuario,HttpStatus.OK);
+    }
+	
 	@RequestMapping(value="/{userId}/enviarMensajes",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createMsg(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@Valid @RequestBody MensajeDTO mensaje) {
 		

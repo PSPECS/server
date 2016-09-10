@@ -50,7 +50,7 @@ public class UsuarioResource {
     }
 	
 	@RequestMapping(value="/{userId}/contactos",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createLog(@PathVariable String userId) {
+    public ResponseEntity<?> getContacts(@PathVariable String userId) {
 		List<UsuarioDTO> contactos = null;
 		
         try {

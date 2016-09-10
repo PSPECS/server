@@ -11,6 +11,7 @@ public class CredentialsResponseDTO {
 	private String refreshToken;
 	private String id;
 	private String nombre;
+	private String fnac;
 	private String apellido;
 	private String mail;
 	private String rol;
@@ -30,6 +31,7 @@ public class CredentialsResponseDTO {
 		this.rol = (String) dbObject.get("rol");
 		this.etapaPecs = (String) dbObject.get("etapaPecs");
 		this.imagenDePerfil = imagenPerfil.orElse("");
+		this.fnac = (String) dbObject.get("fnac");
 	}
 	public String getImagenDePerfil() {
 		return imagenDePerfil;
@@ -100,6 +102,14 @@ public class CredentialsResponseDTO {
 
 	public void setEtapaPecs(String etapaPecs) {
 		this.etapaPecs = etapaPecs;
+	}
+
+	public String getFnac() {
+		return fnac;
+	}
+
+	public void setFnac(String fnac) {
+		this.fnac = fnac;
 	}
 	
 }

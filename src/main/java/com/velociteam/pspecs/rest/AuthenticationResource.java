@@ -28,7 +28,7 @@ public class AuthenticationResource {
 	private AuthenticationDAO authDao;
 	
 	@RequestMapping(value="/signup",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createMsg(@RequestBody SignupDTO signupDTO) {
+    public ResponseEntity<?> signup(@RequestBody SignupDTO signupDTO) {
 		SignupResponseDTO responseDTO = null;
         try {
         	usuarioDao.createUser(signupDTO);
@@ -41,7 +41,7 @@ public class AuthenticationResource {
     }
 	
 	@RequestMapping(value="/login",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createMsg(@RequestBody CredentialsDTO credentialsDTO) {
+    public ResponseEntity<?> auth(@RequestBody CredentialsDTO credentialsDTO) {
 		CredentialsResponseDTO responseDTO = null;
         try {
         	responseDTO = authDao.authenticate(credentialsDTO.getMail(),credentialsDTO.getPassword());
@@ -51,7 +51,7 @@ public class AuthenticationResource {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(responseDTO,HttpStatus.CREATED);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 	
 }

@@ -17,7 +17,7 @@ public class UsuarioDTO {
 	
 	public UsuarioDTO(DBObject dbObject) {
 		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
-		this.id = (String) dbObject.get("_id");
+		this.id = (String) dbObject.get("_id").toString();
 		this.nombre = (String) dbObject.get("nombre");
 		this.apellido = (String) dbObject.get("apellido");
 		this.etapaPecs = (String) dbObject.get("etapaPecs");

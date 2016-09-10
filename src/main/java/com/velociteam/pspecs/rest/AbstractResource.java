@@ -14,8 +14,9 @@ public abstract class AbstractResource {
 		if (autHeader!=null){
 			String token = autHeader.replace("Basic ", "");
 			authService.isValidToken(token);
+		} else{
+			throw new AuthenticationException("Acceso no autorizado.");
 		}
-		throw new AuthenticationException("Acceso no autorizado.");
 	}
 
 }

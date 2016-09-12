@@ -14,7 +14,7 @@ public class SignupResponseDTO {
 	
 	public SignupResponseDTO(DBObject dbObject) {
 		this.id = ((ObjectId) dbObject.get("_id")).toString();
-		this.accessToken = (String) dbObject.get("accesToken");
+		this.accessToken = (String) dbObject.get("accessToken");
 		this.refreshToken = (String) dbObject.get("refreshToken");
 	}
 	public String getId() {

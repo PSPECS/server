@@ -1,7 +1,6 @@
 package com.velociteam.pspecs.dao;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +79,28 @@ public class UsuariosDao extends AbstractDao{
 				.find(new BasicDBObject("mail",mail).append("password", password)).one();
 		
 		if (dbUsuario==null) throw new BussinessException("El usuario y/o password ingresado no existe");
+		
+		String accessToken = (String) dbUsuario.get("accessToken");
+		String refreshToken = (String) dbUsuario.get("refreshToken");
+		String id = (String) dbUsuario.get("_id").toString();
+		String nombre = (String) dbUsuario.get("nombre").toString();
+		
+		if (accessToken==null){
+			collection("usuario").update(new BasicDBObject("_id",new ObjectId(id)), 
+					new BasicDBObject("$set",new BasicDBObject("accessToken",base64Token(nombre))));
+			createATIndexes();
+		} 
+		if (refreshToken==null){
+			collection("usuario").update(new BasicDBObject("_id",new ObjectId(id)), 
+					new BasicDBObject("$set",new BasicDBObject("refreshToken",base64Token(nombre))));
+			createRTIndexes();
+		} 
+		
+		if (accessToken==null || refreshToken==null){
+			dbUsuario = collection("usuario")
+					.find(new BasicDBObject("mail",mail).append("password", password)).one();
+		}
+		
 		return new CredentialsResponseDTO(dbUsuario);
 	}
 	
@@ -95,8 +116,8 @@ public class UsuariosDao extends AbstractDao{
 				.append("accessToken", base64Token(signupDTO.getNombre()))
 				.append("refreshToken", base64Token(signupDTO.getNombre())));
 		
-		collection("usuario").createIndex(new BasicDBObject("accessToken",1),new BasicDBObject("expireAfterSeconds",THIRTY_MINS));
-		collection("usuario").createIndex(new BasicDBObject("refreshToken",1),new BasicDBObject("expireAfterSeconds",ONE_WEEK));
+		createATIndexes();
+		createRTIndexes();
 	}
 	
 	public void validateAccessToken(String token){
@@ -125,7 +146,8 @@ public class UsuariosDao extends AbstractDao{
 		collection("usuario").update(new BasicDBObject("_id",new ObjectId(cred.getId())), 
 				new BasicDBObject("$set",new BasicDBObject("accessToken",newToken)));
 		
-		collection("usuario").createIndex(new BasicDBObject("accessToken",1),new BasicDBObject("expireAfterSeconds",THIRTY_MINS));
+		collection("usuario").dropIndex(new BasicDBObject("accessToken",1));
+		createATIndexes();
 		
 		return newToken;
 	}
@@ -143,6 +165,14 @@ public class UsuariosDao extends AbstractDao{
 		
 		collection("usuario").dropIndex(new BasicDBObject("accessToken",1));
 		collection("usuario").dropIndex(new BasicDBObject("refreshToken",1));
+	}
+	
+	public void createATIndexes(){
+		collection("usuario").createIndex(new BasicDBObject("accessToken",1),new BasicDBObject("expireAfterSeconds",THIRTY_MINS));
+	}
+	
+	public void createRTIndexes(){
+		collection("usuario").createIndex(new BasicDBObject("refreshToken",1),new BasicDBObject("expireAfterSeconds",ONE_WEEK));
 	}
 
 

@@ -22,7 +22,7 @@ public class CredentialsResponseDTO {
 	
 	public CredentialsResponseDTO(DBObject dbObject) {
 		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
-		this.token = (String) dbObject.get("accesToken");
+		this.token = (String) dbObject.get("accessToken");
 		this.refreshToken = (String) dbObject.get("refreshToken");
 		this.id = ((ObjectId) dbObject.get("_id")).toString();
 		this.nombre = (String) dbObject.get("nombre");

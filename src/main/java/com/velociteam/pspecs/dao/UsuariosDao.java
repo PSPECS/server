@@ -88,7 +88,7 @@ public class UsuariosDao extends AbstractDao{
 				.append("apellido", signupDTO.getApellido())
 				.append("mail", signupDTO.getMail())
 				.append("password", signupDTO.getPassword())
-				.append("fnac", new SimpleDateFormat("dd/MM/yyyy").parse(signupDTO.getFnac()).getTime())
+				.append("fnac", signupDTO.getFnac())
 				.append("etapaPecs", signupDTO.getEtapaPecs())
 				.append("rol", signupDTO.getRol())
 				.append("imagenDePerfil",signupDTO.getFoto())

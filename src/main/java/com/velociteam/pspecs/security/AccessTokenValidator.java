@@ -20,7 +20,7 @@ public class AccessTokenValidator implements TokenValidator{
 	}
 	
 	private Long timestamp() {
-		return Long.valueOf(decoder.decode().split("/")[1]);
+		return Long.valueOf(decoder.decode().split("/")[1].toString());
 	}
 	
 	private long plus30Mins(Long timestamp) {

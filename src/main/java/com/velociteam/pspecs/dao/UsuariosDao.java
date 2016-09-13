@@ -20,13 +20,10 @@ import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
 import com.velociteam.pspecs.security.Token;
+import com.velociteam.pspecs.security.TokenBuilder;
 
 @Repository
 public class UsuariosDao extends AbstractDao{
-
-	private static final int ONE_WEEK = 604800;
-	private static final int THIRTY_MINS = 1800;
-
 
 	@Autowired
 	public UsuariosDao(MongodbDBCreator aCreator) {
@@ -87,13 +84,11 @@ public class UsuariosDao extends AbstractDao{
 		
 		if (accessToken==null){
 			collection("usuario").update(new BasicDBObject("_id",new ObjectId(id)), 
-					new BasicDBObject("$set",new BasicDBObject("accessToken",base64Token(nombre))));
-			createATIndexes();
+					new BasicDBObject("$set",new BasicDBObject("accessToken",buildAccessToken(nombre))));
 		} 
 		if (refreshToken==null){
 			collection("usuario").update(new BasicDBObject("_id",new ObjectId(id)), 
-					new BasicDBObject("$set",new BasicDBObject("refreshToken",base64Token(nombre))));
-			createRTIndexes();
+					new BasicDBObject("$set",new BasicDBObject("refreshToken",buildRefreshToken(nombre))));
 		} 
 		
 		if (accessToken==null || refreshToken==null){
@@ -103,8 +98,9 @@ public class UsuariosDao extends AbstractDao{
 		
 		return new CredentialsResponseDTO(dbUsuario);
 	}
-	
+
 	public void createUser(SignupDTO signupDTO) throws ParseException{
+		String nombre=signupDTO.getNombre();
 		collection("usuario").insert(new BasicDBObject("nombre",signupDTO.getNombre())
 				.append("apellido", signupDTO.getApellido())
 				.append("mail", signupDTO.getMail())
@@ -113,18 +109,15 @@ public class UsuariosDao extends AbstractDao{
 				.append("etapaPecs", signupDTO.getEtapaPecs())
 				.append("rol", signupDTO.getRol())
 				.append("imagenDePerfil",signupDTO.getFoto())
-				.append("accessToken", base64Token(signupDTO.getNombre()))
-				.append("refreshToken", base64Token(signupDTO.getNombre())));
-		
-		createATIndexes();
-		createRTIndexes();
+				.append("accessToken", buildAccessToken(nombre))
+				.append("refreshToken", buildRefreshToken(nombre)));
 	}
 	
-	public void validateAccessToken(String token){
+	public void isAccessTokenPresent(Token token){
 		DBObject dbUsuario = collection("usuario")
-				.find(new BasicDBObject("accessToken",token)).one();
+				.find(new BasicDBObject("accessToken",token.toString())).one();
 		
-		if (dbUsuario==null) throw new AuthenticationException("El access token expiro o no es valido.");
+		if (dbUsuario==null) throw new AuthenticationException("El access token no existe.");
 	}
 	
 	public ObjectId isValid(String userId) {
@@ -135,25 +128,18 @@ public class UsuariosDao extends AbstractDao{
 		return new ObjectId(userId);
 	}
 
-	public String getNewAccessToken(String refreshToken) {
-		DBObject dbUsuario = collection("usuario").find(new BasicDBObject("refreshToken",refreshToken)).one();
+	public String getNewAccessToken(Token token) {
+		DBObject dbUsuario = collection("usuario")
+				.find(new BasicDBObject("accessToken",token.toString())).one();
 		
-		if (dbUsuario==null) throw new AuthenticationException("El refresh token expiro o no es valido.");
+		if (dbUsuario==null) throw new AuthenticationException("El access token no existe.");
 		
 		CredentialsResponseDTO cred = new CredentialsResponseDTO(dbUsuario);
-		
-		String newToken = base64Token(cred.getNombre());
+		String newToken = buildAccessToken(cred.getNombre());
 		collection("usuario").update(new BasicDBObject("_id",new ObjectId(cred.getId())), 
 				new BasicDBObject("$set",new BasicDBObject("accessToken",newToken)));
 		
-		collection("usuario").dropIndex(new BasicDBObject("accessToken",1));
-		createATIndexes();
-		
 		return newToken;
-	}
-
-	private String base64Token(String name) {
-		return new Token(name).base64();
 	}
 
 	public void clearTokens(String userId) {
@@ -163,17 +149,17 @@ public class UsuariosDao extends AbstractDao{
 		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
 				new BasicDBObject("$unset",new BasicDBObject("refreshToken",1)));
 		
-		collection("usuario").dropIndex(new BasicDBObject("accessToken",1));
-		collection("usuario").dropIndex(new BasicDBObject("refreshToken",1));
 	}
 	
-	public void createATIndexes(){
-		collection("usuario").createIndex(new BasicDBObject("accessToken",1),new BasicDBObject("expireAfterSeconds",THIRTY_MINS));
+	private String buildAccessToken(String nombre) {
+		return new TokenBuilder(nombre).asAT().encode().build().toString();
 	}
 	
-	public void createRTIndexes(){
-		collection("usuario").createIndex(new BasicDBObject("refreshToken",1),new BasicDBObject("expireAfterSeconds",ONE_WEEK));
+	private String buildRefreshToken(String nombre) {
+		return new TokenBuilder(nombre).asRT().encode().build().toString();
 	}
-
+	
+	
+	
 
 }

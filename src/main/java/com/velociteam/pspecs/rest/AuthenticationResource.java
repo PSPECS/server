@@ -19,6 +19,7 @@ import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
+import com.velociteam.pspecs.security.Token;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -75,7 +76,7 @@ public class AuthenticationResource extends AbstractResource {
     public ResponseEntity<?> newToken(@RequestBody String refreshToken) {
 		String newToken = null;
         try {
-        	newToken = authService.refreshToken(refreshToken);
+        	newToken = authService.isValidRefreshToken(new Token(refreshToken,false));
         } catch(AuthenticationException e){
         	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {

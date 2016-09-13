@@ -1,5 +1,6 @@
 package com.velociteam.pspecs.security;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class Base64Decoder {
@@ -11,7 +12,7 @@ public class Base64Decoder {
 	}
 
 	public String decode(){
-		return Base64.getDecoder().decode(token).toString();
+		return new String(Base64.getDecoder().decode(token),  StandardCharsets.UTF_8);
 	}
 
 }

@@ -110,7 +110,8 @@ public class UsuariosDao extends AbstractDao{
 				.append("rol", signupDTO.getRol())
 				.append("imagenDePerfil",signupDTO.getFoto())
 				.append("accessToken", buildAccessToken(nombre))
-				.append("refreshToken", buildRefreshToken(nombre)));
+				.append("refreshToken", buildRefreshToken(nombre))
+				.append("foto", signupDTO.getFoto()));
 	}
 	
 	public void isAccessTokenPresent(Token token){

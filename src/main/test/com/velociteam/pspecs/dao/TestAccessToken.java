@@ -1,12 +1,11 @@
 package com.velociteam.pspecs.dao;
 
-import java.security.SecureRandom;
-import java.util.Date;
-
 import org.junit.Test;
 
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.security.AccessTokenValidator;
+import com.velociteam.pspecs.security.Base64Decoder;
+import com.velociteam.pspecs.security.Base64Encoder;
 import com.velociteam.pspecs.security.RefreshTokenValidator;
 import com.velociteam.pspecs.security.Token;
 
@@ -24,8 +23,7 @@ public class TestAccessToken {
 	
 	@Test
 	public void test(){
-		String s ="martin"+"/"+String.valueOf(new Date().getTime())+"/"+String.valueOf(new SecureRandom().nextInt());
-		System.out.println(s);
+		System.out.println(new Base64Decoder(new Token(new Base64Encoder("martin").encode(),false)).decode());
 	}
 
 }

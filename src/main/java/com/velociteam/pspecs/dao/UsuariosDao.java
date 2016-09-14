@@ -130,9 +130,9 @@ public class UsuariosDao extends AbstractDao{
 
 	public String getNewAccessToken(Token token) {
 		DBObject dbUsuario = collection("usuario")
-				.find(new BasicDBObject("accessToken",token.toString())).one();
+				.find(new BasicDBObject("refreshToken",token.toString())).one();
 		
-		if (dbUsuario==null) throw new AuthenticationException("El access token no existe.");
+		if (dbUsuario==null) throw new AuthenticationException("El refresh token no existe.");
 		
 		CredentialsResponseDTO cred = new CredentialsResponseDTO(dbUsuario);
 		String newToken = buildAccessToken(cred.getNombre());

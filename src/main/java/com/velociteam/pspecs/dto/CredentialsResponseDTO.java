@@ -7,7 +7,6 @@ import org.bson.types.ObjectId;
 import com.mongodb.DBObject;
 
 public class CredentialsResponseDTO {
-	private String token;
 	private String refreshToken;
 	private String accessToken;
 	private String id;
@@ -23,7 +22,6 @@ public class CredentialsResponseDTO {
 	
 	public CredentialsResponseDTO(DBObject dbObject) {
 		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
-		this.token = (String) dbObject.get("token");
 		this.accessToken = (String) dbObject.get("accessToken");
 		this.refreshToken = (String) dbObject.get("refreshToken");
 		this.id = ((ObjectId) dbObject.get("_id")).toString();
@@ -40,14 +38,6 @@ public class CredentialsResponseDTO {
 	}
 	public void setImagenDePerfil(String imagenDePerfil) {
 		this.imagenDePerfil = imagenDePerfil;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public String getRefreshToken() {

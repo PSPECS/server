@@ -1,5 +1,8 @@
 package com.velociteam.pspecs.dao;
 
+import java.security.SecureRandom;
+import java.util.Date;
+
 import org.junit.Test;
 
 import com.velociteam.pspecs.exception.AuthenticationException;
@@ -17,6 +20,12 @@ public class TestAccessToken {
 	@Test(expected=AuthenticationException.class)
 	public void testRTokenInvalid(){
 		new RefreshTokenValidator(new Token("UmVndWxhcjUvMTQ3MzgwNjcwOTEyNS9qYXZhLnNlY3VyaXR5LlNlY3VyZVJhbmRvbUAzNGFhMGQ=",true)).validate();
+	}
+	
+	@Test
+	public void test(){
+		String s ="martin"+"/"+String.valueOf(new Date().getTime())+"/"+String.valueOf(new SecureRandom().nextInt());
+		System.out.println(s);
 	}
 
 }

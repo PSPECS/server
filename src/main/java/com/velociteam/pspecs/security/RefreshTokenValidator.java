@@ -1,5 +1,7 @@
 package com.velociteam.pspecs.security;
 
+import java.util.Date;
+
 import com.velociteam.pspecs.exception.AuthenticationException;
 
 public class RefreshTokenValidator implements TokenValidator {
@@ -14,7 +16,7 @@ public class RefreshTokenValidator implements TokenValidator {
 	
 	@Override
 	public void validate() {
-		if (timestamp()>=plus1Week(timestamp())){
+		if (diffGTE1Week(new Date().getTime() - timestamp())){
 			throw new AuthenticationException("El refresh token ingresado expiro.");
 		}
 	}
@@ -23,7 +25,10 @@ public class RefreshTokenValidator implements TokenValidator {
 		return Long.valueOf(decoder.decode().split("/")[1]);
 	}
 	
-	private Long plus1Week(Long timestamp) {
-		return timestamp*7*24*60*60*1000;
+	private boolean diffGTE1Week(Long diff) {
+		if (diff>(7*24*60*60*1000)){
+			return true;
+		}
+		return false; 
 	}
 }

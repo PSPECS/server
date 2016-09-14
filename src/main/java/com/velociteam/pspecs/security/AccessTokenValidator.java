@@ -1,5 +1,7 @@
 package com.velociteam.pspecs.security;
 
+import java.util.Date;
+
 import com.velociteam.pspecs.exception.AuthenticationException;
 
 public class AccessTokenValidator implements TokenValidator{
@@ -14,7 +16,7 @@ public class AccessTokenValidator implements TokenValidator{
 	
 	@Override
 	public void validate() {
-		if (timestamp()>=plus30Mins(timestamp())){
+		if (diffGTE30Mins(new Date().getTime() - timestamp())){
 			throw new AuthenticationException("El access token ingresado expiro.");
 		}
 	}
@@ -23,8 +25,11 @@ public class AccessTokenValidator implements TokenValidator{
 		return Long.valueOf(decoder.decode().split("/")[1]);
 	}
 	
-	private long plus30Mins(Long timestamp) {
-		return timestamp*1*60*1000;
+	private boolean diffGTE30Mins(Long diff) {
+		if (diff>(1*60*1000)){
+			return true;
+		}
+		return false; 
 	}
 
 }

@@ -110,8 +110,7 @@ public class UsuariosDao extends AbstractDao{
 				.append("rol", signupDTO.getRol())
 				.append("imagenDePerfil",signupDTO.getFoto())
 				.append("accessToken", buildAccessToken(nombre))
-				.append("refreshToken", buildRefreshToken(nombre))
-				.append("foto", signupDTO.getFoto()));
+				.append("refreshToken", buildRefreshToken(nombre)));
 	}
 	
 	public void isAccessTokenPresent(Token token){
@@ -149,6 +148,9 @@ public class UsuariosDao extends AbstractDao{
 		
 		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
 				new BasicDBObject("$unset",new BasicDBObject("refreshToken",1)));
+		
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+				new BasicDBObject("$unset",new BasicDBObject("token",1)));
 		
 	}
 	

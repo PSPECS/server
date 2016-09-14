@@ -24,7 +24,7 @@ public class AccessTokenValidator implements TokenValidator{
 	}
 	
 	private long plus30Mins(Long timestamp) {
-		return timestamp*30*60*1000;
+		return timestamp*1*60*1000;
 	}
 
 }

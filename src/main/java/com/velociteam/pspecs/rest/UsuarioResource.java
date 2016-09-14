@@ -62,7 +62,7 @@ public class UsuarioResource extends AbstractResource {
         	auth(autHeader);
         	contactos=usuariosDao.getContacts(userId);
         } catch (AuthenticationException e){
-        	return new ResponseEntity<>(e,HttpStatus.UNAUTHORIZED);
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -78,7 +78,7 @@ public class UsuarioResource extends AbstractResource {
         	auth(autHeader);
         	usuario=usuariosDao.getUserInfoById(userId);
         } catch (AuthenticationException e){
-        	return new ResponseEntity<>(e,HttpStatus.UNAUTHORIZED);
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }

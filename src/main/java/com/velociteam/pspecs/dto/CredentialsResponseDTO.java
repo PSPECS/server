@@ -9,6 +9,7 @@ import com.mongodb.DBObject;
 public class CredentialsResponseDTO {
 	private String token;
 	private String refreshToken;
+	private String accessToken;
 	private String id;
 	private String nombre;
 	private String fnac;
@@ -22,7 +23,8 @@ public class CredentialsResponseDTO {
 	
 	public CredentialsResponseDTO(DBObject dbObject) {
 		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
-		this.token = (String) dbObject.get("accessToken");
+		this.token = (String) dbObject.get("token");
+		this.accessToken = (String) dbObject.get("accessToken");
 		this.refreshToken = (String) dbObject.get("refreshToken");
 		this.id = ((ObjectId) dbObject.get("_id")).toString();
 		this.nombre = (String) dbObject.get("nombre");
@@ -110,6 +112,14 @@ public class CredentialsResponseDTO {
 
 	public void setFnac(String fnac) {
 		this.fnac = fnac;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 	
 }

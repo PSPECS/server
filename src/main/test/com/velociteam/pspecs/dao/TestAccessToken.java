@@ -11,7 +11,7 @@ public class TestAccessToken {
 	
 	@Test(expected=AuthenticationException.class)
 	public void testATokenInvalid(){
-		new AccessTokenValidator(new Token("UmVndWxhcjUvMTQ3MzgwNjcwOTEyNS9qYXZhLnNlY3VyaXR5LlNlY3VyZVJhbmRvbUAzNGFhMGQ=",true)).validate();
+		new AccessTokenValidator(new Token("mZmLzE0NzM4MTMyNjMxMTkvamF2YS5zZWN1cml0eS5TZWN1cmVSYW5kb21AMTA2OWU3",true)).validate();
 	}
 	
 	@Test(expected=AuthenticationException.class)

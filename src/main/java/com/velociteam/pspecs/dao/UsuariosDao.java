@@ -139,6 +139,9 @@ public class UsuariosDao extends AbstractDao{
 		collection("usuario").update(new BasicDBObject("_id",new ObjectId(cred.getId())), 
 				new BasicDBObject("$set",new BasicDBObject("accessToken",newToken)));
 		
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(cred.getId())), 
+				new BasicDBObject("$set",new BasicDBObject("refreshToken",buildRefreshToken(cred.getNombre()))));
+		
 		return newToken;
 	}
 

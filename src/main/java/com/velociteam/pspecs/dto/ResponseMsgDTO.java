@@ -7,15 +7,17 @@ public class ResponseMsgDTO {
 	private String enviadoPor;
 	private String timestamp;
 	private List<ImagenMetadataDTO> imagenes;
+	private String descripcion;
 	
 	public ResponseMsgDTO() {
 	}
 	
-	public ResponseMsgDTO(String enviadoPor, String timestamp, List<ImagenMetadataDTO> imagenes) {
+	public ResponseMsgDTO(String enviadoPor, String timestamp, List<ImagenMetadataDTO> imagenes,String descripcion) {
 		super();
 		this.enviadoPor = enviadoPor;
 		this.timestamp = timestamp;
 		this.imagenes = imagenes;
+		this.descripcion = descripcion;
 	}
 	
 	public String getEnviadoPor() {
@@ -37,6 +39,14 @@ public class ResponseMsgDTO {
 
 	public void setImagenes(List<ImagenMetadataDTO> imagenes) {
 		this.imagenes = imagenes;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 	
 

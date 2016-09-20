@@ -53,7 +53,7 @@ public class MensajesDao extends AbstractDao{
 				ResponseMsgDTO response = new ResponseMsgDTO(
 						(String) ((DBObject) mensaje).get("usuarioOrigen"),
 						new SimpleDateFormat("dd/MM/yyyy-HH:mm").format(new Date(timestamp)),
-						imagenes);
+						imagenes,(String) ((DBObject) mensaje).get("descripcion"));
 				
 				mensajes.add(response);
 			}
@@ -68,7 +68,8 @@ public class MensajesDao extends AbstractDao{
 		mensajes.insert(new BasicDBObject("usuarioOrigen",userFrom)
 				.append("timestamp", new Date().getTime())
 				.append("usuarioDestino", mensajesDTO.getTo())
-				.append("imagenes", buildImagenes(mensajesDTO.getImagenes())));
+				.append("imagenes", buildImagenes(mensajesDTO.getImagenes()))
+				.append("descripcion", mensajesDTO.getDescripcion()));
 	}
 	
 	private ImagenMetadataDTO setImagenMetadata(Object imagen) {

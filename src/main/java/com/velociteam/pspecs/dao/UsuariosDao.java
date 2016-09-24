@@ -15,7 +15,6 @@ import com.mongodb.DBObject;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
 import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
-import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
@@ -46,9 +45,9 @@ public class UsuariosDao extends AbstractDao{
 		return contactos;
 	}
 
-	public void updateToken(String userId, TokenDTO tokenDTO) {
+	public void updateToken(String userId, String token) {
 		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
-				new BasicDBObject("$set",new BasicDBObject("token",tokenDTO.getRefreshToken())));
+				new BasicDBObject("$set",new BasicDBObject("token",token)));
 	}
 
 	public String getTokenByUser(String userId) {
@@ -163,6 +162,10 @@ public class UsuariosDao extends AbstractDao{
 	
 	private String buildRefreshToken(String nombre) {
 		return new TokenBuilder(nombre).asRT().encode().build().toString();
+	}
+
+	public void resetFBToken(String userId, String fbToken) {
+		if (fbToken.equalsIgnoreCase(getTokenByUser(userId))) updateToken(userId, fbToken); 
 	}
 	
 	

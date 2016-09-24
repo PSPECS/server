@@ -47,12 +47,12 @@ public class TestUsuarioDao {
 	
 	@Test
 	public void testUpdateToken(){
-		usuarioDao.updateToken(martinId, new TokenDTO("12345"));
+		usuarioDao.updateToken(martinId, new TokenDTO("12345").getRefreshToken());
 	}
 	
 	@Test
 	public void testGetTokenById(){
-		usuarioDao.updateToken(martinId, new TokenDTO("12345"));
+		usuarioDao.updateToken(martinId, new TokenDTO("12345").getRefreshToken());
 		Assert.assertEquals("12345",usuarioDao.getTokenByUser(martinId));
 	}
 

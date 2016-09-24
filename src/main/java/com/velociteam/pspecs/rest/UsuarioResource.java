@@ -44,7 +44,7 @@ public class UsuarioResource extends AbstractResource {
 		
         try {
         	auth(autHeader);
-        	usuariosDao.updateToken(userId,tokenDTO);
+        	usuariosDao.updateToken(userId,tokenDTO.getRefreshToken());
         } catch (AuthenticationException e){
         	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
@@ -52,6 +52,21 @@ public class UsuarioResource extends AbstractResource {
         }
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+	
+	@RequestMapping(value="/{userId}/resetFBToken",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> resetFBToken(@RequestHeader("Authorization") String autHeader, @PathVariable String userId, @Valid @RequestBody String fbToken) {
+		
+        try {
+        	auth(autHeader);
+        	usuariosDao.resetFBToken(userId,fbToken);
+        } catch (AuthenticationException e){
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 	
 	@RequestMapping(value="/{userId}/contactos",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)

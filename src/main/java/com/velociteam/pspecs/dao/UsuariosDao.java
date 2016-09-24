@@ -49,6 +49,11 @@ public class UsuariosDao extends AbstractDao{
 		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
 				new BasicDBObject("$set",new BasicDBObject("token",token)));
 	}
+	
+	public void removeToken(String userId) {
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+				new BasicDBObject("$unset",new BasicDBObject("token","")));
+	}
 
 	public String getTokenByUser(String userId) {
 		DBObject token = collection("usuario")
@@ -165,7 +170,8 @@ public class UsuariosDao extends AbstractDao{
 	}
 
 	public void resetFBToken(String userId, String fbToken) {
-		if (fbToken.equalsIgnoreCase(getTokenByUser(userId))) updateToken(userId, fbToken); 
+		if (fbToken.equalsIgnoreCase(getTokenByUser(userId))) removeToken(userId);
+		else updateToken(userId, fbToken); 
 	}
 	
 	

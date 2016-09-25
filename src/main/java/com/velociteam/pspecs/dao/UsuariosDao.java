@@ -171,7 +171,6 @@ public class UsuariosDao extends AbstractDao{
 
 	public void resetFBToken(String userId, String fbToken) {
 		if (fbToken.equalsIgnoreCase(getTokenByUser(userId))) removeToken(userId);
-		else updateToken(userId, fbToken); 
 	}
 	
 	

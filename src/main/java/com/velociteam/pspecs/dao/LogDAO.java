@@ -42,7 +42,6 @@ public class LogDAO extends AbstractDao{
 	
 	private List<BasicDBObject> buildDBPictogramas(LogDTO logDTO) {
 		return logDTO.getPictogramas().stream().map(p-> new BasicDBObject("nombre",p.getNombre())
-				.append("categoria", p.getCategoria())
 				.append("usos", p.getUsos())).collect(Collectors.toList());
 	}
 

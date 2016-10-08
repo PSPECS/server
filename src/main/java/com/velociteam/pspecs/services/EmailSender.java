@@ -38,9 +38,10 @@ public class EmailSender {
 			message.setFrom(new InternetAddress("from-email@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse("delallave.martin@gmail.com"));
-			message.setSubject("Testing Subject");
-			message.setText("Dear Mail Crawler,"
-				+ "\n\n No spam to my email, please!");
+			message.setSubject("Reporte PSPECS");
+			message.setText("Hola,"
+				+ "\n\n El reporte esta adjunto,"
+				+ "\n\n Velociteam");
 
 			Transport.send(message);
 

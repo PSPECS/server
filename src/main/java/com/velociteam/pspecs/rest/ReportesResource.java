@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.velociteam.pspecs.dto.ReportRequestDTO;
+import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.services.ReportService;
 
 @RestController
@@ -24,6 +25,8 @@ public class ReportesResource extends AbstractResource{
 		try {
         	auth(autHeader);
         	reportService.generateReport(reportRequestDTO);
+        } catch(AuthenticationException e){
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }

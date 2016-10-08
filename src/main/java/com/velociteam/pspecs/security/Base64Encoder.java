@@ -12,7 +12,7 @@ public class Base64Encoder {
 	}
 
 	public String encode(){
-		String keySource = username+"/"+String.valueOf(new Date().getTime())+"/"+String.valueOf(new SecureRandom().nextInt());
+		String keySource = username+"/"+String.valueOf(new Date().getTime())+"/"+String.valueOf(new SecureRandom().nextInt(Integer.MAX_VALUE));
 		return new String(Base64.getEncoder().encode(keySource.getBytes()));
 	}
 

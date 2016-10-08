@@ -14,6 +14,7 @@ public class Token {
 		validator.validate();
 	}
 	
+	@Override
 	public String toString(){
 		return this.token;
 	}

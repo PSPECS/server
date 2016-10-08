@@ -19,6 +19,7 @@ import com.velociteam.pspecs.dto.CredentialsDTO;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
 import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
+import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
 import com.velociteam.pspecs.security.Token;
@@ -75,10 +76,10 @@ public class AuthenticationResource extends AbstractResource {
     }
 	
 	@RequestMapping(value="/newToken",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> newToken(@Valid @RequestBody String refreshToken) {
+    public ResponseEntity<?> newToken(@Valid @RequestBody TokenDTO refreshToken) {
 		String newToken = null;
         try {
-        	newToken = authService.isValidRefreshToken(new Token(refreshToken,false));
+        	newToken = authService.isValidRefreshToken(new Token(refreshToken.getRefreshToken(),false));
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }

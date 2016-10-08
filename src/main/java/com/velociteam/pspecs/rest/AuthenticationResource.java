@@ -1,5 +1,7 @@
 package com.velociteam.pspecs.rest;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -73,7 +75,7 @@ public class AuthenticationResource extends AbstractResource {
     }
 	
 	@RequestMapping(value="/newToken",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> newToken(@RequestBody String refreshToken) {
+    public ResponseEntity<?> newToken(@Valid @RequestBody String refreshToken) {
 		String newToken = null;
         try {
         	newToken = authService.isValidRefreshToken(new Token(refreshToken,false));

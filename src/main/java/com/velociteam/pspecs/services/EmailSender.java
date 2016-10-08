@@ -35,7 +35,7 @@ public class EmailSender {
 		try {
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("from-email@gmail.com"));
+			message.setFrom(new InternetAddress("velociteam@noreply.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse("delallave.martin@gmail.com"));
 			message.setSubject("Reporte PSPECS");

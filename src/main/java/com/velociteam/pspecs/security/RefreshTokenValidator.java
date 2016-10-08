@@ -6,12 +6,10 @@ import com.velociteam.pspecs.exception.AuthenticationException;
 
 public class RefreshTokenValidator implements TokenValidator {
 
-	final private Token token;
 	final private Base64Decoder decoder;
 	
 	public RefreshTokenValidator(Token token) {
-		this.token=token;
-		this.decoder=new Base64Decoder(this.token);
+		this.decoder=new Base64Decoder(token);
 	}
 	
 	@Override

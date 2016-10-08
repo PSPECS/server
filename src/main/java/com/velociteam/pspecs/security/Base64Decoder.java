@@ -12,7 +12,7 @@ public class Base64Decoder {
 	}
 
 	public String decode(){
-		return new String(Base64.getDecoder().decode(token),  StandardCharsets.UTF_8);
+		return new String(Base64.getDecoder().decode(token.getBytes(StandardCharsets.UTF_8)));
 	}
 
 }

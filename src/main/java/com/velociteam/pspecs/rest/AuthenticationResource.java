@@ -79,8 +79,6 @@ public class AuthenticationResource extends AbstractResource {
 		String newToken = null;
         try {
         	newToken = authService.isValidRefreshToken(new Token(refreshToken,false));
-        } catch(AuthenticationException e){
-        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }

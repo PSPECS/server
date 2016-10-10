@@ -15,6 +15,7 @@ import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
 import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.exception.BussinessException;
+import com.velociteam.pspecs.exception.MongoException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/rest-servlet.xml"})
@@ -64,7 +65,7 @@ public class TestUsuarioDao {
 		Assert.assertNotNull(usuarioDao.getUserInfoById(martinDtoByNyA.getId()));
 	}
 	
-	@Test(expected=BussinessException.class)
+	@Test(expected=MongoException.class)
 	public void shouldGetUserInfoByIdWithError(){
 		usuarioDao.createUser(martinSignup);
 		Assert.assertNotNull(usuarioDao.getUserInfoById(INVALID_USER_ID));

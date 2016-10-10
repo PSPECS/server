@@ -19,6 +19,7 @@ import com.velociteam.pspecs.dto.SignupResponseDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
+import com.velociteam.pspecs.exception.MongoException;
 import com.velociteam.pspecs.security.Token;
 import com.velociteam.pspecs.security.TokenBuilder;
 
@@ -108,7 +109,7 @@ public class UsuariosDao extends AbstractDao{
 			dbUsuario = collection("usuario")
 					.find(new BasicDBObject("_id",new ObjectId(userId))).one();
 		} catch (IllegalArgumentException e){
-			throw new BussinessException("El id ingresado es invalido.",e);
+			throw new MongoException("El id ingresado es invalido.",e);
 		}
 		if (dbUsuario==null) throw new BussinessException("El id ingresado no existe.");
 		return new UsuarioDTO(dbUsuario);

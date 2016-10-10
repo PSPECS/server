@@ -16,7 +16,7 @@ import com.velociteam.pspecs.services.ReportService;
 
 @RestController
 @RequestMapping(value = "/reportes")
-public class ReportesResource extends AbstractResource{
+public class ReportResource extends AbstractResource{
 	@Autowired 
 	private ReportService reportService;
 	

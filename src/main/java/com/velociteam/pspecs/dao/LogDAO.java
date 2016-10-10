@@ -43,7 +43,6 @@ public class LogDAO extends AbstractDao{
 
 	
 	public DBCursor filteredNavigations(String userId, String fInicio, String fFin) {
-		DBCollection navegacion = collection("navegacion");
 		Long fInicioTS;
 		Long fFinTS;
 		try {
@@ -62,7 +61,7 @@ public class LogDAO extends AbstractDao{
 			throw new BussinessException("El reporte debe ser generado con un periodo mayor a tres meses.");
 		}
 		
-		DBCursor navegacionesFiltradas = navegacion.find(new BasicDBObject("userId",new ObjectId(userId))
+		DBCursor navegacionesFiltradas = collection("navegacion").find(new BasicDBObject("userId",new ObjectId(userId))
 				.append("dtInicio", new BasicDBObject("$gte",fInicioTS))
 				.append("dtFin", new BasicDBObject("$lte",fFinTS)));
 		return navegacionesFiltradas;

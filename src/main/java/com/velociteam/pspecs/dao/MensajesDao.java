@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;
@@ -25,7 +26,7 @@ import com.velociteam.pspecs.dto.ResponseMsgDTO;
 public class MensajesDao extends AbstractDao{
 	
 	@Autowired
-	public MensajesDao(MongodbDBCreator aCreator) {
+	public MensajesDao(@Qualifier("realDB")MongodbDBCreator aCreator) {
 		super(aCreator);
 	}
 

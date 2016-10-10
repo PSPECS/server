@@ -1,6 +1,7 @@
 package com.velociteam.pspecs.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
@@ -10,7 +11,7 @@ import com.velociteam.pspecs.dto.AndroidErrorDTO;
 public class AndroidErrorDao extends AbstractDao{
 
 	@Autowired
-	public AndroidErrorDao(MongodbDBCreator aCreator) {
+	public AndroidErrorDao(@Qualifier("realDB") MongodbDBCreator aCreator) {
 		super(aCreator);
 	}
 

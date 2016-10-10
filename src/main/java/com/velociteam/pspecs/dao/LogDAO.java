@@ -4,19 +4,17 @@ import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.velociteam.pspecs.dto.LogDTO;
 import com.velociteam.pspecs.exception.BussinessException;
 
@@ -24,7 +22,7 @@ import com.velociteam.pspecs.exception.BussinessException;
 public class LogDAO extends AbstractDao{
 	
 	@Autowired
-	public LogDAO(MongodbDBCreator aCreator) {
+	public LogDAO(@Qualifier("realDB")MongodbDBCreator aCreator) {
 		super(aCreator);
 	}
 

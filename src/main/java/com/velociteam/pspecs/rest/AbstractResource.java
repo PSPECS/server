@@ -2,9 +2,9 @@ package com.velociteam.pspecs.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.velociteam.pspecs.dao.AuthenticationService;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.security.Token;
+import com.velociteam.pspecs.services.AuthenticationService;
 
 public abstract class AbstractResource {
 	

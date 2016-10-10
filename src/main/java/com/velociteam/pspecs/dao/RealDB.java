@@ -6,7 +6,7 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
-@Component
+@Component("realDB")
 public class RealDB implements MongodbDBCreator {
 
 	public RealDB() {}

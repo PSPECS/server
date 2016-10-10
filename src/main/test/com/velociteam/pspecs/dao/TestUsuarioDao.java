@@ -2,6 +2,7 @@ package com.velociteam.pspecs.dao;
 
 import java.text.ParseException;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,47 +14,102 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
 import com.velociteam.pspecs.dto.TokenDTO;
-import com.velociteam.pspecs.dto.UsuarioDTO;
+import com.velociteam.pspecs.exception.BussinessException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/rest-servlet.xml"})
 public class TestUsuarioDao {
 	
+	private static final String LASTNAME_NOT_PRESENT = "apellido";
+	private static final String NAME_NOT_PRESENT = "nombre";
+	private static final String EMAIL_NOT_PRESENT = "emailInexistente";
+	private static final String INVALID_USER_ID = "123123";
+
 	@Autowired
 	private UsuariosDao usuarioDao;
 	
 	private SignupDTO martinSignup;
-	private String martinId;
 	
 	@Before
 	public void setUp() throws ParseException{
 		martinSignup = new SignupDTO("Martin","de la Llave","delallave.martin@gmail.com","1234","10/01/1989","5","Usuario Regular","");
+	}
+	
+	@After
+	public void tearDown(){
+		usuarioDao.removeCollection();
+	}
+	
+	@Test
+	public void shouldSignupSuccesfully(){
 		usuarioDao.createUser(martinSignup);
-		SignupResponseDTO martinDto = usuarioDao.getUserInfoByNyA(martinSignup.getNombre(),martinSignup.getApellido());
-		martinId=martinDto.getId();
 	}
 	
 	@Test
-	public void testSignupUser() throws ParseException{
-		SignupResponseDTO martinDto = usuarioDao.getUserInfoByNyA(martinSignup.getNombre(),martinSignup.getApellido());
-		Assert.assertEquals(martinId, martinDto.getId());
+	public void shouldGetUserInfoByNameAndLastName(){
+		usuarioDao.createUser(martinSignup);
+		Assert.assertNotNull(usuarioDao.getUserInfoByNyA(martinSignup.getNombre(),martinSignup.getApellido()));
+	}
+	
+	@Test(expected=BussinessException.class)
+	public void shouldGetUserInfoByNameAndLastNameWithError(){
+		usuarioDao.createUser(martinSignup);
+		Assert.assertNotNull(usuarioDao.getUserInfoByNyA(NAME_NOT_PRESENT,LASTNAME_NOT_PRESENT));
+	}
+
+	@Test
+	public void shouldGetUserInfoById(){
+		usuarioDao.createUser(martinSignup);
+		SignupResponseDTO martinDtoByNyA = usuarioDao.getUserInfoByNyA(martinSignup.getNombre(),martinSignup.getApellido());
+		Assert.assertNotNull(usuarioDao.getUserInfoById(martinDtoByNyA.getId()));
+	}
+	
+	@Test(expected=BussinessException.class)
+	public void shouldGetUserInfoByIdWithError(){
+		usuarioDao.createUser(martinSignup);
+		Assert.assertNotNull(usuarioDao.getUserInfoById(INVALID_USER_ID));
 	}
 	
 	@Test
-	public void testGetUserInfoById() throws ParseException{
-		UsuarioDTO martinDto = usuarioDao.getUserInfoById(martinId);
-		Assert.assertEquals(martinId, martinDto.getId());
+	public void shouldGetUserInfoByEmailAndPass(){
+		usuarioDao.createUser(martinSignup);
+		Assert.assertNotNull(usuarioDao.getUserInfoByEmailAndPass(martinSignup.getMail(),martinSignup.getPassword()));
+	}
+	
+	@Test(expected=BussinessException.class)
+	public void shouldGetUserInfoByEmailAndPassWithError(){
+		usuarioDao.createUser(martinSignup);
+		Assert.assertNotNull(usuarioDao.getUserInfoByEmailAndPass(EMAIL_NOT_PRESENT,martinSignup.getPassword()));
 	}
 	
 	@Test
 	public void testUpdateToken(){
-		usuarioDao.updateToken(martinId, new TokenDTO("12345").getRefreshToken());
+		usuarioDao.createUser(martinSignup);
+		SignupResponseDTO martinDtoByNyA = usuarioDao.getUserInfoByNyA(martinSignup.getNombre(),martinSignup.getApellido());
+		usuarioDao.updateToken(martinDtoByNyA.getId(), new TokenDTO("12345").getRefreshToken());
 	}
 	
 	@Test
-	public void testGetTokenById(){
-		usuarioDao.updateToken(martinId, new TokenDTO("12345").getRefreshToken());
-		Assert.assertEquals("12345",usuarioDao.getTokenByUser(martinId));
+	public void shouldGetTokenByUserId(){
+		usuarioDao.createUser(martinSignup);
+		SignupResponseDTO martinDtoByNyA = usuarioDao.getUserInfoByNyA(martinSignup.getNombre(),martinSignup.getApellido());
+		usuarioDao.updateToken(martinDtoByNyA.getId(), new TokenDTO("12345").getRefreshToken());
+		Assert.assertEquals("12345",usuarioDao.getTokenByUser(martinDtoByNyA.getId()));
 	}
-
+	
+	@Test(expected=BussinessException.class)
+	public void shouldGetTokenByUserIdWithErrorBecauseDoesntExists(){
+		usuarioDao.createUser(martinSignup);
+		SignupResponseDTO martinDtoByNyA = usuarioDao.getUserInfoByNyA(martinSignup.getNombre(),martinSignup.getApellido());
+		Assert.assertEquals("12345",usuarioDao.getTokenByUser(martinDtoByNyA.getId()));
+	}
+	
+	@Test
+	public void shouldResetFBToken(){
+		usuarioDao.createUser(martinSignup);
+		SignupResponseDTO martinDtoByNyA = usuarioDao.getUserInfoByNyA(martinSignup.getNombre(),martinSignup.getApellido());
+		usuarioDao.updateToken(martinDtoByNyA.getId(), new TokenDTO("1234").getRefreshToken());
+		usuarioDao.resetFBToken(martinDtoByNyA.getId(),"12345");
+	}
+	
 }

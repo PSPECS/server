@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.velociteam.pspecs.dao.AuthenticationService;
 import com.velociteam.pspecs.dao.UsuariosDao;
 import com.velociteam.pspecs.dto.CredentialsDTO;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
@@ -23,6 +22,7 @@ import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
 import com.velociteam.pspecs.security.Token;
+import com.velociteam.pspecs.services.AuthenticationService;
 
 @RestController
 @RequestMapping(value = "/auth")

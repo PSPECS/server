@@ -32,12 +32,6 @@ public class TestAccessToken {
 		shouldDecodeTokenSuccesfully(token);
 	}
 	
-	@Test
-	public void shouldGetValidRT1(){
-		Token token = new Token("bXRlc3QvMTQ3NTkzOTY0MjA4Ni8xOTEyMTA3MDky",false);
-		shouldDecodeTokenSuccesfully(token);
-	}
-	
 	private void shouldDecodeTokenSuccesfully(Token token) {
 		System.out.println(token.toString());
 		token.isValid();

@@ -54,14 +54,14 @@ public class EmailSender {
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(to));
 			message.setSubject("Reporte PSPECS");
-			message.setText("Hola,"
-				+ "\n\n El reporte esta adjunto,"
-				+ "\n\n Velociteam");
-
+			String msg ="Hola,"
+					+ "\n\n El reporte esta adjunto,"
+					+ "\n\n Velociteam";
+			message.setText(msg);
 			
 			// creates body part for the message
 			MimeBodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setContent(message, "text/html");
+			messageBodyPart.setContent(msg, "text/html");
 			 
 			// creates body part for the attachment
 			MimeBodyPart attachPart = new MimeBodyPart();

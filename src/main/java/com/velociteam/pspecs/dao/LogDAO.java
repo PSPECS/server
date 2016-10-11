@@ -1,8 +1,6 @@
 package com.velociteam.pspecs.dao;
 
 import java.net.UnknownHostException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,14 +41,9 @@ public class LogDAO extends AbstractDao{
 
 	
 	public DBCursor filteredNavigations(String userId, String fInicio, String fFin) {
-		Long fInicioTS;
-		Long fFinTS;
-		try {
-			fInicioTS = new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(fInicio).getTime();
-			fFinTS = new SimpleDateFormat("dd/MM/yyyy-hh:mm").parse(fFin).getTime();
-		} catch (ParseException e) {
-			throw new BussinessException("El formato de la fecha ingresada es erroneo.",e);
-		}
+		Long fInicioTS = Long.valueOf(fInicio);
+		Long fFinTS = Long.valueOf(fFin);
+		
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MONTH, -3);
 		
@@ -62,13 +55,13 @@ public class LogDAO extends AbstractDao{
 		}
 		
 		DBCursor navegacionesFiltradas = collection("navegacion").find(new BasicDBObject("userId",new ObjectId(userId))
-				.append("dtInicio", new BasicDBObject("$gte",fInicioTS))
-				.append("dtFin", new BasicDBObject("$lte",fFinTS)));
+				.append("dtInicio", new BasicDBObject("$gte",fInicio))
+				.append("dtFin", new BasicDBObject("$lte",fFin)));
 		return navegacionesFiltradas;
 	}
 
 	private long threeMonths() {
-		return 60*60*24*90;
+		return 1000*60*60*24*90;
 	}
 
 

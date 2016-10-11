@@ -57,7 +57,7 @@ public class LogDAO extends AbstractDao{
 		if (fInicioTS>calendar.getTimeInMillis()){
 			throw new BussinessException("El reporte debe ser generado con una fecha de inicio mayor a 3 meses desde la fecha.");
 		} 
-		if ((fFinTS-fInicioTS)>threeMonths()){
+		if ((fFinTS-fInicioTS)<=threeMonths()){
 			throw new BussinessException("El reporte debe ser generado con un periodo mayor a tres meses.");
 		}
 		

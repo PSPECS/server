@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +49,7 @@ public class ReportServiceImpl implements ReportService {
 			
 			BasicDBList usuariosContactados = (BasicDBList) nav.get("usuariosContactados");
 			for (Object usuarioContactado : usuariosContactados) {
-				String userId = (String) ((DBObject) usuarioContactado).get("userId");
+				String userId = ((ObjectId) ((DBObject) usuarioContactado).get("userId")).toHexString();
 				Integer msgsEnviados = (Integer) ((DBObject) usuarioContactado).get("mensajesEnviados");
 				Tuple newTuple = new Tuple(userId, msgsEnviados);
 				updateUserInfo(usuariosMasContactados, fecha, userId, newTuple);

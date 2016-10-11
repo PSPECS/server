@@ -3,7 +3,6 @@ package com.velociteam.pspecs.services;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,6 +24,9 @@ public class ReportServiceImpl implements ReportService {
 	private EmailSender emailSender;
 	
 	@Autowired
+	private ReportGenerator reportGenerator;
+	
+	@Autowired
 	private LogDAO logDao;
 	
 	@Override
@@ -33,13 +35,11 @@ public class ReportServiceImpl implements ReportService {
 				reportRequestDTO.getFechaInicio(), reportRequestDTO.getFechaFin());
 
 		final ReportDTO reportDTO = new ReportDTO(
-				tiempoDeUso(navFilt,reportRequestDTO.getFechaInicio()),
+				tiempoDeUso(navFilt),
 				usuariosContactados(navFilt),
 				pictogramasMasUtilizados(navFilt));
 		
-		// TODO Armar reportes.
-		
-		emailSender.send();
+		emailSender.send(reportRequestDTO.getProfesional(),reportGenerator.generateReport(reportDTO));
 	}
 	
 	private Map<String,List<Tuple>> usuariosContactados(DBCursor navFilt) {
@@ -123,13 +123,16 @@ public class ReportServiceImpl implements ReportService {
 		}
 	}
 
-	private Map<String,Long> tiempoDeUso(DBCursor navFilt,String fInicio){
+	private Map<String,Long> tiempoDeUso(DBCursor navFilt){
 		Map<String,Long> tiemposDeUso = new HashMap<>();
 		
 		for (DBObject navFiltrada : navFilt) {
 			Long inicioNav = (Long) navFiltrada.get("dtInicio");
 			Long finNav = (Long) navFiltrada.get("dtFin");
-			tiemposDeUso.put(fInicio,toHours(finNav-inicioNav));
+			String fecha = fecha(navFiltrada);
+			Long horas = 0L;
+			if (tiemposDeUso.containsKey(fecha)) horas = tiemposDeUso.get(fecha);
+			tiemposDeUso.put(fecha,horas+toHours(finNav-inicioNav));
 		}
 		return tiemposDeUso;
 	}

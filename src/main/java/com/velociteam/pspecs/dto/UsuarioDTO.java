@@ -12,6 +12,7 @@ public class UsuarioDTO {
 	public String etapaPecs;
 	public String imagenDePerfil;
 	public String nuevosMensajes;
+	public String email; 
 	
 	public UsuarioDTO() {}
 	
@@ -21,6 +22,7 @@ public class UsuarioDTO {
 		this.nombre = (String) dbObject.get("nombre");
 		this.apellido = (String) dbObject.get("apellido");
 		this.etapaPecs = (String) dbObject.get("etapaPecs");
+		this.email = (String) dbObject.get("mail");
 		this.imagenDePerfil = imagenPerfil.orElse("");
 		this.nuevosMensajes = "false";
 	}
@@ -60,6 +62,14 @@ public class UsuarioDTO {
 	}
 	public void setNuevosMensajes(String nuevosMensajes) {
 		this.nuevosMensajes = nuevosMensajes;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 

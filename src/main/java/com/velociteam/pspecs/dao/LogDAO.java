@@ -68,7 +68,7 @@ public class LogDAO extends AbstractDao{
 	}
 
 	private long threeMonths() {
-		return 1000*60*60*24*90;
+		return 60*60*24*90;
 	}
 
 

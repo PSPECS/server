@@ -110,7 +110,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	private String fecha(DBObject nav) {
-		Timestamp fInicio = new Timestamp((Long) nav.get("dtInicio"));
+		Timestamp fInicio = new Timestamp(Long.valueOf((String) nav.get("dtInicio")));
 		String fecha = String.valueOf(fInicio.getMonth()+1)+"-"+String.valueOf(1900+fInicio.getYear());
 		return fecha;
 	}
@@ -127,8 +127,8 @@ public class ReportServiceImpl implements ReportService {
 		Map<String,Long> tiemposDeUso = new HashMap<>();
 		
 		for (DBObject navFiltrada : navFilt) {
-			Long inicioNav = (Long) navFiltrada.get("dtInicio");
-			Long finNav = (Long) navFiltrada.get("dtFin");
+			Long inicioNav = Long.valueOf((String) navFiltrada.get("dtInicio"));
+			Long finNav = Long.valueOf((String) navFiltrada.get("dtFin"));
 			String fecha = fecha(navFiltrada);
 			Long horas = 0L;
 			if (tiemposDeUso.containsKey(fecha)) horas = tiemposDeUso.get(fecha);

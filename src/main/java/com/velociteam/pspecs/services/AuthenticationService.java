@@ -35,18 +35,10 @@ public class AuthenticationService{
 	public CredentialsResponseDTO updateAuthTokens(String mail, String password) {
 		CredentialsResponseDTO userInfo = usuarioDao.getUserInfoByEmailAndPass(mail, password);
 		
-		if (userInfo.getAccessToken()==null){
-			usuarioDao.updateProperty(userInfo.getId(),"accessToken",buildAccessToken(userInfo.getNombre()));
-		} 
-		if (userInfo.getRefreshToken()==null){
-			usuarioDao.updateProperty(userInfo.getId(),"refreshToken",buildRefreshToken(userInfo.getNombre()));
-		} 
-		//Si se sobreescribieron los tokens.
-		if (userInfo.getAccessToken()==null || userInfo.getRefreshToken()==null){
-			userInfo=usuarioDao.getUserInfoByEmailAndPass(mail, password);
-		}
+		usuarioDao.updateProperty(userInfo.getId(),"accessToken",buildAccessToken(userInfo.getNombre()));
+		usuarioDao.updateProperty(userInfo.getId(),"refreshToken",buildRefreshToken(userInfo.getNombre()));
 		
-		return userInfo;
+		return usuarioDao.getUserInfoByEmailAndPass(mail, password);
 	}
 	
 	//Deberia ser la responsabilidad de otro objeto.

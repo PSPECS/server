@@ -62,11 +62,11 @@ public class ReportGenerator {
 
 			int cellnum = 0;
 			Cell dateCell = row.createCell(cellnum++);
-			UsuarioDTO usDto = usDao.getUserInfoById(key);
-			dateCell.setCellValue(usDto.getNombre());
+			dateCell.setCellValue(key);
 			for (Tuple tuple : reportData.getUsuariosContactados().get(key)) {
 				Cell cell = row.createCell(cellnum++);
-				cell.setCellValue(tuple.getLabel());
+				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
+				cell.setCellValue(usDto.getNombre());
 			}
 		}
 		return rownum;

@@ -138,7 +138,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 	
 	private double toHours(long l) {
-		return (double) (l/(1000*60*60));
+		return (double) l/(1000*60*60);
 	}
 
 

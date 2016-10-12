@@ -123,22 +123,22 @@ public class ReportServiceImpl implements ReportService {
 		}
 	}
 
-	private Map<String,Long> tiempoDeUso(DBCursor navFilt){
-		Map<String,Long> tiemposDeUso = new HashMap<>();
+	private Map<String,Double> tiempoDeUso(DBCursor navFilt){
+		Map<String,Double> tiemposDeUso = new HashMap<>();
 		
 		for (DBObject navFiltrada : navFilt) {
 			Long inicioNav = Long.valueOf((String) navFiltrada.get("dtInicio"));
 			Long finNav = Long.valueOf((String) navFiltrada.get("dtFin"));
 			String fecha = fecha(navFiltrada);
-			Long horas = 0L;
+			double horas = 0;
 			if (tiemposDeUso.containsKey(fecha)) horas = tiemposDeUso.get(fecha);
 			tiemposDeUso.put(fecha,horas+toHours(finNav-inicioNav));
 		}
 		return tiemposDeUso;
 	}
 	
-	private Long toHours(long l) {
-		return l/(1000*60*60);
+	private double toHours(long l) {
+		return (double) (l/(1000*60*60));
 	}
 
 

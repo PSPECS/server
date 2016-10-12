@@ -17,7 +17,7 @@ public class TestAccessToken {
 	    name ="mtest";
 		now = new Date().getTime();
 		Thread.sleep(100);
-		System.out.println(String.valueOf(now));
+//		System.out.println(String.valueOf(now));
 	}
 	
 	@Test
@@ -30,6 +30,12 @@ public class TestAccessToken {
 	public void shouldGetValidAT(){
 		Token token = new TokenBuilder(name).asAT().encode().build();
 		shouldDecodeTokenSuccesfully(token);
+	}
+	
+	@Test
+	public void test(){
+		double b=(double) 40270L/(1000*60*60);
+		System.out.println(b);
 	}
 	
 	private void shouldDecodeTokenSuccesfully(Token token) {

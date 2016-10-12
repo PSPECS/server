@@ -9,13 +9,19 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.velociteam.pspecs.dao.UsuariosDao;
 import com.velociteam.pspecs.dto.ReportDTO;
+import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.BussinessException;
 
 @Service
 public class ReportGenerator {
+	
+	@Autowired
+	private UsuariosDao usDao;
 
 	public String generateReport(ReportDTO reportData){
 		XSSFWorkbook workbook = new XSSFWorkbook();
@@ -56,7 +62,8 @@ public class ReportGenerator {
 
 			int cellnum = 0;
 			Cell dateCell = row.createCell(cellnum++);
-			dateCell.setCellValue(key);
+			UsuarioDTO usDto = usDao.getUserInfoById(key);
+			dateCell.setCellValue(usDto.getNombre());
 			for (Tuple tuple : reportData.getUsuariosContactados().get(key)) {
 				Cell cell = row.createCell(cellnum++);
 				cell.setCellValue(tuple.getLabel());

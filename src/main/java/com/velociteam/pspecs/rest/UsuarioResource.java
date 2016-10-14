@@ -103,7 +103,7 @@ public class UsuarioResource extends AbstractResource {
         return new ResponseEntity<>(contactos,HttpStatus.OK);
     }
 	
-	@RequestMapping(value="/{userId}/contactos/{userIdDestino}",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/{userId}/contactos/{userIdAAgregar}",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveContact(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@PathVariable String userIdAAgregar) {
         try {
         	auth(autHeader);
@@ -117,7 +117,7 @@ public class UsuarioResource extends AbstractResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 	
-	@RequestMapping(value="/{userId}/contactos/{userIdDestino}",method = RequestMethod.DELETE,consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/{userId}/contactos/{userIdAEliminar}",method = RequestMethod.DELETE,consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteContact(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@PathVariable String userIdAEliminar) {
         try {
         	auth(autHeader);

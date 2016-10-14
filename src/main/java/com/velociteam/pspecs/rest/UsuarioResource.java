@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.velociteam.pspecs.dao.MensajesDao;
 import com.velociteam.pspecs.dao.UsuariosDao;
+import com.velociteam.pspecs.dto.ContactoDTO;
 import com.velociteam.pspecs.dto.MensajeDTO;
 import com.velociteam.pspecs.dto.RequestMsgDTO;
 import com.velociteam.pspecs.dto.TokenDTO;
@@ -83,6 +85,50 @@ public class UsuarioResource extends AbstractResource {
         }
 
         return new ResponseEntity<>(contactos,HttpStatus.OK);
+    }
+	
+	@RequestMapping(value="/{userId}/search",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> search(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@RequestParam String search) {
+		List<ContactoDTO> contactos = null;
+		
+        try {
+        	auth(autHeader);
+        	contactos=usuariosDao.searchContact(userId,search);
+        } catch (AuthenticationException e){
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(contactos,HttpStatus.OK);
+    }
+	
+	@RequestMapping(value="/{userId}/contactos/{userIdDestino}",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveContact(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@PathVariable String userIdAAgregar) {
+        try {
+        	auth(autHeader);
+        	usuariosDao.saveContact(userId,userIdAAgregar);
+        } catch (AuthenticationException e){
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+	
+	@RequestMapping(value="/{userId}/contactos/{userIdDestino}",method = RequestMethod.DELETE,consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteContact(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@PathVariable String userIdAEliminar) {
+        try {
+        	auth(autHeader);
+        	usuariosDao.deleteContact(userId,userIdAEliminar);
+        } catch (AuthenticationException e){
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 	
 	@RequestMapping(value="/{userId}",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)

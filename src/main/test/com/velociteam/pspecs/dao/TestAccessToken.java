@@ -34,8 +34,7 @@ public class TestAccessToken {
 	
 	@Test
 	public void test(){
-		double b=(double) 40270L/(1000*60*60);
-		System.out.println(b);
+		System.out.println(0+(double) 40270L/(1000*60*60));
 	}
 	
 	private void shouldDecodeTokenSuccesfully(Token token) {

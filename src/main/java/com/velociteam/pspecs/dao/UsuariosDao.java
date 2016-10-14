@@ -13,6 +13,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
+import com.velociteam.pspecs.dto.ContactoDTO;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
 import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
@@ -73,6 +74,16 @@ public class UsuariosDao extends AbstractDao{
 	
 	public void resetFBToken(String userId, String fbToken) {
 		if (fbToken.equalsIgnoreCase(getTokenByUser(userId))) removeToken(userId,"token");
+	}
+	//Contactos
+	public void saveContact(String userId, String userIdAAgregar) {
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+				new BasicDBObject("$push",new BasicDBObject("contactos",buildContact(getUserInfoById(userIdAAgregar)))));
+	}
+
+	public void deleteContact(String userId, String userIdAEliminar) {
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+				new BasicDBObject("$pull",new BasicDBObject("contactos",buildContact(getUserInfoById(userIdAEliminar)))));
 	}
 	
 	//Solo usuado para testear.
@@ -148,9 +159,17 @@ public class UsuariosDao extends AbstractDao{
 	private String buildAccessToken(String nombre) {
 		return new TokenBuilder(nombre).asAT().encode().build().toString();
 	}
-	
 	private String buildRefreshToken(String nombre) {
 		return new TokenBuilder(nombre).asRT().encode().build().toString();
+	}
+	private BasicDBObject buildContact(UsuarioDTO userInfo) {
+		return new BasicDBObject("_id",userInfo.getId())
+		.append("nombre", userInfo.getNombre())
+		.append("apellido", userInfo.getApellido())
+		.append("mail", userInfo.getEmail())
+		.append("etapaPecs", userInfo.getEtapaPecs())
+		.append("imagenDePerfil", userInfo.getImagenDePerfil())
+		.append("nuevosMensajes", userInfo.getNuevosMensajes());
 	}
 	
 	//Internal CRUD Operations
@@ -167,5 +186,9 @@ public class UsuariosDao extends AbstractDao{
 				new BasicDBObject("$unset",new BasicDBObject(property,1)));
 	}
 
+	public List<ContactoDTO> searchContact(String userId, String search) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -13,6 +13,7 @@ public class UsuarioDTO {
 	public String imagenDePerfil;
 	public String nuevosMensajes;
 	public String email; 
+	public String rol;
 	
 	public UsuarioDTO() {}
 	
@@ -24,6 +25,7 @@ public class UsuarioDTO {
 		this.etapaPecs = (String) dbObject.get("etapaPecs");
 		this.email = (String) dbObject.get("mail");
 		this.imagenDePerfil = imagenPerfil.orElse("");
+		this.rol = (String) dbObject.get("rol");
 		this.nuevosMensajes = "false";
 	}
 	
@@ -70,6 +72,14 @@ public class UsuarioDTO {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getRol() {
+		return rol;
+	}
+
+	public void setRol(String rol) {
+		this.rol = rol;
 	}
 	
 

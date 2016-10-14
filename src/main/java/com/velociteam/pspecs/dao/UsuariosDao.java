@@ -77,13 +77,28 @@ public class UsuariosDao extends AbstractDao{
 	}
 	//Contactos
 	public void saveContact(String userId, String userIdAAgregar) {
-		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
-				new BasicDBObject("$push",new BasicDBObject("contactos",buildContact(getUserInfoById(userIdAAgregar)))));
+		UsuarioDTO userOrigen = getUserInfoById(userId);
+		if ("usuario regular".equalsIgnoreCase(userOrigen.getRol())){
+			collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+					new BasicDBObject("$push",new BasicDBObject("contactos",buildContact(getUserInfoById(userIdAAgregar)))));
+			collection("usuario").update(new BasicDBObject("_id",new ObjectId(userIdAAgregar)), 
+					new BasicDBObject("$push",new BasicDBObject("contactos",buildContact(userOrigen))));
+		} else {
+			throw new BussinessException("Para agregar contactos el rol del usuario debe ser regular");
+		}
+		
 	}
 
 	public void deleteContact(String userId, String userIdAEliminar) {
-		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
-				new BasicDBObject("$pull",new BasicDBObject("contactos",buildContact(getUserInfoById(userIdAEliminar)))));
+		UsuarioDTO userOrigen = getUserInfoById(userId);
+		if ("usuario regular".equalsIgnoreCase(userOrigen.getRol())){
+			collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)), 
+					new BasicDBObject("$pull",new BasicDBObject("contactos",buildContact(getUserInfoById(userIdAEliminar)))));
+			collection("usuario").update(new BasicDBObject("_id",new ObjectId(userIdAEliminar)), 
+					new BasicDBObject("$pull",new BasicDBObject("contactos",buildContact(userOrigen))));
+		} else {
+			throw new BussinessException("Para eliminar contactos el rol del usuario debe ser regular");
+		}
 	}
 	
 	//Solo usuado para testear.
@@ -169,6 +184,7 @@ public class UsuariosDao extends AbstractDao{
 		.append("mail", userInfo.getEmail())
 		.append("etapaPecs", userInfo.getEtapaPecs())
 		.append("imagenDePerfil", userInfo.getImagenDePerfil())
+		.append("rol", userInfo.getRol())
 		.append("nuevosMensajes", userInfo.getNuevosMensajes());
 	}
 	

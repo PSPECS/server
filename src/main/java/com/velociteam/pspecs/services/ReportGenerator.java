@@ -159,7 +159,7 @@ public class ReportGenerator {
 				cell.setCellValue(usDto.getNombre());
 				Cell cell1 = row.createCell(cellnum++);
 				cell1.setCellValue(tuple.getValue());
-				updateCharData(charData, key, tuple, usDto);
+				updateCharData(charData, tuple, usDto.getNombre());
 			}
 		}
 		int chartRow=rownum++;
@@ -175,11 +175,11 @@ public class ReportGenerator {
 		return new Tuple(String.valueOf(chartRow), rownum);
 	}
 
-	private void updateCharData(Map<String, Integer> charData, String key, Tuple tuple, UsuarioDTO usDto) {
-		if(charData.containsKey(usDto.getNombre())){
-			charData.put(usDto.getNombre(), charData.get(key)+tuple.getValue());
+	private void updateCharData(Map<String, Integer> charData, Tuple tuple, String key) {
+		if(charData.containsKey(key)){
+			charData.put(key, charData.get(key)+tuple.getValue());
 		} else {
-			charData.put(usDto.getNombre(), tuple.getValue());
+			charData.put(key, tuple.getValue());
 		}
 	}
 

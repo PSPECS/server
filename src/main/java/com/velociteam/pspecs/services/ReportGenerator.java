@@ -52,13 +52,13 @@ public class ReportGenerator {
 		rownum = 0;
 		rownum = fillSheet(reportData, rownum, sheetUsuarios);
 		
-		createPieChart(sheetUsuarios,"Sheet2!$A$2:$A$3","Sheet2!$B$2:$B$3"); 
+		createPieChart(sheetUsuarios,"Sheet2!$B$1:$B$2","Sheet2!$C$1:$C$2"); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogrmas Mas utilizadas");
 		rownum = 0;
 		rownum = fillSheet(reportData, rownum, sheetPictogramas);
 		
-		createPieChart(sheetPictogramas,"Sheet3!$A$2:$A$3","Sheet3!$B$2:$B$3");
+		createPieChart(sheetPictogramas,"Sheet3!$B$1:$B$2","Sheet2!$C$1:$C$2");
 		
 		//Write the workbook in file system  
 	    FileOutputStream out;

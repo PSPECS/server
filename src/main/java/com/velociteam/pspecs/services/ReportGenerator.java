@@ -10,12 +10,25 @@ import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.charts.AxisCrosses;
+import org.apache.poi.ss.usermodel.charts.AxisPosition;
+import org.apache.poi.ss.usermodel.charts.ChartAxis;
+import org.apache.poi.ss.usermodel.charts.ChartDataSource;
+import org.apache.poi.ss.usermodel.charts.ChartLegend;
+import org.apache.poi.ss.usermodel.charts.DataSources;
+import org.apache.poi.ss.usermodel.charts.LegendPosition;
+import org.apache.poi.ss.usermodel.charts.LineChartData;
+import org.apache.poi.ss.usermodel.charts.LineChartSerie;
+import org.apache.poi.ss.usermodel.charts.ValueAxis;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTBoolean;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumRef;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
@@ -38,7 +51,7 @@ public class ReportGenerator {
 
 	public String generateReport(ReportDTO reportData){
 		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet sheetTiempoDeUso = workbook.createSheet("Tiempo de Uso");
+		Sheet sheetTiempoDeUso = workbook.createSheet("Tiempo de Uso");
 		int rownum = 0;
 		for (String key : reportData.getTiemposDeUso().keySet()) {
 			Row row = sheetTiempoDeUso.createRow(rownum++);
@@ -48,7 +61,9 @@ public class ReportGenerator {
 			usosCell.setCellValue(reportData.getTiemposDeUso().get(key));
 		}
 		
-		XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
+        createLinearChart(sheetTiempoDeUso, rownum);
+
+        XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
 		rownum = 0;
 		rownum = fillSheet(reportData, rownum, sheetUsuarios);
 		
@@ -71,6 +86,39 @@ public class ReportGenerator {
 			throw new BussinessException("Se produjo un error al generar el archivo del reporte.",e);
 		}  
 		return filename;
+	}
+
+	private void createLinearChart(Sheet sheetTiempoDeUso, int rownum) {
+		Drawing drawing = sheetTiempoDeUso.createDrawingPatriarch();
+        ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 2 + 2, 3, 2 + 15, 20);
+
+        Chart chart = drawing.createChart(anchor);
+        ChartLegend legend = chart.getOrCreateLegend();
+        legend.setPosition(LegendPosition.RIGHT);
+
+        LineChartData data = chart.getChartDataFactory().createLineChartData();
+
+        ChartAxis bottomAxis = chart.getChartAxisFactory().createCategoryAxis(AxisPosition.BOTTOM);
+        ValueAxis leftAxis = chart.getChartAxisFactory().createValueAxis(AxisPosition.LEFT);
+        leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
+
+        ChartDataSource<Number> xs = DataSources.fromNumericCellRange(sheetTiempoDeUso, new CellRangeAddress(0, rownum - 1, 1, 1));
+        ChartDataSource<Number> ys1 = DataSources.fromNumericCellRange(sheetTiempoDeUso, new CellRangeAddress(0, rownum - 1, 2, 2));
+
+        LineChartSerie series1 = data.addSerie(xs, ys1);
+        series1.setTitle("one");
+
+        chart.plot(data, bottomAxis, leftAxis);
+
+        XSSFChart xssfChart = (XSSFChart) chart;
+        CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
+        plotArea.getLineChartArray()[0].getSmooth();
+        CTBoolean ctBool = CTBoolean.Factory.newInstance();
+        ctBool.setVal(false);
+        plotArea.getLineChartArray()[0].setSmooth(ctBool);
+        for (CTLineSer ser : plotArea.getLineChartArray()[0].getSerArray()) {
+            ser.setSmooth(ctBool);
+        }
 	}
 
 	private void createPieChart(XSSFSheet sheetUsuarios,String ref1,String ref2) {

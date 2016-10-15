@@ -87,8 +87,8 @@ public class UsuarioResource extends AbstractResource {
         return new ResponseEntity<>(contactos,HttpStatus.OK);
     }
 	
-	@RequestMapping(value="/{userId}/search",method = RequestMethod.GET,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> search(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@RequestBody String search) {
+	@RequestMapping(value="/{userId}/search",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> search(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@RequestParam String search) {
 		List<ContactoDTO> contactos = null;
 		
         try {

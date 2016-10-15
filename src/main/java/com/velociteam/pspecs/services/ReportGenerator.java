@@ -29,6 +29,8 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTBoolean;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarker;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarkerStyle;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumRef;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
@@ -106,18 +108,16 @@ public class ReportGenerator {
         ChartDataSource<Number> ys1 = DataSources.fromNumericCellRange(sheetTiempoDeUso, new CellRangeAddress(0, rownum - 1, 2, 2));
 
         LineChartSerie series1 = data.addSerie(xs, ys1);
-        series1.setTitle("one");
+        series1.setTitle("Timempo de uso");
 
         chart.plot(data, bottomAxis, leftAxis);
 
         XSSFChart xssfChart = (XSSFChart) chart;
         CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        plotArea.getLineChartArray()[0].getSmooth();
-        CTBoolean ctBool = CTBoolean.Factory.newInstance();
-        ctBool.setVal(false);
-        plotArea.getLineChartArray()[0].setSmooth(ctBool);
+        CTMarker ctMarker = CTMarker.Factory.newInstance();
+        ctMarker.setSymbol(CTMarkerStyle.Factory.newInstance());
         for (CTLineSer ser : plotArea.getLineChartArray()[0].getSerArray()) {
-            ser.setSmooth(ctBool);
+            ser.setMarker(ctMarker);
         }
 	}
 

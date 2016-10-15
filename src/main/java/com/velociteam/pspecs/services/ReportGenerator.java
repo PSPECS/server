@@ -71,13 +71,13 @@ public class ReportGenerator {
 		rownum = 0;
 		Tuple charDataRows = fillSheet(reportData, rownum, sheetUsuarios);
 		
-		createPieChart(sheetUsuarios,"Sheet2!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$C$"+String.valueOf(charDataRows.getValue())); 
+		createPieChart(sheetUsuarios,"Sheet2!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
 		
-		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogrmas Mas utilizadas");
+		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
 		rownum = 0;
 		charDataRows = fillSheet(reportData, rownum, sheetPictogramas);
 		
-		createPieChart(sheetPictogramas,"Sheet3!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$C$"+String.valueOf(charDataRows.getValue()));
+		createPieChart(sheetPictogramas,"Sheet3!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		
 		//Write the workbook in file system  
 	    FileOutputStream out;
@@ -157,12 +157,11 @@ public class ReportGenerator {
 				Cell cell = row.createCell(cellnum++);
 				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
 				cell.setCellValue(usDto.getNombre());
-				Cell cell1 = row.createCell(cellnum++);
-				cell1.setCellValue(tuple.getValue());
-				updateCharData(charData, tuple, usDto.getNombre());
+				updateCharData(charData, tuple.getValue(), usDto.getNombre());
 			}
 		}
-		int chartRow=rownum++;
+		rownum++;
+		int chartRow=rownum+1;
 		for (String key : charData.keySet()) {
 			Row row = sheetPictogramas.createRow(rownum++);
 			int cellnum = 0;
@@ -175,11 +174,11 @@ public class ReportGenerator {
 		return new Tuple(String.valueOf(chartRow), rownum);
 	}
 
-	private void updateCharData(Map<String, Integer> charData, Tuple tuple, String key) {
+	private void updateCharData(Map<String, Integer> charData, Integer value, String key) {
 		if(charData.containsKey(key)){
-			charData.put(key, charData.get(key)+tuple.getValue());
+			charData.put(key, charData.get(key)+value);
 		} else {
-			charData.put(key, tuple.getValue());
+			charData.put(key, value);
 		}
 	}
 

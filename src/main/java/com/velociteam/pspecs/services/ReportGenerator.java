@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Chart;
@@ -67,15 +69,15 @@ public class ReportGenerator {
 
         XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
 		rownum = 0;
-		rownum = fillSheet(reportData, rownum, sheetUsuarios);
+		Tuple charDataRows = fillSheet(reportData, rownum, sheetUsuarios);
 		
-		createPieChart(sheetUsuarios,"Sheet2!$B$1:$B$2","Sheet2!$C$1:$C$2"); 
+		createPieChart(sheetUsuarios,"Sheet2!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$C$"+String.valueOf(charDataRows.getValue())); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogrmas Mas utilizadas");
 		rownum = 0;
-		rownum = fillSheet(reportData, rownum, sheetPictogramas);
+		charDataRows = fillSheet(reportData, rownum, sheetPictogramas);
 		
-		createPieChart(sheetPictogramas,"Sheet3!$B$1:$B$2","Sheet2!$C$1:$C$2");
+		createPieChart(sheetPictogramas,"Sheet3!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$C$"+String.valueOf(charDataRows.getValue()));
 		
 		//Write the workbook in file system  
 	    FileOutputStream out;
@@ -108,7 +110,7 @@ public class ReportGenerator {
         ChartDataSource<Number> ys1 = DataSources.fromNumericCellRange(sheetTiempoDeUso, new CellRangeAddress(0, rownum - 1, 2, 2));
 
         LineChartSerie series1 = data.addSerie(xs, ys1);
-        series1.setTitle("Timempo de uso");
+        series1.setTitle("Tiempo de uso");
 
         chart.plot(data, bottomAxis, leftAxis);
 
@@ -144,10 +146,10 @@ public class ReportGenerator {
         ctNumRef.setF(ref2);
 	}
 
-	private int fillSheet(ReportDTO reportData, int rownum, XSSFSheet sheetPictogramas) {
+	private Tuple fillSheet(ReportDTO reportData, int rownum, XSSFSheet sheetPictogramas) {
+		Map<String,Integer> charData = new HashMap<>();
 		for (String key : reportData.getUsuariosContactados().keySet()) {
 			Row row = sheetPictogramas.createRow(rownum++);
-
 			int cellnum = 0;
 			Cell dateCell = row.createCell(cellnum++);
 			dateCell.setCellValue(key);
@@ -155,9 +157,30 @@ public class ReportGenerator {
 				Cell cell = row.createCell(cellnum++);
 				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
 				cell.setCellValue(usDto.getNombre());
+				Cell cell1 = row.createCell(cellnum++);
+				cell1.setCellValue(tuple.getValue());
+				updateCharData(charData, key, tuple, usDto);
 			}
 		}
-		return rownum;
+		int chartRow=rownum++;
+		for (String key : charData.keySet()) {
+			Row row = sheetPictogramas.createRow(rownum++);
+			int cellnum = 0;
+			Cell nameCell = row.createCell(cellnum++);
+			nameCell.setCellValue(key);
+			Cell valueCell = row.createCell(cellnum++);
+			valueCell.setCellValue(charData.get(key));
+		}
+		
+		return new Tuple(String.valueOf(chartRow), rownum);
+	}
+
+	private void updateCharData(Map<String, Integer> charData, String key, Tuple tuple, UsuarioDTO usDto) {
+		if(charData.containsKey(usDto.getNombre())){
+			charData.put(usDto.getNombre(), charData.get(key)+tuple.getValue());
+		} else {
+			charData.put(usDto.getNombre(), tuple.getValue());
+		}
 	}
 
 }

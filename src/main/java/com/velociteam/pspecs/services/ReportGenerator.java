@@ -6,9 +6,22 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Chart;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTBoolean;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumRef;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieSer;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrRef;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +52,13 @@ public class ReportGenerator {
 		rownum = 0;
 		rownum = fillSheet(reportData, rownum, sheetUsuarios);
 		
+		createPieChart(sheetUsuarios,"Sheet2!$A$2:$A$3","Sheet2!$B$2:$B$3"); 
+		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogrmas Mas utilizadas");
 		rownum = 0;
 		rownum = fillSheet(reportData, rownum, sheetPictogramas);
+		
+		createPieChart(sheetPictogramas,"Sheet3!$A$2:$A$3","Sheet3!$B$2:$B$3");
 		
 		//Write the workbook in file system  
 	    FileOutputStream out;
@@ -54,6 +71,29 @@ public class ReportGenerator {
 			throw new BussinessException("Se produjo un error al generar el archivo del reporte.",e);
 		}  
 		return filename;
+	}
+
+	private void createPieChart(XSSFSheet sheetUsuarios,String ref1,String ref2) {
+		Drawing drawing = sheetUsuarios.createDrawingPatriarch();
+        ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 5, 5, 20);
+
+        Chart chart = drawing.createChart(anchor);
+
+        CTChart ctChart = ((XSSFChart)chart).getCTChart();
+        CTPlotArea ctPlotArea = ctChart.getPlotArea();
+        CTPieChart ctPieChart = ctPlotArea.addNewPieChart();
+        CTBoolean ctBoolean = ctPieChart.addNewVaryColors();
+        ctBoolean.setVal(true);
+        CTPieSer ctPieSer = ctPieChart.addNewSer();
+
+        ctPieSer.addNewIdx().setVal(0);     
+
+        CTAxDataSource cttAxDataSource = ctPieSer.addNewCat();
+        CTStrRef ctStrRef = cttAxDataSource.addNewStrRef();
+        ctStrRef.setF(ref1); 
+        CTNumDataSource ctNumDataSource = ctPieSer.addNewVal();
+        CTNumRef ctNumRef = ctNumDataSource.addNewNumRef();
+        ctNumRef.setF(ref2);
 	}
 
 	private int fillSheet(ReportDTO reportData, int rownum, XSSFSheet sheetPictogramas) {

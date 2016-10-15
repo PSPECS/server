@@ -26,7 +26,6 @@ import com.velociteam.pspecs.dto.RequestMsgDTO;
 import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
-import com.velociteam.pspecs.exception.BussinessException;
 import com.velociteam.pspecs.services.FirebaseChatService;
 
 @RestController

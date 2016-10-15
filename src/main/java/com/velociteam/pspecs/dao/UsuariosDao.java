@@ -2,6 +2,7 @@ package com.velociteam.pspecs.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,8 +204,22 @@ public class UsuariosDao extends AbstractDao{
 	}
 
 	public List<ContactoDTO> searchContact(String userId, String search) {
-		// TODO Auto-generated method stub
-		return null;
+		UsuarioDTO userOrigen = getUserInfoById(userId);
+		List<UsuarioDTO> existingContacts = getContacts(userId);
+		List<ContactoDTO> contactosSugeridos = new ArrayList<>();
+		if ("usuario regular".equalsIgnoreCase(userOrigen.getRol())){
+			BasicDBList or = new BasicDBList();
+			or.add(new BasicDBObject("rol","Profesional"));
+			or.add(new BasicDBObject("rol","Familiar o Amigo"));
+			DBCursor dbContactos = collection("usuario").find(new BasicDBObject("apellido",search).append("$or",or));
+			for (DBObject usuario : dbContactos) {
+				String userIdDB = (String) usuario.get("_id").toString();
+				if(!userIdDB.equalsIgnoreCase(userId) && existingContacts.stream().noneMatch(c->c.getId().equalsIgnoreCase(userIdDB))){
+					contactosSugeridos.add(new ContactoDTO(usuario));
+				}
+			}
+		}
+		return contactosSugeridos.stream().limit(10L).collect(Collectors.toList());
 	}
 
 }

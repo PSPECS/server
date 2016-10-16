@@ -73,13 +73,13 @@ public class ReportGenerator {
 
         XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
 		rownum = 0;
-		Tuple charDataRows = fillSheet(reportData.getUsuariosContactados(), rownum, sheetUsuarios);
+		Tuple charDataRows = fillSheet(reportData.getUsuariosContactados(), rownum, sheetUsuarios,true);
 		
 		createPieChart(reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
 		rownum = 0;
-		charDataRows = fillSheet(reportData.getPictogramasMasUtilizados(), rownum, sheetPictogramas);
+		charDataRows = fillSheet(reportData.getPictogramasMasUtilizados(), rownum, sheetPictogramas,false);
 		
 		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		
@@ -163,24 +163,30 @@ public class ReportGenerator {
 //		}
 	}
 
-	private Tuple fillSheet(Map<String, List<Tuple>> data, int rownum, XSSFSheet sheetPictogramas) {
+	private Tuple fillSheet(Map<String, List<Tuple>> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {
 		Map<String,Integer> charData = new HashMap<>();
 		for (String key : data.keySet()) {
-			Row row = sheetPictogramas.createRow(rownum++);
+			Row row = sheet.createRow(rownum++);
 			int cellnum = 0;
 			Cell dateCell = row.createCell(cellnum++);
 			dateCell.setCellValue(key);
 			for (Tuple tuple : data.get(key)) {
 				Cell cell = row.createCell(cellnum++);
-				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
-				cell.setCellValue(usDto.getNombre());
-				updateCharData(charData, tuple.getValue(), usDto.getNombre());
+				String nombre ="";
+				if(isUsMasContactados){
+					UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
+					nombre=usDto.getNombre();
+				} else{
+					nombre=tuple.getLabel();
+				}
+				cell.setCellValue(nombre);
+				updateCharData(charData, tuple.getValue(), nombre);
 			}
 		}
 		rownum++;
 		int chartRow=rownum+1;
 		for (String key : charData.keySet()) {
-			Row row = sheetPictogramas.createRow(rownum++);
+			Row row = sheet.createRow(rownum++);
 			int cellnum = 0;
 			Cell nameCell = row.createCell(cellnum++);
 			nameCell.setCellValue(key);

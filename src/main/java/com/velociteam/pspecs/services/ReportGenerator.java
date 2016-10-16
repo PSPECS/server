@@ -73,13 +73,13 @@ public class ReportGenerator {
 
         XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
 		rownum = 0;
-		Tuple charDataRows = fillSheet(reportData, rownum, sheetUsuarios);
+		Tuple charDataRows = fillSheet(reportData.getUsuariosContactados(), rownum, sheetUsuarios);
 		
 		createPieChart(reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
 		rownum = 0;
-		charDataRows = fillSheet(reportData, rownum, sheetPictogramas);
+		charDataRows = fillSheet(reportData.getPictogramasMasUtilizados(), rownum, sheetPictogramas);
 		
 		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		
@@ -145,32 +145,32 @@ public class ReportGenerator {
         CTAxDataSource cttAxDataSource = ctPieSer.addNewCat();
         CTStrRef ctStrRef = cttAxDataSource.addNewStrRef();
         ctStrRef.setF(ref1);
-        CTStrData ctStrData = ctStrRef.addNewStrCache();
-        ctStrData.addNewPtCount().setVal(data.size());
-        for (String key : data.keySet()) {
-			ctStrData.addNewPt().setV(key);
-		}
+//        CTStrData ctStrData = ctStrRef.addNewStrCache();
+//        ctStrData.addNewPtCount().setVal(data.size());
+//        for (String key : data.keySet()) {
+//			ctStrData.addNewPt().setV(key);
+//		}
         CTNumDataSource ctNumDataSource = ctPieSer.addNewVal();
         CTNumRef ctNumRef = ctNumDataSource.addNewNumRef();
         ctNumRef.setF(ref2);
-        CTNumData ctNumData = ctNumRef.addNewNumCache();
-        ctNumData.addNewPtCount().setVal(data.size());
-        for (String key : data.keySet()) {
-        	Integer sum = data.get(key).stream()
-        	.map(t->t.getValue())
-        	.reduce(Integer::sum).get();
-        	ctNumData.addNewPt().setV(String.valueOf(sum));
-		}
+//        CTNumData ctNumData = ctNumRef.addNewNumCache();
+//        ctNumData.addNewPtCount().setVal(data.size());
+//        for (String key : data.keySet()) {
+//        	Integer sum = data.get(key).stream()
+//        	.map(t->t.getValue())
+//        	.reduce(Integer::sum).get();
+//        	ctNumData.addNewPt().setV(String.valueOf(sum));
+//		}
 	}
 
-	private Tuple fillSheet(ReportDTO reportData, int rownum, XSSFSheet sheetPictogramas) {
+	private Tuple fillSheet(Map<String, List<Tuple>> data, int rownum, XSSFSheet sheetPictogramas) {
 		Map<String,Integer> charData = new HashMap<>();
-		for (String key : reportData.getUsuariosContactados().keySet()) {
+		for (String key : data.keySet()) {
 			Row row = sheetPictogramas.createRow(rownum++);
 			int cellnum = 0;
 			Cell dateCell = row.createCell(cellnum++);
 			dateCell.setCellValue(key);
-			for (Tuple tuple : reportData.getUsuariosContactados().get(key)) {
+			for (Tuple tuple : data.get(key)) {
 				Cell cell = row.createCell(cellnum++);
 				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
 				cell.setCellValue(usDto.getNombre());

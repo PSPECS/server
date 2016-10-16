@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Chart;
@@ -33,11 +35,13 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarker;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarkerStyle;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumData;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumRef;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrData;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrRef;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,13 +75,13 @@ public class ReportGenerator {
 		rownum = 0;
 		Tuple charDataRows = fillSheet(reportData, rownum, sheetUsuarios);
 		
-		createPieChart(sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
+		createPieChart(reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
 		rownum = 0;
 		charDataRows = fillSheet(reportData, rownum, sheetPictogramas);
 		
-		createPieChart(sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
+		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		
 		//Write the workbook in file system  
 	    FileOutputStream out;
@@ -123,7 +127,7 @@ public class ReportGenerator {
         }
 	}
 
-	private void createPieChart(XSSFSheet sheetUsuarios,String ref1,String ref2) {
+	private void createPieChart(Map<String, List<Tuple>> data, XSSFSheet sheetUsuarios,String ref1,String ref2) {
 		Drawing drawing = sheetUsuarios.createDrawingPatriarch();
         ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 5, 5, 20);
 
@@ -140,10 +144,23 @@ public class ReportGenerator {
 
         CTAxDataSource cttAxDataSource = ctPieSer.addNewCat();
         CTStrRef ctStrRef = cttAxDataSource.addNewStrRef();
-        ctStrRef.setF(ref1); 
+        ctStrRef.setF(ref1);
+        CTStrData ctStrData = ctStrRef.addNewStrCache();
+        ctStrData.addNewPtCount().setVal(data.size());
+        for (String key : data.keySet()) {
+			ctStrData.addNewPt().setV(key);
+		}
         CTNumDataSource ctNumDataSource = ctPieSer.addNewVal();
         CTNumRef ctNumRef = ctNumDataSource.addNewNumRef();
         ctNumRef.setF(ref2);
+        CTNumData ctNumData = ctNumRef.addNewNumCache();
+        ctNumData.addNewPtCount().setVal(data.size());
+        for (String key : data.keySet()) {
+        	Integer sum = data.get(key).stream()
+        	.map(t->t.getValue())
+        	.reduce(Integer::sum).get();
+        	ctNumData.addNewPt().setV(String.valueOf(sum));
+		}
 	}
 
 	private Tuple fillSheet(ReportDTO reportData, int rownum, XSSFSheet sheetPictogramas) {

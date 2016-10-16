@@ -71,13 +71,13 @@ public class ReportGenerator {
 		rownum = 0;
 		Tuple charDataRows = fillSheet(reportData, rownum, sheetUsuarios);
 		
-		createPieChart(sheetUsuarios,"Sheet2!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
+		createPieChart(sheetUsuarios,"Usuarios Mas contactados!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
 		rownum = 0;
 		charDataRows = fillSheet(reportData, rownum, sheetPictogramas);
 		
-		createPieChart(sheetPictogramas,"Sheet3!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
+		createPieChart(sheetPictogramas,"5 Pictogramas Mas utilizados!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"Sheet2!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		
 		//Write the workbook in file system  
 	    FileOutputStream out;

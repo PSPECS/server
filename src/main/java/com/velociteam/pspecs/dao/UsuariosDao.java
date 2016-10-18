@@ -2,6 +2,7 @@ package com.velociteam.pspecs.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
@@ -211,7 +212,7 @@ public class UsuariosDao extends AbstractDao{
 			BasicDBList or = new BasicDBList();
 			or.add(new BasicDBObject("rol","Profesional"));
 			or.add(new BasicDBObject("rol","Familiar o Amigo"));
-			DBCursor dbContactos = collection("usuario").find(new BasicDBObject("apellido","/.*"+search+".*/").append("$or",or));
+			DBCursor dbContactos = collection("usuario").find(new BasicDBObject("apellido",Pattern.compile(search)).append("$or",or));
 			for (DBObject usuario : dbContactos) {
 				String userIdDB = (String) usuario.get("_id").toString();
 				if(!userIdDB.equalsIgnoreCase(userId) && existingContacts.stream().noneMatch(c->c.getId().equalsIgnoreCase(userIdDB))){

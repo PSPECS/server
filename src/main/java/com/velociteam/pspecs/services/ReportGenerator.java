@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Chart;
@@ -35,13 +34,11 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarker;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarkerStyle;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumData;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumRef;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrData;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrRef;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,25 +58,28 @@ public class ReportGenerator {
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		Sheet sheetTiempoDeUso = workbook.createSheet("Tiempo de Uso");
 		int rownum = 0;
+		Row rowHeader = sheetTiempoDeUso.createRow(rownum++);
+		Cell fechaCell = rowHeader.createCell(1);
+		fechaCell.setCellValue("Fecha");
+		Cell horasCell = rowHeader.createCell(2);
+		horasCell.setCellValue("Horas de uso");
 		for (String key : reportData.getTiemposDeUso().keySet()) {
 			Row row = sheetTiempoDeUso.createRow(rownum++);
 			Cell dateCell = row.createCell(1);
 			dateCell.setCellValue(key);
 			Cell usosCell = row.createCell(2);
-			usosCell.setCellValue(reportData.getTiemposDeUso().get(key));
+			usosCell.setCellValue(reportData.getTiemposDeUso().get(key).intValue());
 		}
 		
         createLinearChart(sheetTiempoDeUso, rownum);
 
         XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
-		rownum = 0;
-		Tuple charDataRows = fillSheet(reportData.getUsuariosContactados(), rownum, sheetUsuarios,true);
+		Tuple charDataRows = fillSheet(reportData.getUsuariosContactados(), 0, sheetUsuarios,true);
 		
 		createPieChart(reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
-		rownum = 0;
-		charDataRows = fillSheet(reportData.getPictogramasMasUtilizados(), rownum, sheetPictogramas,false);
+		charDataRows = fillSheet(reportData.getPictogramasMasUtilizados(), 0, sheetPictogramas,false);
 		
 		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		

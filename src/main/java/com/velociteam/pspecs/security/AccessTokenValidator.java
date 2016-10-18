@@ -26,7 +26,7 @@ public class AccessTokenValidator implements TokenValidator{
 	}
 	
 	private boolean diffGTE30Mins(Long diff) {
-		if (diff>(30*60*1000)){
+		if (diff>(3*60*1000)){
 			return true;
 		}
 		return false; 

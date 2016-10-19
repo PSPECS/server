@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.velociteam.pspecs.dao.UsuariosDao;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
-import com.velociteam.pspecs.dto.UpdatedTokensDTO;
 import com.velociteam.pspecs.security.Token;
 import com.velociteam.pspecs.security.TokenBuilder;
 
@@ -24,7 +23,7 @@ public class AuthenticationService{
 		usuarioDao.isAccessTokenPresent(token);
 	}
 
-	public UpdatedTokensDTO isValidRefreshToken(Token token) {
+	public String isValidRefreshToken(Token token) {
 		token.isValid();
 		return usuarioDao.refreshAccessToken(token);
 	}

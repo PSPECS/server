@@ -19,6 +19,7 @@ import com.velociteam.pspecs.dto.ContactoDTO;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
 import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
+import com.velociteam.pspecs.dto.UpdatedTokensDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
@@ -40,7 +41,7 @@ public class UsuariosDao extends AbstractDao{
 		if(wr.getN()<=0) throw new BussinessException("No se actulizo el FB token correctamente");
 	}
 	
-	public String refreshAccessToken(Token token) {
+	public UpdatedTokensDTO refreshAccessToken(Token token) {
 		DBObject dbUsuario = collection("usuario")
 				.find(new BasicDBObject("refreshToken",token.toString())).one();
 		
@@ -48,10 +49,11 @@ public class UsuariosDao extends AbstractDao{
 		
 		CredentialsResponseDTO cred = new CredentialsResponseDTO(dbUsuario);
 		String newAT = buildAccessToken(cred.getNombre());
+		String newRT = buildRefreshToken(cred.getNombre());
 		updateProperty(cred.getId(), "accessToken", newAT);
-		updateProperty(cred.getId(), "refreshToken", buildRefreshToken(cred.getNombre()));
+		updateProperty(cred.getId(), "refreshToken", newRT);
 		
-		return newAT;
+		return new UpdatedTokensDTO(newAT,newRT);
 	}
 	
 	//TODO agrega clearTokens a los tests.

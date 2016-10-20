@@ -65,13 +65,7 @@ public class ReportGenerator {
 		fechaCell.setCellValue("Fecha");
 		Cell horasCell = rowHeader.createCell(2);
 		horasCell.setCellValue("Horas de uso");
-		Set<String> fechas= reportData.getTiemposDeUso().keySet();
-		List<String> fechasOrdenadas = fechas.stream()
-				.sorted((a,b)->
-					Integer.valueOf(a.substring(0, a.indexOf("-")))
-						.compareTo(Integer.valueOf(b.substring(0, b.indexOf("-")))))
-				.collect(Collectors.toList());
-		for (String key : fechasOrdenadas) {
+		for (String key : orderDates(reportData.getTiemposDeUso().keySet())) {
 			Row row = sheetTiempoDeUso.createRow(rownum++);
 			Cell dateCell = row.createCell(1);
 			dateCell.setCellValue(key);
@@ -102,6 +96,14 @@ public class ReportGenerator {
 			throw new BussinessException("Se produjo un error al generar el archivo del reporte.",e);
 		}  
 		return filename;
+	}
+
+	private List<String> orderDates(Set<String> fechas) {
+		return fechas.stream()
+				.sorted((a,b)->
+					Integer.valueOf(a.substring(0, a.indexOf("-")))
+						.compareTo(Integer.valueOf(b.substring(0, b.indexOf("-")))))
+				.collect(Collectors.toList());
 	}
 
 	private void createLinearChart(Sheet sheetTiempoDeUso, int rownum) {
@@ -193,7 +195,7 @@ public class ReportGenerator {
 		}
 		rownum++;
 		int chartRow=rownum+1;
-		for (String key : charData.keySet()) {
+		for (String key : orderDates(charData.keySet())) {
 			Row row = sheet.createRow(rownum++);
 			int cellnum = 0;
 			Cell nameCell = row.createCell(cellnum++);

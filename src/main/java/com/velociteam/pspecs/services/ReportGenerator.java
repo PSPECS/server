@@ -68,8 +68,8 @@ public class ReportGenerator {
 		Set<String> fechas= reportData.getTiemposDeUso().keySet();
 		List<String> fechasOrdenadas = fechas.stream()
 				.sorted((a,b)->
-					Integer.valueOf(a.substring(0, a.indexOf("-")-1))
-						.compareTo(Integer.valueOf(b.substring(0, b.indexOf("-")-1))))
+					Integer.valueOf(a.substring(0, a.indexOf("-")))
+						.compareTo(Integer.valueOf(b.substring(0, b.indexOf("-")))))
 				.collect(Collectors.toList());
 		for (String key : fechasOrdenadas) {
 			Row row = sheetTiempoDeUso.createRow(rownum++);

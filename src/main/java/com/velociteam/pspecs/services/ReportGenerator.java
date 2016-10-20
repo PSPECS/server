@@ -66,7 +66,11 @@ public class ReportGenerator {
 		Cell horasCell = rowHeader.createCell(2);
 		horasCell.setCellValue("Horas de uso");
 		Set<String> fechas= reportData.getTiemposDeUso().keySet();
-		List<String> fechasOrdenadas = fechas.stream().sorted().collect(Collectors.toList());
+		List<String> fechasOrdenadas = fechas.stream()
+				.sorted((a,b)->
+					Integer.valueOf(a.substring(0, a.indexOf("-")-1))
+						.compareTo(Integer.valueOf(b.substring(0, b.indexOf("-")-1))))
+				.collect(Collectors.toList());
 		for (String key : fechasOrdenadas) {
 			Row row = sheetTiempoDeUso.createRow(rownum++);
 			Cell dateCell = row.createCell(1);

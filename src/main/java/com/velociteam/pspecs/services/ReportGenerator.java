@@ -175,7 +175,7 @@ public class ReportGenerator {
 
 	private Tuple fillSheet(Map<String, List<Tuple>> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {
 		Map<String,Integer> charData = new HashMap<>();
-		for (String key : data.keySet()) {
+		for (String key : orderDates(data.keySet())) {
 			Row row = sheet.createRow(rownum++);
 			int cellnum = 0;
 			Cell dateCell = row.createCell(cellnum++);
@@ -195,7 +195,7 @@ public class ReportGenerator {
 		}
 		rownum++;
 		int chartRow=rownum+1;
-		for (String key : orderDates(charData.keySet())) {
+		for (String key : charData.keySet()) {
 			Row row = sheet.createRow(rownum++);
 			int cellnum = 0;
 			Cell nameCell = row.createCell(cellnum++);

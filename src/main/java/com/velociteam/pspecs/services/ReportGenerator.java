@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Chart;
@@ -63,7 +65,9 @@ public class ReportGenerator {
 		fechaCell.setCellValue("Fecha");
 		Cell horasCell = rowHeader.createCell(2);
 		horasCell.setCellValue("Horas de uso");
-		for (String key : reportData.getTiemposDeUso().keySet()) {
+		Set<String> fechas= reportData.getTiemposDeUso().keySet();
+		List<String> fechasOrdenadas = fechas.stream().sorted().collect(Collectors.toList());
+		for (String key : fechasOrdenadas) {
 			Row row = sheetTiempoDeUso.createRow(rownum++);
 			Cell dateCell = row.createCell(1);
 			dateCell.setCellValue(key);

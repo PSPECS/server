@@ -61,6 +61,20 @@ public class AuthenticationResource extends AbstractResource {
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 	
+	@RequestMapping(value="/{userId}/simulationAccessToken/{patientUserId}",method = RequestMethod.GET,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> simulatedAuth(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@PathVariable String patientUserId) {
+		CredentialsResponseDTO responseDTO = null;
+        try {
+        	responseDTO = authService.simulateAuthentication(userId,patientUserId);
+        } catch(BussinessException e){
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+    }
+	
 	@RequestMapping(value="/{userId}/logout",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String autHeader,@PathVariable String userId) {
         try {

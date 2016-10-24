@@ -1,10 +1,15 @@
 package com.velociteam.pspecs.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.velociteam.pspecs.dao.UsuariosDao;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
+import com.velociteam.pspecs.dto.UsuarioDTO;
+import com.velociteam.pspecs.exception.AuthenticationException;
+import com.velociteam.pspecs.exception.BussinessException;
 import com.velociteam.pspecs.security.Token;
 import com.velociteam.pspecs.security.TokenBuilder;
 
@@ -15,7 +20,14 @@ public class AuthenticationService{
 	private UsuariosDao usuarioDao;
 	
 	public CredentialsResponseDTO authenticate(String mail, String password) {
-		return updateAuthTokens(mail, password);
+		CredentialsResponseDTO userInfo = usuarioDao.getUserInfoByEmailAndPass(mail, password);
+		
+		try{
+			new Token(userInfo.getRefreshToken(),false).isValid();
+		} catch(AuthenticationException e){
+			usuarioDao.updateProperty(userInfo.getId(),"refreshToken",buildRefreshToken(userInfo.getNombre()));
+		}
+		return usuarioDao.getUserInfoByEmailAndPass(mail, password);
 	}
 	
 	public void isValidAccessToken(Token token){
@@ -31,21 +43,17 @@ public class AuthenticationService{
 	public void logout(String userId) {
 		usuarioDao.clearTokens(userId);
 	}
-	
-	public CredentialsResponseDTO updateAuthTokens(String mail, String password) {
-		CredentialsResponseDTO userInfo = usuarioDao.getUserInfoByEmailAndPass(mail, password);
+
+	public CredentialsResponseDTO simulateAuthentication(String userId, String patientUserId) {
+		List<UsuarioDTO> users = usuarioDao.getContacts(userId);
 		
-		usuarioDao.updateProperty(userInfo.getId(),"accessToken",buildAccessToken(userInfo.getNombre()));
-		usuarioDao.updateProperty(userInfo.getId(),"refreshToken",buildRefreshToken(userInfo.getNombre()));
-		
-		return usuarioDao.getUserInfoByEmailAndPass(mail, password);
+		if(users.stream().anyMatch(user->patientUserId.equalsIgnoreCase(user.getId()))){
+			return usuarioDao.simulateLogin(patientUserId);
+		}
+		throw new BussinessException("El usuario ingresado no puede realizar esta operación");
 	}
 	
 	//Deberia ser la responsabilidad de otro objeto.
-	private String buildAccessToken(String nombre) {
-		return new TokenBuilder(nombre).asAT().encode().build().toString();
-	}
-	
 	private String buildRefreshToken(String nombre) {
 		return new TokenBuilder(nombre).asRT().encode().build().toString();
 	}

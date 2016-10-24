@@ -17,8 +17,10 @@ import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
 import com.velociteam.pspecs.dto.ContactoDTO;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
+import com.velociteam.pspecs.dto.PassEditionDTO;
 import com.velociteam.pspecs.dto.SignupDTO;
 import com.velociteam.pspecs.dto.SignupResponseDTO;
+import com.velociteam.pspecs.dto.UserEditionDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
@@ -49,7 +51,6 @@ public class UsuariosDao extends AbstractDao{
 		CredentialsResponseDTO cred = new CredentialsResponseDTO(dbUsuario);
 		String newAT = buildAccessToken(cred.getNombre());
 		updateProperty(cred.getId(), "accessToken", newAT);
-//		updateProperty(cred.getId(), "refreshToken", buildRefreshToken(cred.getNombre()));
 		
 		return newAT;
 	}
@@ -155,6 +156,17 @@ public class UsuariosDao extends AbstractDao{
 		if (dbUsuario==null) throw new BussinessException("El usuario y/o password ingresado no existe");
 		return new CredentialsResponseDTO(dbUsuario);
 	}
+	public CredentialsResponseDTO simulateLogin(String userId) {
+		DBObject dbUsuario=null;
+		try{
+			dbUsuario = collection("usuario")
+					.find(new BasicDBObject("_id",new ObjectId(userId))).one();
+		} catch (IllegalArgumentException e){
+			throw new MongoException("El id ingresado es invalido.",e);
+		}
+		if (dbUsuario==null) throw new BussinessException("El id ingresado no existe.");
+		return new CredentialsResponseDTO(dbUsuario);
+	}
 	
 	//Validaciones
 	public void isAccessTokenPresent(Token token){
@@ -221,6 +233,24 @@ public class UsuariosDao extends AbstractDao{
 			}
 		}
 		return contactosSugeridos.stream().limit(10L).collect(Collectors.toList());
+	}
+
+	public void updateUser(String userId, UserEditionDTO userEditionDTO) {
+		collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)),
+				new BasicDBObject("$set",new BasicDBObject("nombre",userEditionDTO.getName())
+						.append("apellido", userEditionDTO.getLastname())
+						.append("mail", userEditionDTO.getEmail())
+						.append("etapaPecs", userEditionDTO.getPecsLevel())
+						.append("imagenDePerfil", userEditionDTO.getSelectedProfilePic())));
+	}
+
+	public void updatePassword(String userId, PassEditionDTO passDto) {
+		if(collection("usuario").find(new BasicDBObject("password",passDto.getOldPassword()).append("_id",new ObjectId(userId))).one()!=null){
+			collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)),
+					new BasicDBObject("$set",new BasicDBObject("password",passDto.getPassword())));
+		} else{
+			throw new BussinessException("El password ingresado es incorrecto");
+		}
 	}
 
 }

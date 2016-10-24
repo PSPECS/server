@@ -22,8 +22,10 @@ import com.velociteam.pspecs.dao.MensajesDao;
 import com.velociteam.pspecs.dao.UsuariosDao;
 import com.velociteam.pspecs.dto.ContactoDTO;
 import com.velociteam.pspecs.dto.MensajeDTO;
+import com.velociteam.pspecs.dto.PassEditionDTO;
 import com.velociteam.pspecs.dto.RequestMsgDTO;
 import com.velociteam.pspecs.dto.TokenDTO;
+import com.velociteam.pspecs.dto.UserEditionDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.services.FirebaseChatService;
@@ -54,6 +56,36 @@ public class UsuarioResource extends AbstractResource {
         }
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+	
+	@RequestMapping(value="/{userId}/edit",method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String autHeader, @PathVariable String userId, @Valid @RequestBody UserEditionDTO userEditionDTO) {
+		
+        try {
+        	auth(autHeader);
+        	usuariosDao.updateUser(userId,userEditionDTO);
+        } catch (AuthenticationException e){
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+	
+	@RequestMapping(value="/{userId}/password",method = RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updatePass(@RequestHeader("Authorization") String autHeader, @PathVariable String userId, @Valid @RequestBody PassEditionDTO passDto) {
+		
+        try {
+        	auth(autHeader);
+        	usuariosDao.updatePassword(userId,passDto);
+        } catch (AuthenticationException e){
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 	
 	@RequestMapping(value="/{userId}/resetFBToken",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)

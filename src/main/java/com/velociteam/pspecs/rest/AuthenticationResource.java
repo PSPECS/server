@@ -61,7 +61,7 @@ public class AuthenticationResource extends AbstractResource {
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 	
-	@RequestMapping(value="/{userId}/simulationAccessToken/{patientUserId}",method = RequestMethod.GET,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/{userId}/simulationAccessToken/{patientUserId}",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> simulatedAuth(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@PathVariable String patientUserId) {
 		CredentialsResponseDTO responseDTO = null;
         try {

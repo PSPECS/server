@@ -39,7 +39,7 @@ public class ReportServiceImpl implements ReportService {
 				usuariosContactados(navFilt),
 				pictogramasMasUtilizados(navFilt));
 		
-		emailSender.send(reportRequestDTO.getProfesional(),reportGenerator.generateReport(reportDTO));
+		emailSender.send(reportRequestDTO.getProfesional(),reportGenerator.generateReport(reportRequestDTO.paciente,reportDTO));
 	}
 	
 	private Map<String,List<Tuple>> usuariosContactados(DBCursor navFilt) {

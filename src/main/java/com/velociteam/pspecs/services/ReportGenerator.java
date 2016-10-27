@@ -56,7 +56,7 @@ public class ReportGenerator {
 	@Autowired
 	private UsuariosDao usDao;
 
-	public String generateReport(ReportDTO reportData){
+	public String generateReport(String paciente, ReportDTO reportData){
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		Sheet sheetTiempoDeUso = workbook.createSheet("Tiempo de Uso");
 		int rownum = 0;
@@ -85,9 +85,11 @@ public class ReportGenerator {
 		
 		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		
+		
+		UsuarioDTO usDTO = usDao.getUserInfoById(paciente);
 		//Write the workbook in file system  
 	    FileOutputStream out;
-	    String filename = String.format("ReporteActividad%s.xlsx", new Date().getTime());
+	    String filename = String.format("Reporte-%s-%s.xlsx", usDTO.getNombre(),usDTO.getApellido());
 		try {
 			out = new FileOutputStream(new File(filename));
 			workbook.write(out);  

@@ -21,7 +21,6 @@ public class CredentialsResponseDTO {
 	public CredentialsResponseDTO() {}
 	
 	public CredentialsResponseDTO(DBObject dbObject) {
-		Optional<String> imagenPerfil = Optional.of((String) dbObject.get("imagenDePerfil"));
 		this.accessToken = (String) dbObject.get("accessToken");
 		this.refreshToken = (String) dbObject.get("refreshToken");
 		this.id = ((ObjectId) dbObject.get("_id")).toString();
@@ -30,7 +29,7 @@ public class CredentialsResponseDTO {
 		this.mail = (String) dbObject.get("mail");
 		this.rol = (String) dbObject.get("rol");
 		this.etapaPecs = (String) dbObject.get("etapaPecs");
-		this.imagenDePerfil = imagenPerfil.orElse("");
+		this.imagenDePerfil = (String) dbObject.get("imagenDePerfil");
 		this.fnac = (String) dbObject.get("fnac");
 	}
 	public String getImagenDePerfil() {

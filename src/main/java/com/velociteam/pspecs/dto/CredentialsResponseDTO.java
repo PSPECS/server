@@ -1,7 +1,5 @@
 package com.velociteam.pspecs.dto;
 
-import java.util.Optional;
-
 import org.bson.types.ObjectId;
 
 import com.mongodb.DBObject;

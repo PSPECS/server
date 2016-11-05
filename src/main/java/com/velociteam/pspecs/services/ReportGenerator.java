@@ -188,6 +188,14 @@ public class ReportGenerator {
 
 	private Tuple fillSheet(XSSFWorkbook workbook, Map<String, List<Tuple>> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {
 		Map<String,Integer> charData = new HashMap<>();
+		Row rowHeader = sheet.createRow(rownum++);
+		Cell titleCell = rowHeader.createCell(5);
+		if(isUsMasContactados){
+			titleCell.setCellValue("Reporte de Usuarios Mas contactados");
+		} else{
+			titleCell.setCellValue("Reporte de Pictogramas Mas utilizados");
+		}
+		titleCell.setCellStyle(setFontToBold(workbook));
 		for (String key : orderDates(data.keySet())) {
 			Row row = sheet.createRow(rownum++);
 			int cellnum = 0;

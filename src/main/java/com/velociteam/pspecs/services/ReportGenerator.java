@@ -10,10 +10,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.charts.AxisCrosses;
@@ -60,11 +63,19 @@ public class ReportGenerator {
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		Sheet sheetTiempoDeUso = workbook.createSheet("Tiempo de Uso");
 		int rownum = 0;
+		CellStyle style = setFontToBold(workbook);
+		
+		
 		Row rowHeader = sheetTiempoDeUso.createRow(rownum++);
 		Cell fechaCell = rowHeader.createCell(1);
-		fechaCell.setCellValue("Fecha");
+		fechaCell.setCellValue("Mes");
+		fechaCell.setCellStyle(style);
 		Cell horasCell = rowHeader.createCell(2);
 		horasCell.setCellValue("Horas de uso");
+		horasCell.setCellStyle(style);
+		Cell titleCell = rowHeader.createCell(5);
+		titleCell.setCellValue("Reporte de Tiempo de uso");
+		titleCell.setCellStyle(style);
 		for (String key : orderDates(reportData.getTiemposDeUso().keySet())) {
 			Row row = sheetTiempoDeUso.createRow(rownum++);
 			Cell dateCell = row.createCell(1);
@@ -76,12 +87,12 @@ public class ReportGenerator {
         createLinearChart(sheetTiempoDeUso, rownum);
 
         XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
-		Tuple charDataRows = fillSheet(reportData.getUsuariosContactados(), 0, sheetUsuarios,true);
+		Tuple charDataRows = fillSheet(workbook,reportData.getUsuariosContactados(), 0, sheetUsuarios,true);
 		
 		createPieChart(reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
-		charDataRows = fillSheet(reportData.getPictogramasMasUtilizados(), 0, sheetPictogramas,false);
+		charDataRows = fillSheet(workbook,reportData.getPictogramasMasUtilizados(), 0, sheetPictogramas,false);
 		
 		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		
@@ -175,7 +186,7 @@ public class ReportGenerator {
 //		}
 	}
 
-	private Tuple fillSheet(Map<String, List<Tuple>> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {
+	private Tuple fillSheet(XSSFWorkbook workbook, Map<String, List<Tuple>> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {
 		Map<String,Integer> charData = new HashMap<>();
 		for (String key : orderDates(data.keySet())) {
 			Row row = sheet.createRow(rownum++);
@@ -207,6 +218,14 @@ public class ReportGenerator {
 		}
 		
 		return new Tuple(String.valueOf(chartRow), rownum);
+	}
+
+	private CellStyle setFontToBold(XSSFWorkbook workbook) {
+		CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setColor(HSSFColor.BLACK.index);
+        style.setFont(font);
+		return style;
 	}
 
 	private void updateCharData(Map<String, Integer> charData, Integer value, String key) {

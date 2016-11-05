@@ -36,6 +36,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTBoolean;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTDLbls;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarker;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarkerStyle;
@@ -161,11 +162,17 @@ public class ReportGenerator {
         CTPieChart ctPieChart = ctPlotArea.addNewPieChart();
         CTBoolean ctBoolean = ctPieChart.addNewVaryColors();
         ctBoolean.setVal(true);
+        CTDLbls ctDLbls = ctPieChart.addNewDLbls();
+        CTBoolean ctPercBool = ctDLbls.addNewShowPercent();
+        ctPercBool.setVal(true);
         CTPieSer ctPieSer = ctPieChart.addNewSer();
 
         ctPieSer.addNewIdx().setVal(0);     
 
         CTAxDataSource cttAxDataSource = ctPieSer.addNewCat();
+        CTDLbls ctDLblsSer = ctPieSer.addNewDLbls();
+        CTBoolean ctSerPercBool = ctDLblsSer.addNewShowPercent();
+        ctSerPercBool.setVal(true);
         CTStrRef ctStrRef = cttAxDataSource.addNewStrRef();
         ctStrRef.setF(ref1);
 //        CTStrData ctStrData = ctStrRef.addNewStrCache();

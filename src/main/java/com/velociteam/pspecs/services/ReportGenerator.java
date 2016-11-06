@@ -176,7 +176,7 @@ public class ReportGenerator {
         ctPieSer.addNewIdx().setVal(0);     
         // Series Text
         for (int i = Integer.valueOf(charDataRows.getLabel()); i <= charDataRows.getValue(); i++) {
-        	CTSerTx tx = ctLabelsSer.getTx();
+        	CTSerTx tx = ctLabelsSer.addNewTx();
             String titleRef = new CellReference(sheetUsuarios.getSheetName(), i, 1, true, true).formatAsString();
             tx.addNewStrRef().setF(titleRef);
 		}

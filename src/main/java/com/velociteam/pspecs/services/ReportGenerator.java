@@ -37,7 +37,9 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTBoolean;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTDLbls;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTLayout;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTManualLayout;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarker;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarkerStyle;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumData;
@@ -50,6 +52,8 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrData;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrRef;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrVal;
+import org.openxmlformats.schemas.drawingml.x2006.chart.STLayoutMode;
+import org.openxmlformats.schemas.drawingml.x2006.chart.STLayoutTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -179,6 +183,16 @@ public class ReportGenerator {
         CTBoolean ctShowDblsOverMaxBoolean =ctChart.addNewShowDLblsOverMax();
         ctShowDblsOverMaxBoolean.setVal(true);
         CTPlotArea ctPlotArea = ctChart.getPlotArea();
+        
+        CTManualLayout ctLayout = ctPlotArea.addNewLayout().addNewManualLayout();
+        ctLayout.addNewLayoutTarget().setVal(STLayoutTarget.INNER);
+        ctLayout.addNewXMode().setVal(STLayoutMode.EDGE);
+        ctLayout.addNewYMode().setVal(STLayoutMode.EDGE);
+        ctLayout.addNewX().setVal(0.12291666666666666);
+        ctLayout.addNewY().setVal(9.7777777777777783E-2);
+        ctLayout.addNewW().setVal(0.84583333333333333);
+        ctLayout.addNewH().setVal(0.90222222222222226);
+        
         CTPieChart ctPieChart = ctPlotArea.addNewPieChart();
         CTBoolean ctBoolean = ctPieChart.addNewVaryColors();
         ctBoolean.setVal(true);

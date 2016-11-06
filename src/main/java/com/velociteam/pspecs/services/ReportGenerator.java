@@ -158,6 +158,9 @@ public class ReportGenerator {
         Chart chart = drawing.createChart(anchor);
 
         CTChart ctChart = ((XSSFChart)chart).getCTChart();
+//        <c:showDLblsOverMax val="1" />
+        CTBoolean ctShowDblsOverMaxBoolean =ctChart.getShowDLblsOverMax();
+        ctShowDblsOverMaxBoolean.setVal(true);
         CTPlotArea ctPlotArea = ctChart.getPlotArea();
         CTPieChart ctPieChart = ctPlotArea.addNewPieChart();
         CTBoolean ctBoolean = ctPieChart.addNewVaryColors();

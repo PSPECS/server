@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -41,13 +40,16 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTDLbls;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarker;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarkerStyle;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumData;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumRef;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumVal;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTSerTx;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrData;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrRef;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrVal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,12 +94,12 @@ public class ReportGenerator {
         XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
 		Tuple charDataRows = fillSheet(workbook,reportData.getUsuariosContactados(), 0, sheetUsuarios,true);
 		
-		createPieChart(charDataRows,reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
+		createPieChart(reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
 		charDataRows = fillSheet(workbook,reportData.getPictogramasMasUtilizados(), 0, sheetPictogramas,false);
 		
-		createPieChart(charDataRows,reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
+		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
 		
 		
 		UsuarioDTO usDTO = usDao.getUserInfoById(paciente);
@@ -153,7 +155,7 @@ public class ReportGenerator {
         }
 	}
 
-	private void createPieChart(Tuple charDataRows,Map<String, List<Tuple>> data, XSSFSheet sheetUsuarios,String ref1,String ref2) {
+	private void createPieChart(Map<String, List<Tuple>> data, XSSFSheet sheetUsuarios,String ref1,String ref2) {
 		Drawing drawing = sheetUsuarios.createDrawingPatriarch();
         ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 5, 5, 20);
 
@@ -170,40 +172,39 @@ public class ReportGenerator {
         CTBoolean ctPercBool = ctDLbls.addNewShowPercent();
         ctPercBool.setVal(true);
         CTPieSer ctPieSer = ctPieChart.addNewSer();
-        
-        CTPieSer ctLabelsSer = ctPieChart.getSerArray(0);
 
         ctPieSer.addNewIdx().setVal(0);     
-        // Series Text
-        for (int i = Integer.valueOf(charDataRows.getLabel()); i <= charDataRows.getValue(); i++) {
-        	CTSerTx tx = ctLabelsSer.addNewTx();
-            String titleRef = new CellReference(sheetUsuarios.getSheetName(), i, 1, true, true).formatAsString();
-            tx.addNewStrRef().setF(titleRef);
-		}
-        
-        
+
         CTAxDataSource cttAxDataSource = ctPieSer.addNewCat();
         CTDLbls ctDLblsSer = ctPieSer.addNewDLbls();
         CTBoolean ctSerPercBool = ctDLblsSer.addNewShowPercent();
         ctSerPercBool.setVal(true);
         CTStrRef ctStrRef = cttAxDataSource.addNewStrRef();
         ctStrRef.setF(ref1);
-//        CTStrData ctStrData = ctStrRef.addNewStrCache();
-//        ctStrData.addNewPtCount().setVal(data.size());
-//        for (String key : data.keySet()) {
-//			ctStrData.addNewPt().setV(key);
-//		}
+        CTStrData ctStrData = ctStrRef.addNewStrCache();
+        ctStrData.addNewPtCount().setVal(data.size());
+        int idx=0;
+        for (String key : data.keySet()) {
+        	CTStrVal sVal = ctStrData.addNewPt();
+        	sVal.setIdx(idx);
+        	sVal.setV(key);
+        	idx++;
+		}
         CTNumDataSource ctNumDataSource = ctPieSer.addNewVal();
         CTNumRef ctNumRef = ctNumDataSource.addNewNumRef();
         ctNumRef.setF(ref2);
-//        CTNumData ctNumData = ctNumRef.addNewNumCache();
-//        ctNumData.addNewPtCount().setVal(data.size());
-//        for (String key : data.keySet()) {
-//        	Integer sum = data.get(key).stream()
-//        	.map(t->t.getValue())
-//        	.reduce(Integer::sum).get();
-//        	ctNumData.addNewPt().setV(String.valueOf(sum));
-//		}
+        CTNumData ctNumData = ctNumRef.addNewNumCache();
+        ctNumData.addNewPtCount().setVal(data.size());
+        idx=0;
+        for (String key : data.keySet()) {
+        	Integer sum = data.get(key).stream()
+        	.map(t->t.getValue())
+        	.reduce(Integer::sum).get();
+        	CTNumVal numVal = ctNumData.addNewPt();
+        	numVal.setV(String.valueOf(sum));
+        	numVal.setIdx(idx);
+        	idx++;
+		}
 	}
 
 	private Tuple fillSheet(XSSFWorkbook workbook, Map<String, List<Tuple>> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {

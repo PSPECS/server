@@ -94,12 +94,12 @@ public class ReportGenerator {
         XSSFSheet sheetUsuarios = workbook.createSheet("Usuarios Mas contactados");
 		Tuple charDataRows = fillSheet(workbook,reportData.getUsuariosContactados(), 0, sheetUsuarios,true);
 		
-		createPieChart(reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue())); 
+		createPieChart(reportData.getUsuariosContactados(),sheetUsuarios,"'Usuarios Mas contactados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'Usuarios Mas contactados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()),true); 
 		
 		XSSFSheet sheetPictogramas = workbook.createSheet("5 Pictogramas Mas utilizados");
 		charDataRows = fillSheet(workbook,reportData.getPictogramasMasUtilizados(), 0, sheetPictogramas,false);
 		
-		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()));
+		createPieChart(reportData.getPictogramasMasUtilizados(),sheetPictogramas,"'5 Pictogramas Mas utilizados'!$A$"+charDataRows.getLabel()+":$A$"+String.valueOf(charDataRows.getValue()),"'5 Pictogramas Mas utilizados'!$B$"+charDataRows.getLabel()+":$B$"+String.valueOf(charDataRows.getValue()),false);
 		
 		
 		UsuarioDTO usDTO = usDao.getUserInfoById(paciente);
@@ -155,7 +155,21 @@ public class ReportGenerator {
         }
 	}
 
-	private void createPieChart(Map<String, List<Tuple>> data, XSSFSheet sheetUsuarios,String ref1,String ref2) {
+	private void createPieChart(Map<String, List<Tuple>> data, XSSFSheet sheetUsuarios,String ref1,String ref2,boolean isUsMasContactados) {
+	   Map<String,Integer> charData = new HashMap<>();
+	   for (String key : orderDates(data.keySet())) {
+			for (Tuple tuple : data.get(key)) {
+				String nombre ="";
+				if(isUsMasContactados){
+					UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
+					nombre=usDto.getNombre();
+				} else{
+					nombre=tuple.getLabel();
+				}
+				updateCharData(charData, tuple.getValue(), nombre);
+			}
+		}
+		
 		Drawing drawing = sheetUsuarios.createDrawingPatriarch();
         ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 5, 5, 20);
 
@@ -184,7 +198,7 @@ public class ReportGenerator {
         CTStrData ctStrData = ctStrRef.addNewStrCache();
         ctStrData.addNewPtCount().setVal(data.size());
         int idx=0;
-        for (String key : data.keySet()) {
+        for (String key : charData.keySet()) {
         	CTStrVal sVal = ctStrData.addNewPt();
         	sVal.setIdx(idx);
         	sVal.setV(key);
@@ -196,15 +210,16 @@ public class ReportGenerator {
         CTNumData ctNumData = ctNumRef.addNewNumCache();
         ctNumData.addNewPtCount().setVal(data.size());
         idx=0;
-        for (String key : data.keySet()) {
-        	Integer sum = data.get(key).stream()
-        	.map(t->t.getValue())
-        	.reduce(Integer::sum).get();
+        for (String key : charData.keySet()) {
+//        	Integer sum = data.get(key).stream()
+//        	.map(t->t.getValue())
+//        	.reduce(Integer::sum).get();
         	CTNumVal numVal = ctNumData.addNewPt();
-        	numVal.setV(String.valueOf(sum));
+        	numVal.setV(String.valueOf(charData.get(key)));
         	numVal.setIdx(idx);
         	idx++;
 		}
+        
 	}
 
 	private Tuple fillSheet(XSSFWorkbook workbook, Map<String, List<Tuple>> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {

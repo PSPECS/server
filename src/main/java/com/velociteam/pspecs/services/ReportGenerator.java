@@ -178,7 +178,7 @@ public class ReportGenerator {
         for (int i = Integer.valueOf(charDataRows.getLabel()); i <= charDataRows.getValue(); i++) {
         	CTSerTx tx = ctLabelsSer.getTx();
             String titleRef = new CellReference(sheetUsuarios.getSheetName(), i, 1, true, true).formatAsString();
-            tx.getStrRef().setF(titleRef);
+            tx.addNewStrRef().setF(titleRef);
 		}
         
         

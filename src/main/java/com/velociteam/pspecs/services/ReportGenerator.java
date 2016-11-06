@@ -37,7 +37,6 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTBoolean;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTDLbls;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTLayout;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTManualLayout;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTMarker;
@@ -247,12 +246,12 @@ public class ReportGenerator {
 		}
 		titleCell.setCellStyle(setFontToBold(workbook));
 		for (String key : orderDates(data.keySet())) {
-			Row row = sheet.createRow(rownum++);
-			int cellnum = 0;
-			Cell dateCell = row.createCell(cellnum++);
-			dateCell.setCellValue(key);
+//			Row row = sheet.createRow(rownum++);
+//			int cellnum = 0;
+//			Cell dateCell = row.createCell(cellnum++);
+//			dateCell.setCellValue(key);
 			for (Tuple tuple : data.get(key)) {
-				Cell cell = row.createCell(cellnum++);
+//				Cell cell = row.createCell(cellnum++);
 				String nombre ="";
 				if(isUsMasContactados){
 					UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
@@ -260,7 +259,7 @@ public class ReportGenerator {
 				} else{
 					nombre=tuple.getLabel();
 				}
-				cell.setCellValue(nombre);
+//				cell.setCellValue(nombre);
 				updateCharData(charData, tuple.getValue(), nombre);
 			}
 		}

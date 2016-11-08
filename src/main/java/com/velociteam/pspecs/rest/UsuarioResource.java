@@ -87,7 +87,6 @@ public class UsuarioResource extends AbstractResource {
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 	

@@ -24,6 +24,7 @@ import com.velociteam.pspecs.dto.UserEditionDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
+import com.velociteam.pspecs.exception.IncorrectPasswordBussinessException;
 import com.velociteam.pspecs.exception.MongoException;
 import com.velociteam.pspecs.security.Token;
 import com.velociteam.pspecs.security.TokenBuilder;
@@ -242,6 +243,13 @@ public class UsuariosDao extends AbstractDao{
 						.append("mail", userEditionDTO.getEmail())
 						.append("etapaPecs", userEditionDTO.getPecsLevel())
 						.append("imagenDePerfil", userEditionDTO.getSelectedProfilePic())));
+		
+		collection("usuario").update(new BasicDBObject("contactos._id",userId),
+				new BasicDBObject("$set",new BasicDBObject("contactos.$.nombre",userEditionDTO.getName())
+						.append("contactos.$.apellido", userEditionDTO.getLastname())
+						.append("contactos.$.mail", userEditionDTO.getEmail())
+						.append("contactos.$.etapaPecs", userEditionDTO.getPecsLevel())
+						.append("contactos.$.imagenDePerfil", userEditionDTO.getSelectedProfilePic())),false,true);
 	}
 
 	public void updatePassword(String userId, PassEditionDTO passDto) {
@@ -249,7 +257,7 @@ public class UsuariosDao extends AbstractDao{
 			collection("usuario").update(new BasicDBObject("_id",new ObjectId(userId)),
 					new BasicDBObject("$set",new BasicDBObject("password",passDto.getPassword())));
 		} else{
-			throw new BussinessException("El password ingresado es incorrecto");
+			throw new IncorrectPasswordBussinessException();
 		}
 	}
 

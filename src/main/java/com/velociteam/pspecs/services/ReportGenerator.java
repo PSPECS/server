@@ -264,6 +264,19 @@ public class ReportGenerator {
 			}
 		}
 		rownum++;
+		String col1,col2;
+		if(isUsMasContactados){
+			col1="Nombre";
+			col2="Contactos contactados";
+		} else{
+			col1="Pictogramas";
+			col2="Cantidad Usos";
+		}
+		Row hederRow = sheet.createRow(rownum++);
+		Cell firstCell = hederRow.createCell(0);
+		firstCell.setCellValue(col1);
+		Cell secondCell = hederRow.createCell(1);
+		secondCell.setCellValue(col2);
 		int chartRow=rownum+1;
 		for (String key : charData.keySet()) {
 			Row row = sheet.createRow(rownum++);

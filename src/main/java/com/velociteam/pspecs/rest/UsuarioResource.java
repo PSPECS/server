@@ -28,6 +28,7 @@ import com.velociteam.pspecs.dto.TokenDTO;
 import com.velociteam.pspecs.dto.UserEditionDTO;
 import com.velociteam.pspecs.dto.UsuarioDTO;
 import com.velociteam.pspecs.exception.AuthenticationException;
+import com.velociteam.pspecs.exception.IncorrectPasswordBussinessException;
 import com.velociteam.pspecs.services.FirebaseChatService;
 
 @RestController
@@ -81,6 +82,8 @@ public class UsuarioResource extends AbstractResource {
         	usuariosDao.updatePassword(userId,passDto);
         } catch (AuthenticationException e){
         	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (IncorrectPasswordBussinessException e) {
+            return new ResponseEntity<>(e,HttpStatus.PRECONDITION_FAILED);
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }

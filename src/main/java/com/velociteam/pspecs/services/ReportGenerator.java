@@ -183,15 +183,6 @@ public class ReportGenerator {
         ctShowDblsOverMaxBoolean.setVal(true);
         CTPlotArea ctPlotArea = ctChart.getPlotArea();
         
-        CTManualLayout ctLayout = ctPlotArea.addNewLayout().addNewManualLayout();
-        ctLayout.addNewLayoutTarget().setVal(STLayoutTarget.INNER);
-        ctLayout.addNewXMode().setVal(STLayoutMode.EDGE);
-        ctLayout.addNewYMode().setVal(STLayoutMode.EDGE);
-        ctLayout.addNewX().setVal(0.12291666666666666);
-        ctLayout.addNewY().setVal(9.7777777777777783E-2);
-        ctLayout.addNewW().setVal(0.84583333333333333);
-        ctLayout.addNewH().setVal(0.90222222222222226);
-        
         CTPieChart ctPieChart = ctPlotArea.addNewPieChart();
         CTBoolean ctBoolean = ctPieChart.addNewVaryColors();
         ctBoolean.setVal(true);
@@ -224,9 +215,6 @@ public class ReportGenerator {
         ctNumData.addNewPtCount().setVal(data.size());
         idx=0;
         for (String key : charData.keySet()) {
-//        	Integer sum = data.get(key).stream()
-//        	.map(t->t.getValue())
-//        	.reduce(Integer::sum).get();
         	CTNumVal numVal = ctNumData.addNewPt();
         	numVal.setV(String.valueOf(charData.get(key)));
         	numVal.setIdx(idx);

@@ -155,19 +155,17 @@ public class ReportGenerator {
         }
 	}
 
-	private void createPieChart(Map<String, List<Tuple>> data, XSSFSheet sheetUsuarios,String ref1,String ref2,boolean isUsMasContactados) {
+	private void createPieChart(List<Tuple> data, XSSFSheet sheetUsuarios,String ref1,String ref2,boolean isUsMasContactados) {
 	   Map<String,Integer> charData = new HashMap<>();
-	   for (String key : orderDates(data.keySet())) {
-			for (Tuple tuple : data.get(key)) {
-				String nombre ="";
-				if(isUsMasContactados){
-					UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
-					nombre=usDto.getNombre();
-				} else{
-					nombre=tuple.getLabel();
-				}
-				updateCharData(charData, tuple.getValue(), nombre);
+		for (Tuple tuple : data) {
+			String nombre ="";
+			if(isUsMasContactados){
+				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
+				nombre=usDto.getNombre();
+			} else{
+				nombre=tuple.getLabel();
 			}
+			updateCharData(charData, tuple.getValue(), nombre);
 		}
 		
 		Drawing drawing = sheetUsuarios.createDrawingPatriarch();
@@ -220,7 +218,7 @@ public class ReportGenerator {
         
 	}
 
-	private Tuple fillSheet(XSSFWorkbook workbook, Map<String, List<Tuple>> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {
+	private Tuple fillSheet(XSSFWorkbook workbook, List<Tuple> data, int rownum, XSSFSheet sheet,boolean isUsMasContactados) {
 		Map<String,Integer> charData = new HashMap<>();
 		Row rowHeader = sheet.createRow(rownum++);
 		Cell titleCell = rowHeader.createCell(5);
@@ -230,23 +228,15 @@ public class ReportGenerator {
 			titleCell.setCellValue("Reporte de Pictogramas Mas utilizados");
 		}
 		titleCell.setCellStyle(setFontToBold(workbook));
-		for (String key : orderDates(data.keySet())) {
-//			Row row = sheet.createRow(rownum++);
-//			int cellnum = 0;
-//			Cell dateCell = row.createCell(cellnum++);
-//			dateCell.setCellValue(key);
-			for (Tuple tuple : data.get(key)) {
-//				Cell cell = row.createCell(cellnum++);
-				String nombre ="";
-				if(isUsMasContactados){
-					UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
-					nombre=usDto.getNombre();
-				} else{
-					nombre=tuple.getLabel();
-				}
-//				cell.setCellValue(nombre);
-				updateCharData(charData, tuple.getValue(), nombre);
+		for (Tuple tuple : data) {
+			String nombre ="";
+			if(isUsMasContactados){
+				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
+				nombre=usDto.getNombre();
+			} else{
+				nombre=tuple.getLabel();
 			}
+			updateCharData(charData, tuple.getValue(), nombre);
 		}
 		rownum++;
 		String col1,col2;

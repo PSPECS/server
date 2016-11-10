@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,70 +41,46 @@ public class ReportServiceImpl implements ReportService {
 		emailSender.send(reportRequestDTO.getProfesional(),reportGenerator.generateReport(reportRequestDTO.paciente,reportDTO));
 	}
 	
-	private Map<String,List<Tuple>> usuariosContactados(DBCursor navFilt) {
-		Map<String,List<Tuple>> usuariosMasContactados = new HashMap<>();
+	private List<Tuple> usuariosContactados(DBCursor navFilt) {
+		List<Tuple> usuariosMasContactados = new ArrayList<>();
 		for (DBObject nav : navFilt) {
-			String fecha = fecha(nav);
-			
 			BasicDBList usuariosContactados = (BasicDBList) nav.get("usuariosContactados");
 			for (Object usuarioContactado : usuariosContactados) {
 				String userId = ((ObjectId) ((DBObject) usuarioContactado).get("userId")).toHexString();
 				Integer msgsEnviados = (Integer) ((DBObject) usuarioContactado).get("mensajesEnviados");
 				Tuple newTuple = new Tuple(userId, msgsEnviados);
-				updateUserInfo(usuariosMasContactados, fecha, userId, newTuple);
-				
+				updateUserInfo(usuariosMasContactados, userId, newTuple);
 			}
-			
 		}
-		
-		sortByValue(usuariosMasContactados, 2L);
-		
 		return usuariosMasContactados;
-		
 	}
 	
-	private Map<String,List<Tuple>> pictogramasMasUtilizados(DBCursor navFilt) {
-		Map<String,List<Tuple>> pictogramasMasUtilizados = new HashMap<>();
+	private List<Tuple> pictogramasMasUtilizados(DBCursor navFilt) {
+		List<Tuple> pictogramasMasUtilizados = new ArrayList<>();
 		for (DBObject nav : navFilt) {
-			String fecha = fecha(nav);
-			
 			BasicDBList pictogramas = (BasicDBList) nav.get("pictogramas");
 			for (Object pictograma : pictogramas) {
 				String nombre = (String) ((DBObject) pictograma).get("nombre");
 				Integer usos = (Integer) ((DBObject) pictograma).get("usos");
 				Tuple newTuple = new Tuple(nombre, usos);
-				updateUserInfo(pictogramasMasUtilizados, fecha, nombre, newTuple);
-				
+				updateUserInfo(pictogramasMasUtilizados, nombre, newTuple);
 			}
-			
 		}
-		
-		sortByValue(pictogramasMasUtilizados, 5L);
-		
 		return pictogramasMasUtilizados;
 		
 	}
 
-	private void updateUserInfo(Map<String, List<Tuple>> tableInfo, String fecha, String nombre,
-			Tuple newTuple) {
-		if (tableInfo.containsKey(fecha)){
-			List<Tuple> infoUsuario = tableInfo.get(fecha);
-			if (infoUsuario.contains(newTuple)){
-				Tuple oldTuple = infoUsuario.get(infoUsuario.indexOf(newTuple));
-				if (oldTuple!=null){
-					infoUsuario.remove(oldTuple);
-					infoUsuario.add(new Tuple(nombre,oldTuple.getValue()+newTuple.getValue()));
-				}else {
-					//TODO error
-				}
-			} else {
-				infoUsuario.add(newTuple);
+	private void updateUserInfo(List<Tuple> tableInfo, String nombre,Tuple newTuple) {
+		if (tableInfo.contains(newTuple)){
+			Tuple oldTuple = tableInfo.get(tableInfo.indexOf(newTuple));
+			if (oldTuple!=null){
+				tableInfo.remove(oldTuple);
+				tableInfo.add(new Tuple(nombre,oldTuple.getValue()+newTuple.getValue()));
+			}else {
+				//TODO error
 			}
-			tableInfo.put(fecha, infoUsuario);
 		} else {
-			List<Tuple> newInfoUsuario = new ArrayList<>();
-			newInfoUsuario.add(newTuple);
-			tableInfo.put(fecha, newInfoUsuario);
+			tableInfo.add(newTuple);
 		}
 	}
 
@@ -113,14 +88,6 @@ public class ReportServiceImpl implements ReportService {
 		Timestamp fInicio = new Timestamp(Long.valueOf((String) nav.get("dtInicio")));
 		String fecha = String.valueOf(fInicio.getMonth()+1)+"-"+String.valueOf(1900+fInicio.getYear());
 		return fecha;
-	}
-
-	private void sortByValue(Map<String, List<Tuple>> pictogramasMasUtilizados, Long maxSize) {
-		for (String key : pictogramasMasUtilizados.keySet()) {
-			List<Tuple> infoMensual = pictogramasMasUtilizados.get(key);
-			infoMensual.sort((left,right)->right.getValue().compareTo(left.getValue()));
-			pictogramasMasUtilizados.put(key, infoMensual.stream().limit(maxSize).collect(Collectors.toList()));
-		}
 	}
 
 	private Map<String,Double> tiempoDeUso(DBCursor navFilt){

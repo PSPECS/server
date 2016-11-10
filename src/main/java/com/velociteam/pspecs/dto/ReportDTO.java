@@ -8,13 +8,13 @@ import com.velociteam.pspecs.services.Tuple;
 public class ReportDTO {
 	
 	Map<String,Double> tiemposDeUso;
-	Map<String,List<Tuple>> usuariosContactados;
-	Map<String,List<Tuple>> pictogramasMasUtilizados;
+	List<Tuple> usuariosContactados;
+	List<Tuple> pictogramasMasUtilizados;
 
 	public ReportDTO() {
 	}
 	
-	public ReportDTO(Map<String, Double> tiemposDeUso, Map<String, List<Tuple>> usuariosContactados,Map<String,List<Tuple>> pictogramasMasUtilizados) {
+	public ReportDTO(Map<String, Double> tiemposDeUso,List<Tuple> usuariosContactados,List<Tuple> pictogramasMasUtilizados) {
 		this.tiemposDeUso = tiemposDeUso;
 		this.usuariosContactados = usuariosContactados;
 		this.pictogramasMasUtilizados = pictogramasMasUtilizados;
@@ -24,11 +24,11 @@ public class ReportDTO {
 		return tiemposDeUso;
 	}
 
-	public Map<String, List<Tuple>> getUsuariosContactados() {
+	public List<Tuple> getUsuariosContactados() {
 		return usuariosContactados;
 	}
 
-	public Map<String, List<Tuple>> getPictogramasMasUtilizados() {
+	public List<Tuple> getPictogramasMasUtilizados() {
 		return pictogramasMasUtilizados;
 	}
 

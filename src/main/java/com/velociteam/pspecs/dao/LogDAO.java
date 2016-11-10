@@ -1,7 +1,6 @@
 package com.velociteam.pspecs.dao;
 
 import java.net.UnknownHostException;
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,12 +43,6 @@ public class LogDAO extends AbstractDao{
 		Long fInicioTS = Long.valueOf(fInicio);
 		Long fFinTS = Long.valueOf(fFin);
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.MONTH, -3);
-		
-		if (fInicioTS>calendar.getTimeInMillis()){
-			throw new BussinessException("El reporte debe ser generado con una fecha de inicio mayor a 3 meses desde la fecha.");
-		} 
 		if ((fFinTS-fInicioTS)<=threeMonths()){
 			throw new BussinessException("El reporte debe ser generado con un periodo mayor a tres meses.");
 		}

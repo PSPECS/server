@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +54,8 @@ public class ReportServiceImpl implements ReportService {
 				updateUserInfo(usuariosMasContactados, userId, newTuple);
 			}
 		}
-		return usuariosMasContactados;
+		return usuariosMasContactados.stream().sorted((e1, e2) -> Integer.compare(e2.getValue(),
+                e1.getValue())).limit(5L).collect(Collectors.toList());
 	}
 	
 	private List<Tuple> pictogramasMasUtilizados(DBCursor navFilt) {

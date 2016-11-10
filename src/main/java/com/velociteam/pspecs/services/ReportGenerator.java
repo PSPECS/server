@@ -160,8 +160,8 @@ public class ReportGenerator {
 		for (Tuple tuple : data) {
 			String nombre ="";
 			if(isUsMasContactados){
-				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
-				nombre=usDto.getNombre();
+//				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
+				nombre=tuple.getLabel();
 			} else{
 				nombre=tuple.getLabel();
 			}

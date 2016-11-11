@@ -54,8 +54,7 @@ public class ReportServiceImpl implements ReportService {
 				updateUserInfo(usuariosMasContactados, userId, newTuple);
 			}
 		}
-		return usuariosMasContactados.stream().sorted((e1, e2) -> Integer.compare(e2.getValue(),
-                e1.getValue())).limit(5L).collect(Collectors.toList());
+		return usuariosMasContactados;
 	}
 	
 	private List<Tuple> pictogramasMasUtilizados(DBCursor navFilt) {
@@ -69,7 +68,8 @@ public class ReportServiceImpl implements ReportService {
 				updateUserInfo(pictogramasMasUtilizados, nombre, newTuple);
 			}
 		}
-		return pictogramasMasUtilizados;
+		return pictogramasMasUtilizados.stream().sorted((e1, e2) -> Integer.compare(e2.getValue(),
+                e1.getValue())).limit(5L).collect(Collectors.toList());
 		
 	}
 

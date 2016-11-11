@@ -106,7 +106,7 @@ public class ReportGenerator {
 		UsuarioDTO usDTO = usDao.getUserInfoById(paciente);
 		//Write the workbook in file system  
 	    FileOutputStream out;
-	    String filename = String.format("Reporte-%s-%s-%s.xlsx", usDTO.getNombre(),usDTO.getApellido(),new SimpleDateFormat("dd/MM/yyyy-HH:mm").format(new Date()));
+	    String filename = String.format("Reporte-%s-%s-%s.xlsx", usDTO.getNombre(),usDTO.getApellido(),new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		try {
 			out = new FileOutputStream(new File(filename));
 			workbook.write(out);  

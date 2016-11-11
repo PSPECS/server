@@ -243,7 +243,7 @@ public class ReportGenerator {
 		String col1,col2;
 		if(isUsMasContactados){
 			col1="Nombre";
-			col2="Contactos contactados";
+			col2="Contidad de mensajes intercambiados";
 		} else{
 			col1="Pictogramas";
 			col2="Cantidad Usos";

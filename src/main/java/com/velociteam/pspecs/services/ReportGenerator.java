@@ -3,6 +3,7 @@ package com.velociteam.pspecs.services;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -105,7 +106,7 @@ public class ReportGenerator {
 		UsuarioDTO usDTO = usDao.getUserInfoById(paciente);
 		//Write the workbook in file system  
 	    FileOutputStream out;
-	    String filename = String.format("Reporte-%s-%s-%s.xlsx", usDTO.getNombre(),usDTO.getApellido(),new Date().getTime());
+	    String filename = String.format("Reporte-%s-%s-%s.xlsx", usDTO.getNombre(),usDTO.getApellido(),new SimpleDateFormat("dd/MM/yyyy-HH:mm").format(new Date()));
 		try {
 			out = new FileOutputStream(new File(filename));
 			workbook.write(out);  

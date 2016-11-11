@@ -162,7 +162,7 @@ public class ReportGenerator {
 			String nombre ="";
 			if(isUsMasContactados){
 				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
-				nombre=tuple.getLabel();
+				nombre=usDto.getNombre();
 			} else{
 				nombre=tuple.getLabel();
 			}
@@ -233,7 +233,7 @@ public class ReportGenerator {
 			String nombre ="";
 			if(isUsMasContactados){
 				UsuarioDTO usDto = usDao.getUserInfoById(tuple.getLabel());
-				nombre=tuple.getLabel();
+				nombre=usDto.getNombre();
 			} else{
 				nombre=tuple.getLabel();
 			}

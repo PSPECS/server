@@ -15,6 +15,7 @@ public class CredentialsResponseDTO {
 	private String rol;
 	private String etapaPecs;
 	private String imagenDePerfil;
+	private String fbToken;
 	
 	public CredentialsResponseDTO() {}
 	
@@ -107,6 +108,14 @@ public class CredentialsResponseDTO {
 
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
+	}
+
+	public String getFbToken() {
+		return fbToken;
+	}
+
+	public void setFbToken(String fbToken) {
+		this.fbToken = fbToken;
 	}
 	
 }

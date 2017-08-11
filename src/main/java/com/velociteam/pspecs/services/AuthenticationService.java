@@ -19,6 +19,9 @@ public class AuthenticationService{
 	@Autowired
 	private UsuariosDao usuarioDao;
 	
+	@Autowired
+	private FirebaseService fbService;
+	
 	public CredentialsResponseDTO authenticate(String mail, String password) {
 		CredentialsResponseDTO userInfo = usuarioDao.getUserInfoByEmailAndPass(mail, password);
 		
@@ -27,7 +30,9 @@ public class AuthenticationService{
 		} catch(AuthenticationException e){
 			usuarioDao.updateProperty(userInfo.getId(),"refreshToken",buildRefreshToken(userInfo.getNombre()));
 		}
-		return usuarioDao.getUserInfoByEmailAndPass(mail, password);
+		userInfo = usuarioDao.getUserInfoByEmailAndPass(mail, password);
+		userInfo.setFbToken(fbService.buildFbToken(userInfo.getId()));
+		return userInfo;
 	}
 	
 	public void isValidAccessToken(Token token){

@@ -53,7 +53,7 @@ public class AuthenticationResource extends AbstractResource {
         try {
         	responseDTO = authService.authenticate(credentialsDTO.getMail(),credentialsDTO.getPassword());
         } catch(BussinessException e){
-        	return new ResponseEntity<> (e,HttpStatus.UNAUTHORIZED);
+        	return new ResponseEntity<> (e,HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
         }

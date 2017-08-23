@@ -14,7 +14,7 @@ import com.velociteam.pspecs.exception.AuthenticationException;
 public class FirebaseService {
 	
 	private static final String FB_DATABASE_NAME = "https://pspecs-e7eeb.firebaseio.com/";
-	private static final String SERVICE_ACCOUNT_FILE = "src/main/resources/pspecs-471739017f1f.json";
+	private static final String SERVICE_ACCOUNT_FILE = "pspecs-471739017f1f.json";
 	
 	private FirebaseApp fbApp;
 	

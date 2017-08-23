@@ -21,7 +21,7 @@ public class FirebaseService {
 	private void buildFBApp() throws FileNotFoundException{
 		if(fbApp!=null) return;
 		
-		FileInputStream serviceAccount = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(SERVICE_ACCOUNT_FILE).getFile());
+		FileInputStream serviceAccount = (FileInputStream) Thread.currentThread().getContextClassLoader().getResourceAsStream(SERVICE_ACCOUNT_FILE);
 
 		FirebaseOptions options = new FirebaseOptions.Builder()
 		  .setServiceAccount(serviceAccount)

@@ -14,14 +14,14 @@ import com.velociteam.pspecs.exception.AuthenticationException;
 public class FirebaseService {
 	
 	private static final String FB_DATABASE_NAME = "https://pspecs-e7eeb.firebaseio.com/";
-	private static final String SERVICE_ACCOUNT_FILE = "WEB-INF/pspecs-471739017f1f.json";
+	private static final String SERVICE_ACCOUNT_FILE = "src/main/pspecs-471739017f1f.json";
 	
 	private FirebaseApp fbApp;
 	
 	private void buildFBApp() throws FileNotFoundException{
 		if(fbApp!=null) return;
 		
-		FileInputStream serviceAccount = new FileInputStream(this.getClass().getClassLoader().getResource(SERVICE_ACCOUNT_FILE).getFile());
+		FileInputStream serviceAccount = new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(SERVICE_ACCOUNT_FILE).getFile());
 
 		FirebaseOptions options = new FirebaseOptions.Builder()
 		  .setServiceAccount(serviceAccount)

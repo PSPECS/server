@@ -109,9 +109,9 @@ public class AuthenticationResource extends AbstractResource {
     }
 	
 	@RequestMapping(value="/validateGoogleToken",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> validateGoogleToken(@Valid @RequestBody CommonTokenDTO refreshToken) {
+    public ResponseEntity<?> validateGoogleToken(@Valid @RequestBody CommonTokenDTO token) {
         try {
-        	if (gService.isValidToken(refreshToken.getToken())) return new ResponseEntity<>(HttpStatus.CREATED);
+        	if (gService.isValidToken(token.getToken())) return new ResponseEntity<>(HttpStatus.CREATED);
         	else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }catch (Exception e) {
             return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);

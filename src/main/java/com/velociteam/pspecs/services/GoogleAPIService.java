@@ -14,7 +14,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 @Service
 public class GoogleAPIService {
 
-	private static String CLIENT_ID = "108741391528397306941";
+	private static String CLIENT_ID = "589899251108-j0m6fff8p74175c3lfibivrpgvfmp9vj.apps.googleusercontent.com";
 	
 	public boolean isValidToken(String idTokenString) throws GeneralSecurityException, IOException{
 		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), JacksonFactory.getDefaultInstance())

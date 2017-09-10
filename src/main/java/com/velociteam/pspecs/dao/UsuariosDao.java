@@ -68,7 +68,6 @@ public class UsuariosDao extends AbstractDao{
 				.append("apellido", signupDTO.getApellido())
 				.append("mail", signupDTO.getMail())
 				.append("password", signupDTO.getPassword())
-				.append("fnac", signupDTO.getFnac())
 				.append("etapaPecs", signupDTO.getEtapaPecs())
 				.append("rol", signupDTO.getRol())
 				.append("imagenDePerfil",signupDTO.getFoto())
@@ -225,7 +224,9 @@ public class UsuariosDao extends AbstractDao{
 			BasicDBList or = new BasicDBList();
 			or.add(new BasicDBObject("rol","Profesional"));
 			or.add(new BasicDBObject("rol","Familiar o Amigo"));
-			DBCursor dbContactos = collection("usuario").find(new BasicDBObject("apellido",Pattern.compile(search)).append("$or",or));
+			or.add(new BasicDBObject("nombre",Pattern.compile("/^"+search+"$/i")));
+			or.add(new BasicDBObject("mail",Pattern.compile("/^"+search+"$/i")));
+			DBCursor dbContactos = collection("usuario").find(new BasicDBObject("apellido",Pattern.compile("/^"+search+"$/i")).append("$or",or));
 			for (DBObject usuario : dbContactos) {
 				String userIdDB = (String) usuario.get("_id").toString();
 				if(!userIdDB.equalsIgnoreCase(userId) && existingContacts.stream().noneMatch(c->c.getId().equalsIgnoreCase(userIdDB))){

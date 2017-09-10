@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.velociteam.pspecs.dao.UsuariosDao;
+import com.velociteam.pspecs.dto.CommonTokenDTO;
 import com.velociteam.pspecs.dto.CredentialsDTO;
 import com.velociteam.pspecs.dto.CredentialsResponseDTO;
 import com.velociteam.pspecs.dto.SignupDTO;
@@ -23,6 +24,7 @@ import com.velociteam.pspecs.exception.AuthenticationException;
 import com.velociteam.pspecs.exception.BussinessException;
 import com.velociteam.pspecs.security.Token;
 import com.velociteam.pspecs.services.AuthenticationService;
+import com.velociteam.pspecs.services.GoogleAPIService;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -33,6 +35,9 @@ public class AuthenticationResource extends AbstractResource {
 	
 	@Autowired
 	private AuthenticationService authService;
+	
+	@Autowired
+	private GoogleAPIService gService;
 	
 	@RequestMapping(value="/signup",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signup(@RequestBody SignupDTO signupDTO) {
@@ -101,6 +106,16 @@ public class AuthenticationResource extends AbstractResource {
         }
 
         return new ResponseEntity<>(newToken,HttpStatus.CREATED);
+    }
+	
+	@RequestMapping(value="/validateGoogleToken",method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> validateGoogleToken(@Valid @RequestBody CommonTokenDTO refreshToken) {
+        try {
+        	if (gService.isValidToken(refreshToken.getToken())) return new ResponseEntity<>(HttpStatus.CREATED);
+        	else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }catch (Exception e) {
+            return new ResponseEntity<>(e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 	
 }

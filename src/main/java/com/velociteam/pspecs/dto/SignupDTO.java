@@ -5,21 +5,19 @@ public class SignupDTO {
 	private String apellido;
 	private String mail;
 	private String password;
-	private String fnac;
 	private String etapaPecs;
 	private String rol;
 	private String foto;
 	
 	public SignupDTO() {}
 	
-	public SignupDTO(String nombre, String apellido, String mail,String password, String fnac, String etapaPecs, String rol,
+	public SignupDTO(String nombre, String apellido, String mail,String password, String etapaPecs, String rol,
 			String foto) {
 		super();
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.mail = mail;
 		this.password = password;
-		this.fnac = fnac;
 		this.etapaPecs = etapaPecs;
 		this.rol = rol;
 		this.foto = foto;
@@ -51,12 +49,6 @@ public class SignupDTO {
 		this.password = password;
 	}
 
-	public String getFnac() {
-		return fnac;
-	}
-	public void setFnac(String fnac) {
-		this.fnac = fnac;
-	}
 	public String getEtapaPecs() {
 		return etapaPecs;
 	}

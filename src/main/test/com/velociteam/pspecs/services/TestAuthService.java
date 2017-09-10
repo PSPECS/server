@@ -26,7 +26,7 @@ public class TestAuthService {
 	
 	@Before
 	public void setUp() throws ParseException{
-		martinSignup = new SignupDTO("Martin","de la Llave","delallave.martin@gmail.com","1234","10/01/1989","5","Usuario Regular","");
+		martinSignup = new SignupDTO("Martin","de la Llave","delallave.martin@gmail.com","1234","5","Usuario Regular","");
 		usuarioDao.createUser(martinSignup);
 	}
 	

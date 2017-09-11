@@ -268,6 +268,6 @@ public class UsuariosDao extends AbstractDao{
 	}
 	
 	private Pattern likeCaseInsensitive(String search) {
-		return Pattern.compile(String.format("/^%s/i", search));
+		return Pattern.compile(String.format("^(%s)",search), Pattern.CASE_INSENSITIVE);
 	}
 }

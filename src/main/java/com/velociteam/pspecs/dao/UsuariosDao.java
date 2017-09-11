@@ -221,12 +221,17 @@ public class UsuariosDao extends AbstractDao{
 		List<UsuarioDTO> existingContacts = getContacts(userId);
 		List<ContactoDTO> contactosSugeridos = new ArrayList<>();
 		if ("usuario regular".equalsIgnoreCase(userOrigen.getRol())){
-			BasicDBList or = new BasicDBList();
-			or.add(new BasicDBObject("rol","Profesional"));
-			or.add(new BasicDBObject("rol","Familiar o Amigo"));
-			or.add(new BasicDBObject("nombre",Pattern.compile("/^"+search+"$/i")));
-			or.add(new BasicDBObject("mail",Pattern.compile("/^"+search+"$/i")));
-			DBCursor dbContactos = collection("usuario").find(new BasicDBObject("apellido",Pattern.compile("/^"+search+"$/i")).append("$or",or));
+			BasicDBList and = new BasicDBList();
+			BasicDBList rolesOr = new BasicDBList();
+			BasicDBList searchOr = new BasicDBList();
+			rolesOr.add(new BasicDBObject("rol","Profesional"));
+			rolesOr.add(new BasicDBObject("rol","Familiar o Amigo"));
+			and.add(new BasicDBObject("$or",rolesOr));
+			searchOr.add(new BasicDBObject("nombre",Pattern.compile("/^"+search+"$/i")));
+			searchOr.add(new BasicDBObject("mail",Pattern.compile("/^"+search+"$/i")));
+			searchOr.add(new BasicDBObject("apellido",Pattern.compile("/^"+search+"$/i")));
+			and.add(new BasicDBObject("$or",searchOr));
+			DBCursor dbContactos = collection("usuario").find(new BasicDBObject("$and",and));
 			for (DBObject usuario : dbContactos) {
 				String userIdDB = (String) usuario.get("_id").toString();
 				if(!userIdDB.equalsIgnoreCase(userId) && existingContacts.stream().noneMatch(c->c.getId().equalsIgnoreCase(userIdDB))){

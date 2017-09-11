@@ -122,11 +122,11 @@ public class UsuarioResource extends AbstractResource {
     }
 	
 	@RequestMapping(value="/{userId}/search",method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> search(@PathVariable String userId,@RequestParam(value="search") String search) {
+    public ResponseEntity<?> search(@RequestHeader("Authorization") String autHeader,@PathVariable String userId,@RequestParam(value="search") String search) {
 		List<ContactoDTO> contactos = null;
 		
         try {
-//        	auth(autHeader);
+        	auth(autHeader);
         	contactos=usuariosDao.searchContact(userId,search);
         } catch (AuthenticationException e){
         	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

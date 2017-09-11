@@ -227,9 +227,9 @@ public class UsuariosDao extends AbstractDao{
 			rolesOr.add(new BasicDBObject("rol","Profesional"));
 			rolesOr.add(new BasicDBObject("rol","Familiar o Amigo"));
 			and.add(new BasicDBObject("$or",rolesOr));
-			searchOr.add(new BasicDBObject("nombre",new BasicDBObject("$regex",Pattern.compile("/^"+search+"$/i"))));
-			searchOr.add(new BasicDBObject("mail",new BasicDBObject("$regex",Pattern.compile("/^"+search+"$/i"))));
-			searchOr.add(new BasicDBObject("apellido",new BasicDBObject("$regex",Pattern.compile("/^"+search+"$/i"))));
+			searchOr.add(new BasicDBObject("nombre",new BasicDBObject("$regex",likeCaseInsensitive(search))));
+			searchOr.add(new BasicDBObject("mail",new BasicDBObject("$regex",likeCaseInsensitive(search))));
+			searchOr.add(new BasicDBObject("apellido",new BasicDBObject("$regex",likeCaseInsensitive(search))));
 			and.add(new BasicDBObject("$or",searchOr));
 			DBCursor dbContactos = collection("usuario").find(new BasicDBObject("$and",and));
 			for (DBObject usuario : dbContactos) {
@@ -266,5 +266,8 @@ public class UsuariosDao extends AbstractDao{
 			throw new IncorrectPasswordBussinessException();
 		}
 	}
-
+	
+	private Pattern likeCaseInsensitive(String search) {
+		return Pattern.compile(String.format("/^%s$/i", Pattern.quote(search)));
+	}
 }

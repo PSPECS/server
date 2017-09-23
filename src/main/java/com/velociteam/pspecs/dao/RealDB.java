@@ -12,7 +12,7 @@ public class RealDB implements MongodbDBCreator {
 	public RealDB() {}
 //	mongodb://userYED:NtA6i5uNpQPwQWLb@mongodb
 //	mongodb://admin:uNckDSYqc-FL@127.8.107.130:27017/
-	private static final String MONGODB_CONN_STRING = "mongodb://userYED:NtA6i5uNpQPwQWLb@mongodb";
+	private static final String MONGODB_CONN_STRING = "mongodb://userVP0:fL3iFDv2bvKTwj3g@mongodb";
 	private MongoClient mc = null;
 	
 	@Override
